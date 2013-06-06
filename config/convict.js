@@ -20,7 +20,7 @@ var convict = require('convict'),
     },
     mongo: {
       doc: "Mongo DB location. Must look like: mongodb://user:pass@host:port/dbnam",
-      format: "url",
+      format: "*",
       default: "mongodb://root:127.0.0.1:27017",
       env: "QUAKE_MONGO"
     },
@@ -53,7 +53,19 @@ var convict = require('convict'),
       format: "*",
       default: "awesomesauce",
       env: "QUAKE_MONGO_DB"
-    }
+    },
+    client_id: {
+      doc: "OAuth2 client id",
+      format: "*",
+      default: "You should really change this",
+      env: "QUAKE_CLIENT_ID"
+    },
+    client_secret: {
+      doc: "OAuth2 client secret",
+      format: "*",
+      default: "You should really change this",
+      env: "QUAKE_CLIENT_SECRET"
+    },
   });
 
 conf.validate();

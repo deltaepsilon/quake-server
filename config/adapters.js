@@ -1,7 +1,5 @@
 var conf = require('./convict.js');
 
-console.log('conf', 'mongodb://' + conf.get('mongo_username') + ':' + conf.get('mongo_password') + '@' + conf.get('mongo_host') + ':' + conf.get('mongo_port') + '/' + conf.get('mongo_db'));
-
 // Configure installed adapters
 // If you define an attribute in your model definition, 
 // it will override anything from this global config.

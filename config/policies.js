@@ -6,7 +6,7 @@
 module.exports.policies = {
 
 	// Default policy (allow public access)
-	'*': true
+//	'*': true
 
 	/** Example mapping: 
 	someController: {
@@ -18,4 +18,10 @@ module.exports.policies = {
 		someAction: 'somePolicy'
 	}
 	*/
+
+  '*': 'authenticated', // As seen in api/policies/oauth2orize
+
+  'auth': { // Whitelist auth controller
+    '*': true
+  }
 };

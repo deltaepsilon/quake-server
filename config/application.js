@@ -25,6 +25,22 @@ module.exports = {
 	//
 	log: {
 		level: 'info'
-	}
+	},
+
+  express: {
+    customMiddleware: function(app) {
+      var passport = require('passport'),
+        oauth2 = require('./../middleware/oauth2.js');
+
+      //  Passport Init
+      app.use(passport.initialize());
+      app.use(passport.session());
+
+      //  OAuth2 Routes
+      app.get('/auth/authorize', oauth2.authorization);
+      app.post('/auth/authorize/decision', oauth2.decision);
+      app.post('/auth/token', oauth2.token);
+    }
+  }
 
 };
