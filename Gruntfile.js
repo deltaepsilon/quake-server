@@ -9,7 +9,8 @@ module.exports = function(grunt) {
     mochaTest: {
       test: {
         options: {
-          ui: 'tdd'
+          ui: 'tdd',
+          timeout: 5000
         },
         src: ['test/*.js']
       }

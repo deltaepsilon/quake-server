@@ -1,3 +1,5 @@
+var conf = require('./convict.js');
+
 module.exports = {
 	
 	// Name of the application (used as default <title>)
@@ -30,11 +32,19 @@ module.exports = {
   express: {
     customMiddleware: function(app) {
       var passport = require('passport'),
+        ClientPasswordStrategy = require('passport-oauth2-client-password').Strategy,
         oauth2 = require('./../middleware/oauth2.js');
 
       //  Passport Init
       app.use(passport.initialize());
       app.use(passport.session());
+      passport.use(new ClientPasswordStrategy(function(clientID, clientSecret, done) {
+        if (clientID === conf.get('client_id') && clientSecret === conf.get('client_secret')) {
+          done(null, {id: 'quiver'});
+        } else {
+          done('Client not found.');
+        }
+      }));
 
       //  OAuth2 Routes
       app.get('/auth/authorize', oauth2.authorization);
