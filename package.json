@@ -32,7 +32,7 @@
     "debug": "node-inspector & grunt concurrent"
   },
   "main": "app.js",
-  "repository": "",
-  "author": "",
+  "repository": "git@github.com:deltaepsilon/quake.git",
+  "author": "Christopher Esplin",
   "license": "MIT"
 }

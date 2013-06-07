@@ -6,6 +6,8 @@ var mocha = require('mocha'),
   sails = require('sails'),
   app;
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; //Allow https testing with self-signed certs
+
 suite('Auth', function() {
   suiteSetup(function(done) {
     sails.lift({
