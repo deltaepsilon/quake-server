@@ -6,6 +6,12 @@ conf = convict({
     default: "development",
     env: "NODE_ENV"
   },
+  quiver_port: {
+    doc: "The port to bind.",
+    format: "port",
+    default: 9000,
+    env: "QUIVER_PORT"
+  },
   ip: {
       doc: "The IP address to bind.",
       format: "ipaddress",

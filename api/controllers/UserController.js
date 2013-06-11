@@ -4,15 +4,15 @@
 ---------------------*/
 var User = sails.models.user,
   UserController = {
-  findOrCreate: function (req, done) {
-    console.log('findOrCreate req, res', req, done);
-    var qUser = req.query.user;
+  findOrCreate: function (req, res, next) {
+    var qUser = req.body;
     qUser.providerID = qUser.id;
     User.findOrCreate({providerID: qUser.providerID}, qUser, function (err, user) {
+      res.setHeader('Content-Type', 'text/json');
       if (err) {
-        done(err);
+        res.end(JSON.stringify('err'));
       } else {
-        done(null, user);
+        res.end(JSON.stringify(user));
       }
     });
   }

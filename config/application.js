@@ -1,5 +1,4 @@
-var conf = require('./convict.js'),
-    fs = require('fs');
+var fs = require('fs');
 
 module.exports = {
 	
@@ -43,27 +42,21 @@ module.exports = {
 
       //  Passport Init
       app.use(passport.initialize());
-      app.use(passport.session());
-      passport.use(new ClientPasswordStrategy(function(clientID, clientSecret, done) {
-        if (clientID === conf.get('client_id') && clientSecret === conf.get('client_secret')) {
-          done(null, {id: 'quiver'});
-        } else {
-          done('Client not found.');
-        }
-      }));
 
-      passport.use(new BearerStrategy(function (token, done) {
-        console.log('finding token', token);
-        done(null, {fakeUser: 'quiver' }, {scope: 'all'});
-      }));
+      passport.use(new ClientPasswordStrategy(oauth2.findByClientID));
+      passport.use(new BearerStrategy(oauth2.findByToken));
+
+      app.use(function (req, res, next) {
+        if (req.url.match(/^\/auth\//)) { // Whitelist all /auth/ routes
+          return next();
+        }
+        passport.authenticate('bearer', {session: false})(req, res, next);
+      });
 
       //  OAuth2 Routes
       app.get('/auth/authorize', oauth2.authorization);
       app.post('/auth/authorize/decision', oauth2.decision);
       app.post('/auth/token', oauth2.token);
-
-      app.use(passport.authenticate('bearer', {session: false}));
-
     }
   }
 

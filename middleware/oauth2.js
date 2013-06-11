@@ -94,5 +94,21 @@ module.exports = {
     passport.authenticate(['oauth2-client-password'], { session: false }),
     server.token(),
     server.errorHandler()
-  ]
+  ],
+  findByClientID: function (clientID, clientSecret, done) { // Let the Quiver app through. TODO let individual users authenticate as well
+    if (clientID === conf.get('client_id') && clientSecret === conf.get('client_secret')) {
+      done(null, {id: 'quiver'});
+    } else {
+      done('Client not found.');
+    }
+  },
+  findByToken: function (token, done) { // Find and return users.
+    AccessToken.find({token: token}, function (err, token) {
+      if (err) {
+        return done(err);
+      }
+      console.log('found user by token... should start finding full user.', token);
+      done(null, token);
+    });
+  }
 }

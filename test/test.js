@@ -5,28 +5,50 @@ var mocha = require('mocha'),
   request = require('supertest'),
   sails = require('sails'),
   userMock = require('./mocks/userMock.js'),
+  quake = require('quake-sdk'),
+  decisionApp = require('express')(),
+  server,
   app;
+
+function post (path) { // Post with authorization token header
+  return request(app).post(path).set('authorization', global.quakeSDKHeader);
+}
+
+function get (path) { // Get with authorization token params
+  return request(app).get(path).query({access_token: global.quakeSDKToken}).query({token_type: 'bearer'});
+}
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; //Allow https testing with self-signed certs
 
 suite('Auth', function() {
   suiteSetup(function(done) {
+    decisionApp.use(quake.middleware.decision);
+    server = decisionApp.listen(conf.get('quiver_port'));
+
     sails.lift({
-      port: 1338
+      port: conf.get('port')
     }, function() {
       app = sails.sails.express.app;
-      done();
+      quake.auth.getToken(function (token, header) {
+        global.quakeSDKHeader = header;
+        global.quakeSDKToken = token;
+        done();
+      });
     });
   });
 
   suiteTeardown(function(done) {
+    server.close();
     sails.lower();
     done();
   });
 
 
-  test('Auth should fail at / route', function(done) {
-    request(app).get('/').expect(403, done);
+  test('Auth should fail at / route without token', function(done) {
+    request(app).get('/').end(function (err, res) {
+      assert.equal(res.text, 'Unauthorized', 'Auth should fail at / route without token');
+      done();
+    });
   });
 
 
@@ -60,7 +82,8 @@ suite('Auth', function() {
   });
 
   test('findOrCreate route should create an identical new user', function(done) {
-    sails.sails.controllers.user.findOrCreate({query: {user: userMock}}, function (err, user) {
+    post('/user/findOrCreate').send(userMock).end(function (err, res) {
+      var user = JSON.parse(res.text);
       assert.equal(userMock.id, user.providerID, 'findOrCreate route should create an identical new user');
       done();
     });
