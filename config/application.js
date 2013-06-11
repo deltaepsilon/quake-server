@@ -38,7 +38,8 @@ module.exports = {
     customMiddleware: function(app) {
       var passport = require('passport'),
         ClientPasswordStrategy = require('passport-oauth2-client-password').Strategy,
-        oauth2 = require('./../middleware/oauth2.js');
+        oauth2 = require('./../middleware/oauth2.js'),
+        BearerStrategy = require('passport-http-bearer').Strategy;
 
       //  Passport Init
       app.use(passport.initialize());
@@ -51,10 +52,18 @@ module.exports = {
         }
       }));
 
+      passport.use(new BearerStrategy(function (token, done) {
+        console.log('finding token', token);
+        done(null, {fakeUser: 'quiver' }, {scope: 'all'});
+      }));
+
       //  OAuth2 Routes
       app.get('/auth/authorize', oauth2.authorization);
       app.post('/auth/authorize/decision', oauth2.decision);
       app.post('/auth/token', oauth2.token);
+
+      app.use(passport.authenticate('bearer', {session: false}));
+
     }
   }
 

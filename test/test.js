@@ -4,6 +4,7 @@ var mocha = require('mocha'),
   conf = require('./../config/convict.js'),
   request = require('supertest'),
   sails = require('sails'),
+  userMock = require('./mocks/userMock.js'),
   app;
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; //Allow https testing with self-signed certs
@@ -37,9 +38,6 @@ suite('Auth', function() {
         token = request(app).post('/auth/token'),
         cookies = res.headers['set-cookie'].pop().split(';')[0];
 
-
-//      console.log(res.headers['set-cookie'].pop().split(';')[0]);
-      //TODO Figure out why this cookie shuffle trick is throwing errors. See https://gist.github.com/joaoneto/5152248
       decision.cookies = cookies;
       token.cookies = cookies;
 
@@ -58,6 +56,13 @@ suite('Auth', function() {
         });
 
       });
+    });
+  });
+
+  test('findOrCreate route should create an identical new user', function(done) {
+    sails.sails.controllers.user.findOrCreate({query: {user: userMock}}, function (err, user) {
+      assert.equal(userMock.id, user.providerID, 'findOrCreate route should create an identical new user');
+      done();
     });
   });
 });

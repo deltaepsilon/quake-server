@@ -12,7 +12,7 @@ module.exports = function(grunt) {
           ui: 'tdd',
           timeout: 5000
         },
-        src: ['test/*.js']
+        src: ['test/test.js']
       }
     },
     shell: {

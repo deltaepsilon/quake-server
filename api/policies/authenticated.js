@@ -4,6 +4,7 @@
 module.exports = function (req, res, next) {
 	
 	// User is allowed, proceed to controller
+  console.log('inside policty authenticated.js');
 	if (req.isAuthenticated()) {
 		return next();
 	}
