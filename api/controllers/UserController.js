@@ -2,11 +2,17 @@
 	:: User 
 	-> controller
 ---------------------*/
-var User = sails.models.user,
+var uuid = require('node-uuid'),
+  User = sails.models.user,
   UserController = {
   findOrCreate: function (req, res, next) {
     var qUser = req.body;
+
+    // Augment the user a bit just in case he/she gets saved. Won't affect existing users.
     qUser.providerID = qUser.id;
+    qUser.clientID = uuid.v4();
+    qUser.clientSecret = uuid.v4();
+
     User.findOrCreate({providerID: qUser.providerID}, qUser, function (err, user) {
       res.setHeader('Content-Type', 'text/json');
       if (err) {

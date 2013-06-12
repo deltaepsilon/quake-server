@@ -7,6 +7,7 @@ var mocha = require('mocha'),
   userMock = require('./mocks/userMock.js'),
   quake = require('quake-sdk'),
   decisionApp = require('express')(),
+  user,
   server,
   app;
 
@@ -29,7 +30,7 @@ suite('Auth', function() {
       port: conf.get('port')
     }, function() {
       app = sails.sails.express.app;
-      quake.auth.getToken(function (token, header) {
+      quake.auth.getToken('quiver', null, null, function (token, header) {
         global.quakeSDKHeader = header;
         global.quakeSDKToken = token;
         done();
@@ -83,9 +84,26 @@ suite('Auth', function() {
 
   test('findOrCreate route should create an identical new user', function(done) {
     post('/user/findOrCreate').send(userMock).end(function (err, res) {
-      var user = JSON.parse(res.text);
+      user = JSON.parse(res.text);
       assert.equal(userMock.id, user.providerID, 'findOrCreate route should create an identical new user');
+      assert.equal(user.clientID.length, 36 , 'New user should have a clientID');
+      assert.equal(user.clientSecret.length, 36 , 'New user should have a clientSecret');
       done();
     });
+  });
+
+  test('Auth as the new user', function(done) {
+    quake.auth.getToken(user.id, user.clientID, user.clientSecret, function (token, header) {
+      assert.equal(token.length, 36 , 'Should return user token');
+      done();
+    });
+  });
+
+  test('Remove user that was just found or created', function (done) {
+    get('/user/destroy/' + user.id).end(function (err, res) {
+      var destroyed = JSON.parse(res.text);
+      assert.equal(user.id, destroyed.id, 'Remove user that was just found or created');
+      done();
+    })
   });
 });

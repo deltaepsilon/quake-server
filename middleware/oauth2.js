@@ -15,8 +15,8 @@ server.deserializeClient(function(id, done) {
   if (id === 'quiver') {
     done(null, { id: 'quiver' });
   } else {
-    User.find(id).done(function(err, model) {
-      done(null, model.id);
+    User.findById(id, function(err, user) {
+      done(null, user);
     });
   }
 });
@@ -74,7 +74,7 @@ module.exports = {
       if (clientID === conf.get('client_id')) {
         return done(null, {id: 'quiver'}, redirectURI);
       } else {
-        User.find(clientID, function(err, client) {
+        User.find({clientID: clientID}, function(err, client) {
           if (err || !client) { return done(err); }
           return done(null, client, redirectURI);
         });
@@ -107,7 +107,7 @@ module.exports = {
       if (err) {
         return done(err);
       }
-      console.log('found user by token... should start finding full user.', token);
+      console.log('found user by token... should start finding full user. userID =', token.userID);
       done(null, token);
     });
   }
