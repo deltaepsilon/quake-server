@@ -39,10 +39,8 @@ server.grant(oauth2orize.grant.code(function(client, redirectURI, user, ares, do
 server.exchange(oauth2orize.exchange.code(function(client, code, redirectURI, done) {
   AuthorizationCode.find({code: code} , function(err, authorizationCode) {
     if (err) { return done(err); }
-    if (client.id !== authorizationCode.clientID) { return done(null, false); }
+    if (client.id.toString() !== authorizationCode.clientID.toString()) { return done(null, false); }
     if (redirectURI !== authorizationCode.redirectURI) { return done(null, false); }
-
-
 
     AccessToken.create({
       token: uuid.v4(),
@@ -83,11 +81,15 @@ module.exports = {
     server.errorHandler()
   ],
   findByClientID: function (clientID, clientSecret, done) { // Let the Quiver app through. TODO let individual users authenticate as well
-    console.log('clientID incoming', clientID);
     if (clientID === conf.get('client_id') && clientSecret === conf.get('client_secret')) {
       done(null, {id: 'quiver'});
     } else {
-      done('Client not found.');
+      User.find({clientID: clientID, clientSecret: clientSecret}, function (err, user) {
+        if (err) {
+          return done(err);
+        }
+        return done(null, user);
+      });
     }
   },
   findByToken: function (token, done) { // Find and return users.

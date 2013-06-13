@@ -94,7 +94,6 @@ suite('Auth', function() {
 
   test('Auth as the new user', function(done) {
     quake.auth.getToken(user.id, user.clientID, user.clientSecret, function (token, header) {
-      console.log('token returned in test', token);
       assert.equal(token.length, 36 , 'Should return user token');
       done();
     });
