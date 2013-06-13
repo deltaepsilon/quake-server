@@ -22,15 +22,11 @@ server.deserializeClient(function(id, done) {
 });
 
 server.grant(oauth2orize.grant.code(function(client, redirectURI, user, ares, done) {
-  if (!user) {
-    user = {id: 'quiver'}
-  }
-
   AuthorizationCode.create({
       code: uuid.v4(),
       clientID: client.id,
-      redirectURI: redirectURI,
-      userID: user.id
+      redirectURI: redirectURI
+//     , userID: user.id
     }, function(err, model) {
       if (err) {
         return done(err);
@@ -41,31 +37,22 @@ server.grant(oauth2orize.grant.code(function(client, redirectURI, user, ares, do
 }));
 
 server.exchange(oauth2orize.exchange.code(function(client, code, redirectURI, done) {
-  if (client.id === 'quiver') {
+  AuthorizationCode.find({code: code} , function(err, authorizationCode) {
+    if (err) { return done(err); }
+    if (client.id !== authorizationCode.clientID) { return done(null, false); }
+    if (redirectURI !== authorizationCode.redirectURI) { return done(null, false); }
+
+
+
     AccessToken.create({
       token: uuid.v4(),
-      userID: 'quiver',
-      clientID: 'quiver'
+      userID: authorizationCode.userID,
+      clientID: authorizationCode.clientID
     }, function(err, model) {
       if (err) { return done(err); }
       done(null, model.token);
     });
-  } else {
-    AuthorizationCode.find(code, function(err, authorizationCode) {
-      if (err) { return done(err); }
-      if (client.id !== authorizationCode.clientID) { return done(null, false); }
-      if (redirectURI !== authorizationCode.redirectURI) { return done(null, false); }
-
-      AccessToken.create({
-        token: uuid.v4(),
-        userID: authorizationCode.userID,
-        clientID: authorizationCode.clientID
-      }, function(err, model) {
-        if (err) { return done(err); }
-        done(null, model.token);
-      });
-    });
-  }
+  });
 }));
 
 module.exports = {
@@ -96,6 +83,7 @@ module.exports = {
     server.errorHandler()
   ],
   findByClientID: function (clientID, clientSecret, done) { // Let the Quiver app through. TODO let individual users authenticate as well
+    console.log('clientID incoming', clientID);
     if (clientID === conf.get('client_id') && clientSecret === conf.get('client_secret')) {
       done(null, {id: 'quiver'});
     } else {
@@ -107,7 +95,6 @@ module.exports = {
       if (err) {
         return done(err);
       }
-      console.log('found user by token... should start finding full user. userID =', token.userID);
       done(null, token);
     });
   }

@@ -70,7 +70,7 @@ suite('Auth', function() {
 
         var code = res.header.location.match(/code=(.+)/)[1];
 
-        token.send({grant_type: 'authorization_code', code: code, client_id: conf.get('client_id'), client_secret: conf.get('client_secret')}).end(function(err, res) {
+        token.send({grant_type: 'authorization_code', code: code, client_id: conf.get('client_id'), client_secret: conf.get('client_secret'), redirect_uri: redirectURI}).end(function(err, res) {
           var tokenParams = JSON.parse(res.text);
 
           assert.isNotNull(tokenParams.access_token, 'Access token should be present');
@@ -94,6 +94,7 @@ suite('Auth', function() {
 
   test('Auth as the new user', function(done) {
     quake.auth.getToken(user.id, user.clientID, user.clientSecret, function (token, header) {
+      console.log('token returned in test', token);
       assert.equal(token.length, 36 , 'Should return user token');
       done();
     });
