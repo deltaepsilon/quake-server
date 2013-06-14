@@ -27,7 +27,7 @@ suite('Auth', function() {
     server = decisionApp.listen(conf.get('quiver_port'));
 
     sails.lift({
-      port: conf.get('port')
+      port: conf.get('quake_port')
     }, function() {
       app = sails.sails.express.app;
       quake.auth.getToken('quiver', null, null, function (token, header) {
