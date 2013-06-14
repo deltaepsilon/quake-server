@@ -39,6 +39,7 @@ module.exports.adapters = {
 
   mongo: {
     module: 'sails-mongo',
-    url: 'mongodb://' + conf.get('mongo_username') + ':' + conf.get('mongo_password') + '@' + conf.get('mongo_host') + ':' + conf.get('mongo_port') + '/' + conf.get('mongo_db')
+    url: 'mongodb://' + conf.get('mongo_host') + ':' + conf.get('mongo_port') + '/' + conf.get('mongo_db')
+//    url: 'mongodb://' + conf.get('mongo_username') + ':' + conf.get('mongo_password') + '@' + conf.get('mongo_host') + ':' + conf.get('mongo_port') + '/' + conf.get('mongo_db')
   }
 };
