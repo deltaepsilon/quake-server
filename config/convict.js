@@ -21,7 +21,7 @@ conf = convict({
   port: {
       doc: "The port to bind.",
       format: "port",
-      default: 1337,
+      default: 9001,
       env: "QUAKE_PORT"
   },
   mongo: {
