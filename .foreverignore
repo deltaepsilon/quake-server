@@ -1,3 +1,3 @@
-.git
-public
-node_modules
+.git/*
+public/*
+node_modules/*
