@@ -3,7 +3,6 @@
 	-> controller
 ---------------------*/
 var uuid = require('node-uuid'),
-  User = sails.models.user,
   UserController = {
   findOrCreate: function (req, res, next) {
     var qUser = req.body;

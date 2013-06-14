@@ -60,6 +60,30 @@ conf = convict({
     default: "awesomesauce",
     env: "QUAKE_MONGO_DB"
   },
+  redis_host: {
+    doc: "Redis host",
+    format: "*",
+    default: "127.0.0.1",
+    env: "REDIS_HOST"
+  },
+  redis_port: {
+    doc: "Redis port",
+    format: "*",
+    default: 6379,
+    env: "REDIS_PORT"
+  },
+  redis_password: {
+    doc: "Redis password",
+    format: "*",
+    default: "You should really change this",
+    env: "REDIS_PASSWORD"
+  },
+  redis_secret: {
+    doc: "Redis secret",
+    format: "*",
+    default: "You should really change this",
+    env: "REDIS_SECRET"
+  },
   client_id: {
     doc: "OAuth2 client id",
     format: "*",

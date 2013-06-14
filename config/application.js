@@ -30,6 +30,14 @@ module.exports = {
 		level: 'info'
 	},
 
+  session: {
+    host: conf.get('redis_host'),
+    port: conf.get('redis_port'),
+    password: conf.get('redis_password'),
+    secret: conf.get('redis_secret'),
+    adapter: "redis"
+  },
+
   express: {
     serverOptions: {
         key: fs.readFileSync('./ssl/key.pem'),
