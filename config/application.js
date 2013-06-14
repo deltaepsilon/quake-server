@@ -7,7 +7,7 @@ module.exports = {
 	appName: "Sails Application",
 
 	// Port this Sails application will live on
-	port: conf.get('port'),
+	port: conf.get('quake_port'),
 
 	// The environment the app is deployed in 
 	// (`development` or `production`)

@@ -6,22 +6,28 @@ conf = convict({
     default: "development",
     env: "NODE_ENV"
   },
+  quiver_host: {
+    doc: "Quiver host",
+    format: "port",
+    default: "127.0.0.1",
+    env: "QUIVER_HOST"
+  },
   quiver_port: {
-    doc: "The port to bind.",
+    doc: "Quiver port",
     format: "port",
     default: 9000,
     env: "QUIVER_PORT"
   },
-  ip: {
-      doc: "The IP address to bind.",
+  quake_host: {
+      doc: "Quake host",
       format: "ipaddress",
       default: "127.0.0.1",
-      env: "QUAKE_IP_ADDRESS"
+      env: "QUAKE_HOST"
   },
-  port: {
-      doc: "The port to bind.",
+  quake_port: {
+      doc: "Quake port",
       format: "port",
-      default: 1337,
+      default: 9001,
       env: "QUAKE_PORT"
   },
   mongo: {
