@@ -1,4 +1,5 @@
-var fs = require('fs');
+var conf = require('./convict.js'),
+  fs = require('fs');
 
 module.exports = {
 	
@@ -6,7 +7,7 @@ module.exports = {
 	appName: "Sails Application",
 
 	// Port this Sails application will live on
-	port: 1337,
+	port: conf.get('port'),
 
 	// The environment the app is deployed in 
 	// (`development` or `production`)
