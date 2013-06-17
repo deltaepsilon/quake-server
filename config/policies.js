@@ -19,9 +19,5 @@ module.exports.policies = {
 	}
 	*/
 
-//  '*': 'authenticated', // As seen in api/policies/oauth2orize
-//
-//  'auth': { // Whitelist auth controller
-//    '*': true
-//  }
+  '*': 'authenticated' // As seen in api/policies/oauth2orize
 };
