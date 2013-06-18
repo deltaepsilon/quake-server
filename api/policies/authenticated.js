@@ -6,7 +6,7 @@ module.exports = function (req, res, next) {
 	// User is allowed, proceed to controller
 	if (req.isAuthenticated()) {
     //TODO add user deets to all incoming requests, unless that user is admin
-    console.log('incoming user-authenticated request...', req.user.id, req.user.clientID);
+    console.log('incoming user-authenticated request...', req.user.id, req.user.clientID, req.url);
 		return next();
 	}
 
