@@ -6,12 +6,6 @@ module.exports = function (req, res, next) {
 	// User is allowed, proceed to controller
 	if (req.isAuthenticated()) {
     //TODO add user deets to all incoming requests, unless that user is admin
-    if (!req.params) {
-      req.params = {};
-    }
-    if (req.user.clientID !== 'quiver') {
-      req.params.id = req.user.clientID.toString();
-    }
 		return next();
 	}
 

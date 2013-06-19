@@ -43,6 +43,7 @@ module.exports = {
       var passport = require('passport'),
         ClientPasswordStrategy = require('passport-oauth2-client-password').Strategy,
         oauth2 = require('./../middleware/oauth2.js'),
+        user = require('./../middleware/user.js'),
         BearerStrategy = require('passport-http-bearer').Strategy;
 
       //  Passport Init
@@ -58,6 +59,8 @@ module.exports = {
         }
         passport.authenticate('bearer', {session: false})(req, res, next);
       });
+
+      app.all('/user*', user);
 
       //  OAuth2 Routes
       app.get('/auth/authorize', oauth2.authorization);

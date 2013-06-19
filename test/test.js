@@ -12,12 +12,20 @@ var mocha = require('mocha'),
   server,
   app;
 
-function post (path) { // Post with authorization token header
-  return request(app).post(path).set('authorization', global.quakeSDKHeader);
+function post (path, token) { // Post with authorization token header
+  return request(app).post(path).set('authorization', token ? 'Bearer ' + token : global.quakeSDKHeader);
 }
 
-function get (path) { // Get with authorization token params
-  return request(app).get(path).query({access_token: global.quakeSDKToken}).query({token_type: 'bearer'});
+function put (path, token) { // Put with authorization token header
+  return request(app).put(path).set('authorization', token ? 'Bearer ' + token : global.quakeSDKHeader);
+}
+
+function del (path, token) { // Delete with authorization token header
+  return request(app).del(path).set('authorization', token ? 'Bearer ' + token : global.quakeSDKHeader);
+}
+
+function get (path, token) { // Get with authorization token params
+  return request(app).get(path).query({access_token: token || global.quakeSDKToken}).query({token_type: 'bearer'});
 }
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; //Allow https testing with self-signed certs
@@ -93,18 +101,30 @@ suite('Auth', function() {
     });
   });
 
+  var userToken;
   test('Auth as the new user', function(done) {
     quake.auth.getToken(user.id, user.clientID, user.clientSecret, function (token, header) {
+      userToken = token;
       assert.equal(token.length, 36 , 'Should return user token');
       done();
     });
   });
 
+  test('PUT to /user/update/1 should return the edited user. The number in the path can be arbitrary.', function (done) {
+    put('/user/update/', userToken).send({emails: [{value: "chris@quiver.is"}]}).end(function (err, res) {
+      var updatedUser = JSON.parse(res.text);
+      assert.equal('chris@quiver.is', updatedUser.emails[0].value, 'Email should be persisted to existing user');
+      assert.equal(user.id, updatedUser.id, 'Updated user should have same ID');
+
+      done();
+    });
+  });
+
   test('Remove user that was just found or created', function (done) {
-    get('/user/destroy/' + user.id).end(function (err, res) {
+    del('/user').send({id: user.id}).end(function (err, res) {
       var destroyed = JSON.parse(res.text);
       assert.equal(user.id, destroyed.id, 'Remove user that was just found or created');
       done();
-    })
+    });
   });
 });

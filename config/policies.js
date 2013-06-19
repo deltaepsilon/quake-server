@@ -19,6 +19,5 @@ module.exports.policies = {
 	}
 	*/
 
-  '*': 'authenticated', // As seen in api/policies/oauth2orize
-  'user': 'user'
+  '*': 'authenticated' // As seen in api/policies/oauth2orize
 };
