@@ -6,9 +6,15 @@ conf = convict({
     default: "development",
     env: "NODE_ENV"
   },
+  quiver_external: {
+    doc: "Quiver external path",
+    format: "*",
+    default: "https://quiver.is",
+    env: "QUIVER_EXTERNAL"
+  },
   quiver_host: {
     doc: "Quiver host",
-    format: "port",
+    format: "ipaddress",
     default: "127.0.0.1",
     env: "QUIVER_HOST"
   },
@@ -17,6 +23,12 @@ conf = convict({
     format: "port",
     default: 9000,
     env: "QUIVER_PORT"
+  },
+  quake_external: {
+    doc: "Quake external path",
+    format: "url",
+    default: "https://api.quiver.is",
+    env: "QUAKE_EXTERNAL"
   },
   quake_host: {
       doc: "Quake host",
@@ -101,7 +113,7 @@ conf = convict({
     format: "*",
     default: "You should really change this",
     env: "QUAKE_CLIENT_SECRET"
-  },
+  }
 });
 
 conf.validate();

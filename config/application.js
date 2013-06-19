@@ -39,10 +39,6 @@ module.exports = {
   },
 
   express: {
-    serverOptions: {
-        key: fs.readFileSync('./ssl/key.pem'),
-        cert: fs.readFileSync('./ssl/cert.pem')
-    },
     customMiddleware: function(app) {
       var passport = require('passport'),
         ClientPasswordStrategy = require('passport-oauth2-client-password').Strategy,

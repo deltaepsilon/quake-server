@@ -6,6 +6,7 @@ var mocha = require('mocha'),
   sails = require('sails'),
   userMock = require('./mocks/userMock.js'),
   quake = require('quake-sdk'),
+  quakeRoot = conf.get('quake_external'),
   decisionApp = require('express')(),
   user,
   server,
@@ -54,7 +55,7 @@ suite('Auth', function() {
 
 
   test('Auth/authorize should return clientID from env vars', function(done) {
-    var redirectURI = 'http://localhost:9000/auth/callback';
+    var redirectURI = quakeRoot + '/auth/callback';
     request(app).get('/auth/authorize?client_id=' + conf.get('client_id') + '&response_type=code&redirect_uri=' + redirectURI).expect(200).expect('Content-Type', 'text/json').end(function(err, res) {
       var params = JSON.parse(res.text),
         decision = request(app).post('/auth/authorize/decision'),
