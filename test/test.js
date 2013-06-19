@@ -33,7 +33,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; //Allow https testing with self-
 suite('Auth', function() {
   suiteSetup(function(done) {
     decisionApp.use(quake.middleware.decision);
-    server = decisionApp.listen(conf.get('quiver_port'));
+    server = decisionApp.listen(9555);
 
     sails.lift({
       port: conf.get('quake_port')
@@ -115,6 +115,10 @@ suite('Auth', function() {
       var updatedUser = JSON.parse(res.text);
       assert.equal('chris@quiver.is', updatedUser.emails[0].value, 'Email should be persisted to existing user');
       assert.equal(user.id, updatedUser.id, 'Updated user should have same ID');
+      assert.isUndefined(updatedUser.clientID, 'updates should not pass back clientID');
+      assert.isUndefined(updatedUser.clientSecret, 'updates should not pass back clientSecret');
+      assert.isUndefined(updatedUser._json, 'updates should not pass back _json');
+      assert.isUndefined(updatedUser._raw, 'updates should not pass back _raw');
 
       done();
     });
