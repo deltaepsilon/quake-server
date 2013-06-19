@@ -52,6 +52,7 @@ module.exports = {
       passport.use(new BearerStrategy(oauth2.findByToken));
 
       app.use(function (req, res, next) {
+        res.setHeader('Access-Control-Allow-Origin', "*"); // Necessary for cross-domain requests
         if (req.url.match(/^\/auth\//)) { // Whitelist all /auth/ routes
           return next();
         }
