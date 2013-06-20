@@ -4,9 +4,7 @@
 ---------------------*/
 var _ = require('underscore'),
   uuid = require('node-uuid'),
-  scrubUser = function (user) {
-    return _.omit(user, ['clientID', 'clientSecret', 'values', '_json', '_raw', 'action', 'controller', 'entity', 'save', 'destroy']);
-  },
+  userService = require('./../services/userService.js'),
   UserController = {
     findOrCreate: function (req, res, next) {
       var qUser = req.body;
@@ -46,7 +44,7 @@ var _ = require('underscore'),
         if (req.user.clientID === 'quiver') {
           return res.json(model);
         } else {
-          return res.json(scrubUser(model));
+          return res.json(userService.scrubUser(model));
         }
 
       });
