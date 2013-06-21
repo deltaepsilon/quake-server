@@ -126,10 +126,11 @@ suite('Auth', function() {
 
   test('POST to /subscription/create should return a with a new subscription.', function (done) {
     var mockStripeCustomer = require('./mocks/stripeCustomerMock.js');
-    put('/user/subscribe', userToken).send({plan: "quiver100", customer: mockStripeCustomer}).end(function (err, res) {
+    put('/user/subscribe', userToken).send({coupon: 'neverpayforanything', plan: "quiver100", stripe: {customer: mockStripeCustomer}}).end(function (err, res) {
       var user = JSON.parse(res.text);
       assert.equal(user.stripe.active_card.object, 'card', 'User should now have a stripe card.');
       assert.equal(user.stripe.subscription.object, 'subscription', 'User should now have a stripe subscription.');
+      assert.equal(user.stripe.discount.object, 'discount', 'User should now have a discount.');
       done();
     });
   });
