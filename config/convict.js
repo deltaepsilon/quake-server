@@ -102,6 +102,12 @@ conf = convict({
     default: "You should really change this",
     env: "REDIS_SECRET"
   },
+  stripe_sk: {
+    doc: "Stripe secret key",
+    format: "*",
+    default: "You should really change this",
+    env: "QUIVER_STRIPE_SK"
+  },
   client_id: {
     doc: "OAuth2 client id",
     format: "*",

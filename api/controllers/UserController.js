@@ -5,6 +5,7 @@
 var _ = require('underscore'),
   uuid = require('node-uuid'),
   userService = require('./../services/userService.js'),
+  stripeService = require('./../services/stripeService.js'),
   UserController = {
     findOrCreate: function (req, res, next) {
       var qUser = req.body;
@@ -48,6 +49,10 @@ var _ = require('underscore'),
         }
 
       });
+    },
+
+    subscribe: function (req, res) {
+      stripeService.createSubscription(req, res, UserController.update);
     }
   };
 module.exports = UserController;
