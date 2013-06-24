@@ -33,7 +33,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; //Allow https testing with self-
 suite('Auth', function() {
   suiteSetup(function(done) {
     decisionApp.use(quake.middleware.decision);
-    server = decisionApp.listen(9555);
+    server = decisionApp.listen(conf.get('quiver_port'));
 
     sails.lift({
       port: conf.get('quake_port')
@@ -124,16 +124,58 @@ suite('Auth', function() {
     });
   });
 
-  test('POST to /subscription/create should return a with a new subscription.', function (done) {
+  /*
+   *  Four Cases
+   *  1. User creating card and subscription: customer.object === 'token' && (!user.stripe || !user.stripe.customer)
+   *  2. User is changing card but not subscription: req.body.stripe.customer.object === 'token' && req.body.stripe.plan === user.stripe.customer.subscription.plan.id
+   *  3. User is changing subscription but not card: req.body.stripe.customer.object === 'customer' && req.body.stripe.plan !== user.stripe.customer.subscription.plan.id
+   *  4. User is changing both subscription and card: req.body.stripe.customer.object === 'token' && req.body.stripe.plan !== user.stripe.customer.subscription.plan.id
+   */
+
+  test('POST to /user/subscribe with token and no current stripe customer should create a new customer and a new subscription.', function (done) {
     var mockStripeCustomer = require('./mocks/stripeCustomerMock.js');
-    put('/user/subscribe', userToken).send({coupon: 'neverpayforanything', plan: "quiver100", stripe: {customer: mockStripeCustomer}}).end(function (err, res) {
+    put('/user/subscribe', userToken).send({stripe: {coupon: 'neverpayforanything', plan: "quiver100", customer: mockStripeCustomer}}).end(function (err, res) {
       var user = JSON.parse(res.text);
-      assert.equal(user.stripe.active_card.object, 'card', 'User should now have a stripe card.');
-      assert.equal(user.stripe.subscription.object, 'subscription', 'User should now have a stripe subscription.');
-      assert.equal(user.stripe.discount.object, 'discount', 'User should now have a discount.');
+      assert.equal(user.stripe.customer.active_card.object, 'card', 'User should now have a stripe card.');
+      assert.equal(user.stripe.customer.subscription.object, 'subscription', 'User should now have a stripe subscription.');
+      assert.equal(user.stripe.customer.discount.object, 'discount', 'User should now have a discount.');
       done();
     });
   });
+
+  test('POST to /user/subscribe with no plan change any a new card should return updated card', function (done) {
+    var mockStripeCustomer = require('./mocks/stripeCustomerMock.js');
+    mockStripeCustomer.card.number = '5555555555554444'; //Valid MasterCard number
+    mockStripeCustomer.card.last4 = '4444'; //Valid MasterCard number
+    put('/user/subscribe', userToken).send({stripe: {customer: {card: mockStripeCustomer.card}}}).end(function (err, res) {
+      var user = JSON.parse(res.text);
+      assert.equal(user.stripe.customer.active_card.type, 'MasterCard', 'Should return updated card');
+      assert.equal(user.stripe.customer.subscription.plan.id, 'quiver100', 'Should return same');
+      done();
+    });
+  });
+
+  test('POST to /user/subscribe with plan change and no card should return updated plan', function (done) {
+    put('/user/subscribe', userToken).send({stripe: {plan: "quiver0", coupon: "neverpayforanything"}}).end(function (err, res) {
+      var user = JSON.parse(res.text);
+      assert.equal(user.stripe.customer.active_card.type, 'MasterCard', 'Should return same card');
+      assert.equal(user.stripe.customer.subscription.plan.id, 'quiver0', 'Should return updated subscription');
+      done();
+    });
+  });
+
+  test('POST to /user/subscribe with plan change and card change should return updated plan', function (done) {
+    var mockStripeCustomer = require('./mocks/stripeCustomerMock.js');
+    mockStripeCustomer.card.number = '4242424242424242'; //Valid Visa number
+    mockStripeCustomer.card.last4 = '4242';
+    put('/user/subscribe', userToken).send({stripe: {customer: mockStripeCustomer, plan: 'quiver100'}}).end(function (err, res) {
+      var user = JSON.parse(res.text);
+      assert.equal(user.stripe.customer.active_card.type, 'Visa', 'Should updated same card');
+      assert.equal(user.stripe.customer.subscription.plan.id, 'quiver100', 'Should return updated subscription');
+      done();
+    });
+  });
+
 
   test('Remove user that was just found or created', function (done) {
     del('/user').send({id: user.id}).end(function (err, res) {

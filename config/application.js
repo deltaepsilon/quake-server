@@ -56,6 +56,7 @@ module.exports = {
         res.setHeader('Access-Control-Allow-Origin', "*"); // Necessary for cross-domain requests
         res.error = function (message, status) {
           this.send({error: message}, status || 400);
+          console.log(new Error(message).stack);
         }
 
         if (req.url.match(/^\/auth\//)) { // Whitelist all /auth/ routes

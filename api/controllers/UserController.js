@@ -52,7 +52,73 @@ var _ = require('underscore'),
     },
 
     subscribe: function (req, res) {
-      stripeService.createSubscription(req, res, UserController.update);
+      User.findById(req.user.clientID, function (err, user) {
+        if (!req.body) {
+          return res.error('Request body missing');
+        }
+        if (!req.body.stripe) {
+          return res.error('Stripe object missing');
+        }
+        if (!req.body.stripe.customer && !req.body.stripe.plan) {
+          return res.error('Stripe customer and plan missing');
+        }
+
+        /*
+         *  Four Cases
+         *  1. User creating card and subscription: customer.object === 'token' && (!user.stripe || !user.stripe.customer)
+         *  2. User is changing card but not subscription: req.body.stripe.customer.object === 'token' && req.body.stripe.plan === user.stripe.customer.subscription.plan.id
+         *  3. User is changing subscription but not card: req.body.stripe.customer.object === 'customer' && req.body.stripe.plan !== user.stripe.customer.subscription.plan.id
+         *  4. User is changing both subscription and card: req.body.stripe.customer.object === 'token' && req.body.stripe.plan !== user.stripe.customer.subscription.plan.id
+        */
+
+
+
+        var customer = req.body.stripe.customer,
+          customerType = customer ? customer.object : null,
+          currentCustomer = user.stripe && user.stripe.customer,
+          currentLast4 = currentCustomer && currentCustomer.active_card ? currentCustomer.active_card.last4 : null,
+          proposedLast4 = customer && customer.card ? customer.card.last4: null,
+          token = (customerType === 'token') ? customer.id : null,
+          newCard = token || (proposedLast4 && proposedLast4 !== currentLast4),
+          proposedPlan = req.body.stripe.plan,
+          currentPlan = (user.stripe && user.stripe.customer && user.stripe.customer.subscription && user.stripe.customer.subscription.plan) ? user.stripe.customer.subscription.plan.id : false,
+          description = user.displayName + ": " + user.emails[0].value,
+          coupon = req.body.stripe.coupon,
+          callback = function (err, customer) {
+            if (err) {
+              res.error(err.message);
+            } else {
+              req.body = {stripe: {customer: customer}};
+              UserController.update(req, res);
+            }
+
+          };
+
+
+        if (newCard) {
+          if (!currentPlan && proposedPlan) { //Case 1: Create a new customer with subscription
+            stripeService.createSubscription(proposedPlan, customer, description, coupon, callback);
+
+          } else if (!proposedPlan || currentPlan === proposedPlan) { //Case 2: Just update card
+            stripeService.updateCard(token, customer, currentCustomer, callback);
+
+          } else if (currentPlan !== proposedPlan) { //Case 4: Update plan and card
+            stripeService.updateSubscription(token, proposedPlan, customer, currentCustomer, coupon, callback);
+
+          } else {
+            res.error('Subscribe request was incomplete');
+
+          }
+
+        } else if (!currentPlan || currentPlan !== proposedPlan) { //Case 3: Update just subscription
+          stripeService.updateSubscription(token, proposedPlan, customer, currentCustomer, coupon, callback);
+
+        } else {
+          res.error('Subscribe request was incomplete');
+
+        }
+      });
+
     }
   };
 module.exports = UserController;

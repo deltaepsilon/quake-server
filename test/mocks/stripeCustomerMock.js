@@ -13,7 +13,6 @@ module.exports = {
     "type":"Visa",
     "exp_month":1,
     "exp_year":2014,
-    "fingerprint":"UvdQJHXlyFSe6fmI",
     "country":"US",
     "name":null,
     "address_line1":null,

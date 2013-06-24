@@ -10,7 +10,7 @@ module.exports = function(grunt) {
       test: {
         options: {
           ui: 'tdd',
-          timeout: 5000
+          timeout: 7000
         },
         src: ['test/test.js']
       }
