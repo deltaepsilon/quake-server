@@ -113,6 +113,8 @@ var _ = require('underscore'),
         } else if (!currentPlan || currentPlan !== proposedPlan) { //Case 3: Update just subscription
           stripeService.updateSubscription(token, proposedPlan, customer, currentCustomer, coupon, callback);
 
+        } else if (coupon) { // Update anything you can... this is currently used for updating promo codes
+          stripeService.updateSubscription(token, proposedPlan, customer, currentCustomer, coupon, callback);
         } else {
           res.error('Subscribe request was incomplete');
 

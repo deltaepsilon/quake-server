@@ -28,9 +28,11 @@ module.exports = {
 
 
   updateSubscription: function (token, plan, proposedCustomer, customer, coupon, callback) {
-    var payload = {
-      plan: plan
-    };
+    var payload = {};
+
+    if (plan) {
+      payload.plan = plan;
+    }
 
     if (coupon) {
       payload.coupon = coupon;
@@ -38,7 +40,7 @@ module.exports = {
 
     if (token) {
       payload.card = token;
-    } else if (proposedCustomer && customer && proposedCustomer.card.last4 !== customer.active_card.last4) {
+    } else if (proposedCustomer && proposedCustomer.card && customer && proposedCustomer.card.last4 !== customer.active_card.last4) {
       payload.card = proposedCustomer.card;
     }
 
@@ -48,7 +50,7 @@ module.exports = {
       } else {
         stripe.customers.retrieve(customer.id, function (err, freshCustomer) {
           callback(err, freshCustomer);
-        })
+        });
       }
 
     });
