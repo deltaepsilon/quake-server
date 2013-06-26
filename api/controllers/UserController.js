@@ -100,6 +100,9 @@ var _ = require('underscore'),
             stripeService.createSubscription(proposedPlan, customer, description, coupon, callback);
 
           } else if (!proposedPlan || currentPlan === proposedPlan) { //Case 2: Just update card
+            if (!customer || !currentCustomer) {
+              return res.error('Update card failed: Stripe customer missing.');
+            }
             stripeService.updateCard(token, customer, currentCustomer, callback);
 
           } else if (currentPlan !== proposedPlan) { //Case 4: Update plan and card
