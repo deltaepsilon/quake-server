@@ -22,7 +22,11 @@ server.deserializeClient(function(id, done) {
 });
 
 server.grant(oauth2orize.grant.code(function(client, redirectURI, user, ares, done) {
-  AuthorizationCode.create({
+  AuthorizationCode.destroy({clientID: client.id}, function (err, count) {
+    if (err) {
+      return ares.error({error: err});
+    }
+    AuthorizationCode.create({
       code: uuid.v4(),
       clientID: client.id,
       redirectURI: redirectURI
@@ -34,6 +38,8 @@ server.grant(oauth2orize.grant.code(function(client, redirectURI, user, ares, do
         return done(null, model.code);
       }
     });
+  });
+
 }));
 
 server.exchange(oauth2orize.exchange.code(function(client, code, redirectURI, done) {
@@ -42,13 +48,20 @@ server.exchange(oauth2orize.exchange.code(function(client, code, redirectURI, do
     if (client.id.toString() !== authorizationCode.clientID.toString()) { return done(null, false); }
     if (redirectURI !== authorizationCode.redirectURI) { return done(null, false); }
 
-    AccessToken.create({
-      token: uuid.v4(),
-      userID: authorizationCode.userID,
-      clientID: authorizationCode.clientID
-    }, function(err, model) {
-      if (err) { return done(err); }
-      done(null, model.token);
+    AccessToken.destroy({clientID: authorizationCode.clientID}, function (err) {
+      if (err) {return done(err);}
+      AccessToken.create({
+        token: uuid.v4(),
+        userID: authorizationCode.userID,
+        clientID: authorizationCode.clientID
+      }, function(err, model) {
+        if (err) { return done(err); }
+        AuthorizationCode.destroy({clientID: authorizationCode.clientID}, function (err) {
+          if (err) { return done(err) }
+          done(null, model.token);
+        });
+      });
+
     });
   });
 }));
