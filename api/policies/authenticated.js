@@ -11,6 +11,6 @@ module.exports = function (req, res, next) {
 
 	// User is not allowed
 	else {
-		return res.send("You are not permitted to perform this action.", 403);
+		return res.error("You are not permitted to perform this action.", 403);
 	}
 };

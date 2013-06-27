@@ -16,11 +16,14 @@ var _ = require('underscore'),
       qUser.clientSecret = uuid.v4();
 
       User.findOrCreate({providerID: qUser.providerID}, qUser, function (err, user) {
-        res.setHeader('Content-Type', 'text/json');
+
         if (err) {
-          res.end(JSON.stringify('err'));
+          res.end(JSON.stringify(err));
         } else {
-          res.end(JSON.stringify(user));
+          User.findById(user.id, function (err, model) {
+            res.end(JSON.stringify(user));
+          });
+
         }
       });
     },

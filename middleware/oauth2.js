@@ -106,11 +106,11 @@ module.exports = {
     }
   },
   findByToken: function (token, done) { // Find and return users.
-    AccessToken.find({token: token}, function (err, token) {
+    AccessToken.find({token: token}, function (err, foundToken) {
       if (err) {
         return done(err);
       }
-      done(null, token);
+      done(null, foundToken);
     });
   }
 }

@@ -14,9 +14,7 @@ module.exports = {
       payload.coupon = coupon;
     }
 
-    stripe.customers.create(payload, function (err, customer) {
-      callback(err, customer);
-    });
+    stripe.customers.create(payload, callback);
 
   },
 
@@ -48,9 +46,7 @@ module.exports = {
       if (err) {
         callback(err);
       } else {
-        stripe.customers.retrieve(customer.id, function (err, freshCustomer) {
-          callback(err, freshCustomer);
-        });
+        stripe.customers.retrieve(customer.id, callback);
       }
 
     });
@@ -61,8 +57,44 @@ module.exports = {
       card: token || proposedCustomer.card
     };
 
-    stripe.customers.update(customer.id, updates, function (err, customer) {
-      callback(err, customer);
-    });
+    stripe.customers.update(customer.id, updates, callback);
+  },
+
+  getCustomer: function (id, callback) {
+    stripe.customers.retrieve(id, callback);
+  },
+
+  deleteCustomer: function (id, callback) {
+    stripe.customers.del(id, callback);
+  },
+
+  updateCustomer: function (id, updates, callback) {
+    stripe.customers.update(id, updates, callback);
+  },
+
+  listCustomers: function (count, offset, callback) {
+    stripe.customers.list(count || 10, offset || 0, callback);
+  },
+
+  deleteCustomers: function (customerIDs, callback) {
+    if (!conf.get('env') === 'development') {
+      return callback('You cannot delete all customers outside of a development environment.');
+    }
+    if (!customerIDs) {
+      return callback('customerIDs missing from delete params');
+    }
+    console.log('deleting customers', customerIDs);
+
+    var deleteCustomers = function (ids, cb) {
+      stripe.customers.del(ids.pop(), function (err, deleted) {
+        if (err || !ids.length) {
+          cb(err, deleted);
+        } else {
+          deleteCustomers(ids, cb);
+        }
+      });
+    };
+    deleteCustomers(customerIDs, callback);
+
   }
 }

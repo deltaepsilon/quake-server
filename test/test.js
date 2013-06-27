@@ -8,7 +8,6 @@ var mocha = require('mocha'),
   quake = require('quake-sdk'),
   quakeRoot = conf.get('quake_external'),
   decisionApp = require('express')(),
-  user,
   server,
   app;
 
@@ -62,35 +61,36 @@ suite('Auth', function() {
   });
 
 
-  test('Auth/authorize should return clientID from env vars', function(done) {
-    var redirectURI = quakeRoot + '/auth/callback';
-    request(app).get('/auth/authorize?client_id=' + conf.get('client_id') + '&response_type=code&redirect_uri=' + redirectURI).expect(200).expect('Content-Type', 'text/json').end(function(err, res) {
-      var params = JSON.parse(res.text),
-        decision = request(app).post('/auth/authorize/decision'),
-        token = request(app).post('/auth/token'),
-        cookies = res.headers['set-cookie'].pop().split(';')[0];
+//  test('Auth/authorize should return clientID from env vars', function(done) {
+//    var redirectURI = quakeRoot + '/auth/callback';
+//    request(app).get('/auth/authorize?client_id=' + conf.get('client_id') + '&response_type=code&redirect_uri=' + redirectURI).expect(200).expect('Content-Type', 'text/json').end(function(err, res) {
+//      var params = JSON.parse(res.text),
+//        decision = request(app).post('/auth/authorize/decision'),
+//        token = request(app).post('/auth/token'),
+//        cookies = res.headers['set-cookie'].pop().split(';')[0];
+//
+//      decision.cookies = cookies;
+//      token.cookies = cookies;
+//
+//      assert.equal(params.client.id, 'quiver', 'auth/authorize with the core application client_id returns said client_id');
+//      decision.send({transaction_id: params.transaction_id, user: 'quiver'}).expect(302).end(function(err, res) {
+//        if (err) { throw new Error(err); }
+//
+//        var code = res.header.location.match(/code=(.+)/)[1];
+//
+//        token.send({grant_type: 'authorization_code', code: code, client_id: conf.get('client_id'), client_secret: conf.get('client_secret'), redirect_uri: redirectURI}).end(function(err, res) {
+//          var tokenParams = JSON.parse(res.text);
+//
+//          assert.isNotNull(tokenParams.access_token, 'Access token should be present');
+//          assert.equal(tokenParams.token_type, 'bearer', 'Token type should be bearer');
+//          done();
+//        });
+//
+//      });
+//    });
+//  });
 
-      decision.cookies = cookies;
-      token.cookies = cookies;
-
-      assert.equal(params.client.id, 'quiver', 'auth/authorize with the core application client_id returns said client_id');
-      decision.send({transaction_id: params.transaction_id, user: 'quiver'}).expect(302).end(function(err, res) {
-        if (err) { throw new Error(err); }
-
-        var code = res.header.location.match(/code=(.+)/)[1];
-
-        token.send({grant_type: 'authorization_code', code: code, client_id: conf.get('client_id'), client_secret: conf.get('client_secret'), redirect_uri: redirectURI}).end(function(err, res) {
-          var tokenParams = JSON.parse(res.text);
-
-          assert.isNotNull(tokenParams.access_token, 'Access token should be present');
-          assert.equal(tokenParams.token_type, 'bearer', 'Token type should be bearer');
-          done();
-        });
-
-      });
-    });
-  });
-
+  var user;
   test('findOrCreate route should create an identical new user', function(done) {
     post('/user/findOrCreate').send(userMock).end(function (err, res) {
       user = JSON.parse(res.text);
@@ -132,10 +132,12 @@ suite('Auth', function() {
    *  4. User is changing both subscription and card: req.body.stripe.customer.object === 'token' && req.body.stripe.plan !== user.stripe.customer.subscription.plan.id
    */
 
+  var stripeUser;
   test('POST to /user/subscribe with token and no current stripe customer should create a new customer and a new subscription.', function (done) {
     var mockStripeCustomer = require('./mocks/stripeCustomerMock.js');
     put('/user/subscribe', userToken).send({stripe: {coupon: 'neverpayforanything', plan: "quiver100", customer: mockStripeCustomer}}).end(function (err, res) {
       var user = JSON.parse(res.text);
+      stripeUser = user;
       assert.equal(user.stripe.customer.active_card.object, 'card', 'User should now have a stripe card.');
       assert.equal(user.stripe.customer.subscription.object, 'subscription', 'User should now have a stripe subscription.');
       assert.equal(user.stripe.customer.discount.object, 'discount', 'User should now have a discount.');
@@ -176,6 +178,34 @@ suite('Auth', function() {
     });
   });
 
+  test('GET to /stripe/customers should fail without a matching admin email.', function (done) {
+    get('/stripe/customers').end(function (err, res) {
+      var response = JSON.parse(res.text);
+      assert.equal(response.error, 'You are not permitted to perform this action.', 'GET to /stripe/customers should fail without a matching admin email.');
+      done();
+    });
+  });
+
+  test('GET to /stripe/customers should succeed with admin user token and result should include mock customer.', function (done) {
+    get('/stripe/customers', userToken).end(function (err, res) {
+      var response = JSON.parse(res.text),
+        customers = response.data,
+        i = customers.length,
+        customer;
+
+      assert.equal(response.object, 'list', 'Should return customer object from Stripe');
+      while(i--) {
+
+        if (customers[i].id === stripeUser.stripe.customer.id) {
+          customer = customers[i];
+          break;
+        }
+      }
+
+      assert.equal(customer.id, stripeUser.stripe.customer.id, 'Stripe user should be among listed customers');
+      done();
+    });
+  });
 
   test('Remove user that was just found or created', function (done) {
     del('/user').send({id: user.id}).end(function (err, res) {

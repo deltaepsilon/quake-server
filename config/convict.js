@@ -119,6 +119,12 @@ conf = convict({
     format: "*",
     default: "You should really change this",
     env: "QUAKE_CLIENT_SECRET"
+  },
+  admin_email: {
+    doc: "Admin email list",
+    format: "*",
+    default: "You should really change this",
+    env: "QUIVER_ADMIN_EMAIL"
   }
 });
 
