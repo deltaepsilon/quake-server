@@ -186,6 +186,22 @@ suite('Auth', function() {
     });
   });
 
+  test('GET to /stripe/customer should return the customer', function (done) {
+    get('/stripe/customer?customer_id=' + stripeUser.stripe.customer.id, userToken).end(function (err, res) {
+      var customer = JSON.parse(res.text);
+      assert.equal(customer.id, stripeUser.stripe.customer.id, 'Stripe customer id should match');
+      done();
+    });
+  });
+
+  test('GET to /stripe/customer should return the customer', function (done) {
+    put('/stripe/customer?customer_id=' + stripeUser.stripe.customer.id, userToken).send({plan: 'quiver0'}).end(function (err, res) {
+      var customer = JSON.parse(res.text);
+      assert.equal(customer.subscription.plan.id, 'quiver0', 'Stripe plan should be updated');
+      done();
+    });
+  });
+
   test('GET to /stripe/customers should succeed with admin user token and result should include mock customer.', function (done) {
     get('/stripe/customers', userToken).end(function (err, res) {
       var response = JSON.parse(res.text),
@@ -195,15 +211,41 @@ suite('Auth', function() {
 
       assert.equal(response.object, 'list', 'Should return customer object from Stripe');
       while(i--) {
-
         if (customers[i].id === stripeUser.stripe.customer.id) {
           customer = customers[i];
           break;
         }
       }
-
       assert.equal(customer.id, stripeUser.stripe.customer.id, 'Stripe user should be among listed customers');
+
       done();
+    });
+  });
+
+  test('GET to /stripe/customer should return the customer', function (done) {
+    del('/stripe/customer', userToken).send({customer_id: stripeUser.stripe.customer.id}).end(function (err, res) {
+      var response = JSON.parse(res.text);
+      assert.isTrue(response.deleted, 'Delete should be successful');
+      assert.equal(stripeUser.stripe.customer.id, response.id, 'Deleted id should match');
+      done();
+    });
+  });
+
+  test('DELETE to /stripe/customers should wipe out ALL OF THE CUSTOMERS', function (done) {
+    get('/stripe/customers', userToken).end(function (err, res) {
+      var response = JSON.parse(res.text),
+        customers = response.data,
+        i = customers.length,
+        customerIDs = [];
+      while (i--) {
+        customerIDs.push(customers[i].id);
+      }
+      del('/stripe/customers', userToken).send({customerIDs: customerIDs}).end(function (err, res) {
+        var deleteResponse = JSON.parse(res.text);
+        assert.isTrue(deleteResponse.deleted);
+        assert.deepEqual(deleteResponse.ids, customerIDs, 'All deleted customer ids should be present in response');
+        done();
+      });
     });
   });
 

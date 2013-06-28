@@ -1,4 +1,5 @@
-var conf = require('./../../config/convict.js'),
+var _ = require('underscore'),
+  conf = require('./../../config/convict.js'),
   stripe = require('stripe')(conf.get('stripe_sk'));
 
 module.exports = {
@@ -83,18 +84,24 @@ module.exports = {
     if (!customerIDs) {
       return callback('customerIDs missing from delete params');
     }
-    console.log('deleting customers', customerIDs);
 
-    var deleteCustomers = function (ids, cb) {
-      stripe.customers.del(ids.pop(), function (err, deleted) {
-        if (err || !ids.length) {
-          cb(err, deleted);
-        } else {
-          deleteCustomers(ids, cb);
+    var originalIDs = _.clone(customerIDs),
+      customCallback = function (err, response) {
+        if (err) {
+          return callback(err);
         }
-      });
-    };
-    deleteCustomers(customerIDs, callback);
+        callback(null, {deleted: true, ids: originalIDs});
+      },
+      deleteCustomers = function (ids, cb) {
+        stripe.customers.del(ids.pop(), function (err, deleted) {
+          if (err || !ids.length) {
+            cb(err, deleted);
+          } else {
+            deleteCustomers(ids, customCallback);
+          }
+        });
+      };
+    deleteCustomers(customerIDs, customCallback);
 
   }
 }
