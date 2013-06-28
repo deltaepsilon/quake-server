@@ -5,33 +5,40 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-nodemon');
 
-  grunt.initConfig({
-    mochaTest: {
-      test: {
-        options: {
-          ui: 'tdd',
-          timeout: 10000
-        },
-        src: ['test/test.js']
+  var tests = {
+    user: {
+      options: {
+        ui: 'tdd',
+        timeout: 10000
       },
-      user: {
-        options: {
-          ui: 'tdd',
-          timeout: 10000
-        },
-        src: ['test/user.js']
-      },
-      stripe: {
-        options: {
-          ui: 'tdd',
-          timeout: 15000
-        },
-        src: ['test/stripe.js']
-      }
+      src: ['test/user.js']
     },
+    stripe: {
+      options: {
+        ui: 'tdd',
+        timeout: 20000
+      },
+      src: ['test/stripe.js']
+    }
+    },
+    keys = Object.keys(tests),
+    shellTests = [],
+    i = keys.length;
+  while (i--) {
+    shellTests.push('grunt mochaTest:' + keys[i]);
+  }
+
+  grunt.initConfig({
+    mochaTest: tests,
     shell: {
       debug: {
         command: 'node-inspector'
+      },
+      tests: {
+        command: shellTests.join('&&'),
+        options: {
+          stdout: true
+        }
       }
     },
     nodemon: {
@@ -62,4 +69,5 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('default', ['mochaTest']);
+  grunt.registerTask('test', ['shell:tests']);
 }

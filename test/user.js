@@ -1,1 +1,3 @@
-require('./lib/user.js')();
+require('./lib/user.js')().then(function (done) {
+  done();
+});

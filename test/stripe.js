@@ -1,1 +1,3 @@
-require('./lib/stripe.js')();
+require('./lib/stripe.js')().then(function (done) {
+  done();
+});

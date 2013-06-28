@@ -32,7 +32,7 @@ module.exports = function () {
     suiteTeardown(function(done) {
       quakeServer.cleanUser(user, function () {
         quakeServer.stopApp(server, function () {
-          done();
+          deferred.resolve(done);
         });
       });
     });

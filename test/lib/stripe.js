@@ -31,7 +31,7 @@ module.exports = function () {
     suiteTeardown(function(done) {
       quakeServer.cleanUser(user, function () {
         quakeServer.stopApp(server, function () {
-          done();
+          deferred.resolve(done);
         });
       });
     });
@@ -155,6 +155,12 @@ module.exports = function () {
         while (i--) {
           customerIDs.push(customers[i].id);
         }
+
+        if (!customerIDs.length) {
+          console.log('No customers to practice deleting');
+          return done();
+        }
+
         verbs.del('/stripe/customers', userToken).send({customerIDs: customerIDs}).end(function (err, res) {
           var deleteResponse = JSON.parse(res.text);
           assert.isTrue(deleteResponse.deleted);
