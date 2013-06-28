@@ -10,9 +10,23 @@ module.exports = function(grunt) {
       test: {
         options: {
           ui: 'tdd',
-          timeout: 7000
+          timeout: 10000
         },
         src: ['test/test.js']
+      },
+      user: {
+        options: {
+          ui: 'tdd',
+          timeout: 10000
+        },
+        src: ['test/user.js']
+      },
+      stripe: {
+        options: {
+          ui: 'tdd',
+          timeout: 15000
+        },
+        src: ['test/stripe.js']
       }
     },
     shell: {
