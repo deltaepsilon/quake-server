@@ -125,6 +125,12 @@ conf = convict({
     format: "*",
     default: "You should really change this",
     env: "QUIVER_ADMIN_EMAIL"
+  },
+  amazon_assets_bucket: {
+    doc: "Amazon assets bucket name",
+    format: "*",
+    default: "You should really change this",
+    env: "AMAZON_ASSETS_BUCKET"
   }
 });
 

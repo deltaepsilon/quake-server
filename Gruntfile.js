@@ -6,20 +6,34 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-nodemon');
 
   var tests = {
-    user: {
-      options: {
-        ui: 'tdd',
-        timeout: 10000
+      user: {
+        options: {
+          ui: 'tdd',
+          timeout: 10000
+        },
+        src: ['test/user.js']
       },
-      src: ['test/user.js']
-    },
-    stripe: {
-      options: {
-        ui: 'tdd',
-        timeout: 20000
+      stripe: {
+        options: {
+          ui: 'tdd',
+          timeout: 20000
+        },
+        src: ['test/stripe.js']
       },
-      src: ['test/stripe.js']
-    }
+      aws: {
+        options: {
+          ui: 'tdd',
+          timeout: 20000
+        },
+        src: ['test/aws.js']
+      },
+      wxr: {
+        options: {
+          ui: 'tdd',
+          timeout: 20000
+        },
+        src: ['test/wxr.js']
+      }
     },
     keys = Object.keys(tests),
     shellTests = [],

@@ -16,7 +16,7 @@ var defer = require('node-promise').defer,
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; //Allow https testing with self-signed certs
 
 module.exports = function () {
-  suite('Auth', function() {
+  suite('Stripe', function() {
     suiteSetup(function(done) {
       quakeServer.startApp(function (aserver, aapp, auser, atoken, aheader, auserToken, auserHeader) {
         server = aserver;
@@ -145,30 +145,30 @@ module.exports = function () {
         done();
       });
     });
-
-    test('DELETE to /stripe/customers should wipe out ALL OF THE CUSTOMERS', function (done) {
-      verbs.get('/stripe/customers', userToken).end(function (err, res) {
-        var response = JSON.parse(res.text),
-          customers = response.data,
-          i = customers.length,
-          customerIDs = [];
-        while (i--) {
-          customerIDs.push(customers[i].id);
-        }
-
-        if (!customerIDs.length) {
-          console.log('No customers to practice deleting');
-          return done();
-        }
-
-        verbs.del('/stripe/customers', userToken).send({customerIDs: customerIDs}).end(function (err, res) {
-          var deleteResponse = JSON.parse(res.text);
-          assert.isTrue(deleteResponse.deleted);
-          assert.deepEqual(deleteResponse.ids, customerIDs, 'All deleted customer ids should be present in response');
-          done();
-        });
-      });
-    });
+//
+//    test('DELETE to /stripe/customers should wipe out ALL OF THE CUSTOMERS', function (done) {
+//      verbs.get('/stripe/customers', userToken).end(function (err, res) {
+//        var response = JSON.parse(res.text),
+//          customers = response.data,
+//          i = customers.length,
+//          customerIDs = [];
+//        while (i--) {
+//          customerIDs.push(customers[i].id);
+//        }
+//
+//        if (!customerIDs.length) {
+//          console.log('No customers to practice deleting');
+//          return done();
+//        }
+//
+//        verbs.del('/stripe/customers', userToken).send({customerIDs: customerIDs}).end(function (err, res) {
+//          var deleteResponse = JSON.parse(res.text);
+//          assert.isTrue(deleteResponse.deleted);
+//          assert.deepEqual(deleteResponse.ids, customerIDs, 'All deleted customer ids should be present in response');
+//          done();
+//        });
+//      });
+//    });
 
   });
 

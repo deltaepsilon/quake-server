@@ -17,7 +17,7 @@ var defer = require('node-promise').defer,
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; //Allow https testing with self-signed certs
 
 module.exports = function () {
-  suite('Auth', function() {
+  suite('User', function() {
     suiteSetup(function(done) {
       quakeServer.startApp(function (aserver, aapp, auser, atoken, aheader, auserToken, auserHeader) {
         server = aserver;

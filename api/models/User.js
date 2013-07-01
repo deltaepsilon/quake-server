@@ -24,16 +24,8 @@ module.exports = {
       birthday: 'STRING',
       locale: 'STRING'
     },
-    stripe: {
-      publicKey: 'STRING',
-      secretKey: 'STRING'
-    },
-    subscription: {
-      active: 'BOOLEAN',
-      stripeUser: {
-
-      }
-    }
+    stripe: {},
+    files: {}
   }
 
 
