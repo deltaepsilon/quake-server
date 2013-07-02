@@ -33,6 +33,13 @@ module.exports = function(grunt) {
           timeout: 20000
         },
         src: ['test/wxr.js']
+      },
+      wxrWorker: {
+        options: {
+          ui: 'tdd',
+          timeout: 20000
+        },
+        src: ['test/wxrWorker.js']
       }
     },
     keys = Object.keys(tests),

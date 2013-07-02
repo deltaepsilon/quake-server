@@ -21,14 +21,19 @@ var FileController = {
     var localCallback = callback(res),
       query = _.extend(req.query || {}, req.params || {}, req.body || {});
 
+    console.log('calling awsService.s3Get');
+
     awsService.s3Get(req.user.clientID + '/wxr/' + query.filename, function (err, result) {
       var buffer = awsService.streamEncode(result.Body, 'utf8'),
       workerProcess = fork(__dirname + './../workers/wxrWorker.js');
-      workerProcess.send({buffer: buffer});
+      workerProcess.send({buffer: buffer, stream: result.Body});
 
       workerProcess.on('message', function (message) {
+
         console.log('parent received message', message);
+        workerProcess.kill();
         localCallback(null, message);
+
       });
     });
   }

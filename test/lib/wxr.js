@@ -20,7 +20,7 @@ var defer = require('node-promise').defer,
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; //Allow https testing with self-signed certs
 
 module.exports = function () {
-  suite('Stripe', function() {
+  suite('WXR', function() {
     suiteSetup(function(done) {
       quakeServer.startApp(function (aserver, aapp, auser, atoken, aheader, auserToken, auserHeader) {
         server = aserver;
@@ -53,7 +53,6 @@ module.exports = function () {
 
     test('POST to /file/wxr should parse a WXR', function (done) {
       verbs.post('/file/wxr', userToken).send({filename: filename}).end(function (err, res) {
-        console.log('res.text', res.text);
         var result = JSON.parse(res.text);
         console.log('result', result);
         done();

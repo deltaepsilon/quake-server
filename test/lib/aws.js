@@ -74,7 +74,7 @@ module.exports = function () {
 
     var wxrResult;
     test('awsService be able to get the WXR object', function (done) {
-      awsService.s3Get(filepath, 'utf8', function (err, result) {
+      awsService.s3Get(filepath, function (err, result) {
         var buffer = new Buffer(result.Body, 'utf8');
         wxrResult = result;
         assert.equal(result.ETag.length, 34, 'ETag should be correct length');
@@ -84,12 +84,11 @@ module.exports = function () {
     });
 
     test('awsService streamEncode should return a utf8-encoded buffer', function (done) {
-      awsService.streamEncode(wxrResult.Body, 'utf8', function (err, buffer) {
-        var wxrResultLength = parseInt(wxrResult.Body.length, 10),
-          bufferLength = buffer.length;
+      var buffer = awsService.streamEncode(wxrResult.Body, 'utf8'),
+        wxrResultLength = parseInt(wxrResult.Body.length, 10),
+        bufferLength = buffer.length;
         assert.isTrue(Math.abs(wxrResultLength - bufferLength)/bufferLength < .0009, 'ContentLength should match uploaded file');
         done();
-      });
     });
 
     test('DELETE to /aws/wxr should delete the WXR file from the WXR folder.', function (done) {

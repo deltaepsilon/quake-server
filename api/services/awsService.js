@@ -5,7 +5,7 @@ var _ = require('underscore'),
   s3Bucket = new AWS.S3({params: {Bucket: bucketName}});
 
 module.exports = {
-  s3Get: function (path, encoding, callback) {
+  s3Get: function (path, callback) {
     s3Bucket.getObject({
       Bucket: bucketName,
       Key: path
