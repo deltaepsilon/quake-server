@@ -38,7 +38,12 @@ var fileService = {
     if (!wxr) {
       callback('wxrSave failed: WXR contents missing');
     }
-    WXR.create({userID: userID, filename: filename, meta: wxr.meta, items: wxr.items}, callback);
+    WXR.destroyWhere({userID: userID, filename: filename}, function (err, res) {
+      if (err) {
+        return callback(err, res);
+      }
+      WXR.create({userID: userID, filename: filename, meta: wxr.meta, items: wxr.items}, callback);
+    });
 
   },
   wxrGet: function (userID, filename, callback) {
@@ -55,24 +60,24 @@ var fileService = {
     if (!userID) {
       callback('wxrList failed: User ID missing.');
     }
-    WXR.find({userID: userID}, callback);
+    WXR.findAll({userID: userID}, callback);
 
   },
-  wxrDelete: function (userID, filename, callback) {
+  wxrDestroy: function (userID, filename, callback) {
     if (!userID) {
       callback('wxrDelete failed: User ID missing.');
     }
     if (!filename) {
       callback('wxrDelete failed: Filename missing');
     }
-    WXR.delete({userID: userID, filename: filename}, callback);
+    WXR.destroy({userID: userID, filename: filename}, callback);
 
   },
-  wxrDeleteAll: function (userID, callback) {
+  wxrDestroyAll: function (userID, callback) {
     if (!userID) {
-      callback('wxrDeleteAll failed: User ID missing.');
+      callback('All failed: User ID missing.');
     }
-    WXR.delete({userID: userID}, callback);
+    WXR.destroy({userID: userID}, callback);
 
   }
 };

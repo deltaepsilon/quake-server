@@ -5,40 +5,29 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-nodemon');
 
-  var tests = {
+  var options = {
+      ui: 'tdd',
+      timeout: 20000
+    },
+    tests = {
       user: {
-        options: {
-          ui: 'tdd',
-          timeout: 10000
-        },
+        options: options,
         src: ['test/user.js']
       },
       stripe: {
-        options: {
-          ui: 'tdd',
-          timeout: 20000
-        },
+        options: options,
         src: ['test/stripe.js']
       },
       aws: {
-        options: {
-          ui: 'tdd',
-          timeout: 20000
-        },
+        options: options,
         src: ['test/aws.js']
       },
       wxr: {
-        options: {
-          ui: 'tdd',
-          timeout: 20000
-        },
+        options: options,
         src: ['test/wxr.js']
       },
       wxrWorker: {
-        options: {
-          ui: 'tdd',
-          timeout: 20000
-        },
+        options: options,
         src: ['test/wxrWorker.js']
       }
     },
