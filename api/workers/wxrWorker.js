@@ -31,8 +31,7 @@ var _ = require('underscore'),
   };
 
 process.on('message', function (message) {
-  console.log('worker received message', message);
-  directParse(message.buffer, function (err, res) {
+  parse(message.buffer, function (err, res) {
     process.send({err: err, res: res});
   });
 });

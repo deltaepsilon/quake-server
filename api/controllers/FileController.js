@@ -12,30 +12,22 @@ var defer = require('node-promise').defer,
       res.send(JSON.stringify(response));
     }
   },
-  awsService = require('./../services/awsService.js'),
-  wxrWorker = require('./../workers/wxrWorker.js'),
-  fork = require('child_process').fork;
+  fileService = require('./../services/fileService.js');
 
 var FileController = {
   wxr: function (req, res) {
     var localCallback = callback(res),
       query = _.extend(req.query || {}, req.params || {}, req.body || {});
 
-    console.log('calling awsService.s3Get');
+    switch (req.method) {
+      case 'GET':
+        fileService.wxrGet(req.user.clientID, query.filename, localCallback);
+        break;
+      case 'POST':
+        fileService.wxrParse(req.user.clientID, query.filename, localCallback);
+        break;
+    }
 
-    awsService.s3Get(req.user.clientID + '/wxr/' + query.filename, function (err, result) {
-      var buffer = awsService.streamEncode(result.Body, 'utf8'),
-      workerProcess = fork(__dirname + './../workers/wxrWorker.js');
-      workerProcess.send({buffer: buffer, stream: result.Body});
-
-      workerProcess.on('message', function (message) {
-
-        console.log('parent received message', message);
-        workerProcess.kill();
-        localCallback(null, message);
-
-      });
-    });
   }
 
 

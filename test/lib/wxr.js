@@ -54,7 +54,8 @@ module.exports = function () {
     test('POST to /file/wxr should parse a WXR', function (done) {
       verbs.post('/file/wxr', userToken).send({filename: filename}).end(function (err, res) {
         var result = JSON.parse(res.text);
-        console.log('result', result);
+        assert.equal(Object.keys(result.meta[0]).length, 20, 'Meta should have the right length');
+        assert.equal(result.items.length, 24, 'Items should have the right length');
         done();
       });
     });
