@@ -38,7 +38,7 @@ var fileService = {
     if (!wxr) {
       callback('wxrSave failed: WXR contents missing');
     }
-    WXR.create({userID: userID, filename: filename, wxr: wxr}, callback);
+    WXR.create({userID: userID, filename: filename, meta: wxr.meta, items: wxr.items}, callback);
 
   },
   wxrGet: function (userID, filename, callback) {

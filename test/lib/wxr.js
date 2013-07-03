@@ -51,11 +51,11 @@ module.exports = function () {
       });
     });
 
-    test('POST to /file/wxr should parse a WXR', function (done) {
+    test('POST to /file/wxr should parse a WXR and return a saved object', function (done) {
       verbs.post('/file/wxr', userToken).send({filename: filename}).end(function (err, res) {
-        var result = JSON.parse(res.text);
-        assert.equal(Object.keys(result.meta[0]).length, 20, 'Meta should have the right length');
-        assert.equal(result.items.length, 24, 'Items should have the right length');
+        var wxr = JSON.parse(res.text);
+        assert.equal(Object.keys(wxr.meta[0]).length, 20, 'Meta should have the right length');
+        assert.equal(wxr.items.length, 24, 'Items should have the right length');
         done();
       });
     });
@@ -67,6 +67,8 @@ module.exports = function () {
         done();
       });
     });
+
+    // TODO Write tests for fileService, particularly wxrSave, wxrGet, wxrList, wxrDelete and wxrDeleteAll
 
 
   });
