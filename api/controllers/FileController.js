@@ -12,6 +12,9 @@ var defer = require('node-promise').defer,
       res.send(JSON.stringify(response));
     }
   },
+  defaultError = function (req, res, name) {
+    res.error('Http verb: ' + req.method + ' not supported by ' + name);
+  },
   fileService = require('./../services/fileService.js');
 
 var FileController = {
@@ -29,10 +32,12 @@ var FileController = {
       case 'POST':
         fileService.wxrParse(req.user.clientID, query.filename, localCallback);
         break;
+      default:
+        defaultError(req, res, 'wxr');
+        break;
     }
 
   },
-
   wxrList: function (req, res) {
     var localCallback = callback(res);
 
@@ -42,6 +47,22 @@ var FileController = {
         break;
       case 'DELETE':
         fileService.wxrDestroyAll(req.user.clientID, localCallback);
+        break;
+      default:
+        defaultError(req, res, 'wxrList');
+        break;
+    }
+
+  },
+  wxrAdd: function (req, res) {
+    var localCallback = callback(res),
+      query = _.extend(req.query || {}, req.params || {}, req.body || {});
+    switch (req.method) {
+      case 'POST':
+        fileService.wxrAdd(req.user.clientID, query.paths, localCallback);
+        break;
+      default:
+        defaultError(req, res, 'wxrAdd');
         break;
     }
   }

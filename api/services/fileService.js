@@ -79,6 +79,38 @@ var fileService = {
     }
     WXR.destroy({userID: userID}, callback);
 
+  },
+
+  wxrAdd: function (userID, paths, callback) {
+    if (!userID) {
+      callback('wxrDelete failed: User ID missing.');
+    }
+    if (!paths) {
+      callback('wxrDelete failed: Paths missing.');
+    }
+    if (!filename) {
+      callback('wxrDelete failed: Filename missing');
+    }
+
+    User.findById(userID, function (err, user) {
+      if (err) {
+        callback(err);
+      } else {
+        var pathsArray = paths.split(','),
+          i = pathsArray.length;
+
+        if (!user.files) {
+          user.files = {}
+        }
+        if (!user.files.wxr) {
+          user.files.wxr = []
+        }
+
+        while (i--) {
+          user.files.wxr.push(pathsArray)
+        }
+      }
+    });
   }
 };
 
