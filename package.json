@@ -55,5 +55,6 @@
   "main": "app.js",
   "repository": "git@github.com:deltaepsilon/quake.git",
   "author": "Christopher Esplin",
-  "license": "MIT"
+  "license": "MIT",
+  "engine": "node 0.10.12"
 }

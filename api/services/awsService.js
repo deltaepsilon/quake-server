@@ -30,7 +30,8 @@ module.exports = {
       Key: path
     }, callback);
   },
-  streamEncode: function (stream, encoding, callback) {
+  streamEncode: function (stream, encoding) {
+    //Requires node >=v0.10.12. The old buffer class couldn't handle everything
     buffer = new Buffer(stream, encoding || 'utf8');
     return buffer.toString();
   }
