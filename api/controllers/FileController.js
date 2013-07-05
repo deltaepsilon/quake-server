@@ -17,16 +17,16 @@ var FileController = {
 
     switch (req.method) {
       case 'GET':
-        return fileService.wxrGet(req.user.clientID, query.filename).then(handler.success, handler.error);
+        fileService.wxrGet(req.user.clientID, query.filename).then(handler.success, handler.error);
         break;
       case 'DELETE':
-        return fileService.wxrDestroy(req.user.clientID, query.filename).then(handler.success, handler.error);
+        fileService.wxrDestroy(req.user.clientID, query.filename).then(handler.success, handler.error);
         break;
       case 'POST':
-        return fileService.wxrParse(req.user.clientID, query.filename).then(handler.success, handler.error);
+        fileService.wxrParse(req.user.clientID, query.filename).then(handler.success, handler.error);
         break;
       default:
-        return defaultError(req, res, 'wxr');
+        defaultError(req, res, 'wxr');
         break;
     }
 
@@ -36,28 +36,16 @@ var FileController = {
 
     switch (req.method) {
       case 'GET':
-        return fileService.wxrList(req.user.clientID).then(handler.success, handler.error);
+        fileService.wxrList(req.user.clientID).then(handler.success, handler.error);
         break;
       case 'DELETE':
-        return fileService.wxrDestroyAll(req.user.clientID).then(handler.success, handler.error);
+        fileService.wxrDestroyAll(req.user.clientID).then(handler.success, handler.error);
         break;
       default:
-        return defaultError(req, res, 'wxrList');
+        defaultError(req, res, 'wxrList');
         break;
     }
 
-  },
-  wxrFiles: function (req, res) {
-    var handler = new Handler(res),
-      query = _.extend(req.query || {}, req.params || {}, req.body || {});
-    switch (req.method) {
-      case 'POST':
-        return fileService.wxrAdd(req.user.clientID, query.paths).then(handler.success, handler.error);
-        break;
-      default:
-        return defaultError(req, res, 'wxrAdd');
-        break;
-    }
   }
 
 

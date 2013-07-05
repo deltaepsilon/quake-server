@@ -4,9 +4,10 @@
 ---------------------*/
 var _ = require('underscore'),
   uuid = require('node-uuid'),
+  Handler = require('./../utilities/quake.js').handler,
   userService = require('./../services/userService.js'),
   stripeService = require('./../services/stripeService.js'),
-  Handler = require('./../utilities/quake.js').handler,
+  fileService = require('./../services/fileService.js'),
   UserController = {
     findOrCreate: function (req, res, next) {
       var qUser = req.body;
@@ -123,6 +124,20 @@ var _ = require('underscore'),
 
         }
       });
+
+    },
+
+    wxr: function (req, res) {
+      var handler = new Handler(res),
+        query = _.extend(req.query || {}, req.params || {}, req.body || {});
+      switch (req.method) {
+        case 'POST':
+          fileService.wxrAdd(req.user.clientID, query.paths).then(handler.success, handler.error);
+          break;
+        default:
+          defaultError(req, res, 'wxrAdd');
+          break;
+      }
 
     }
   };

@@ -43,9 +43,11 @@ module.exports = function () {
     });
 
 
+    var inkBlob1;
     test('POST to /aws/wxr should save a WXR file to the WXR folder.', function (done) {
       verbs.post('/aws/wxr', userToken).send({filename: filename, body: mockWXR}).end(function (err, res) {
         var result = JSON.parse(res.text);
+        inkBlob1 = result;
         assert.equal(result.ETag.length, 34, 'Valid ETag should be returned');
         assert.equal(result.RequestId.length, 16, 'Valid RequestId should be returned');
         done();
@@ -71,10 +73,12 @@ module.exports = function () {
       });
     });
 
+    var inkBlob2;
     test('GET to /file/wxrList should return the relevant wxr objects', function (done) {
       // Upload second file
       verbs.post('/aws/wxr', userToken).send({filename: filename2, body: mockWXR}).end(function (err, res) {
         //Parse second file
+        inkBlob2 = JSON.parse(res.text);
         verbs.post('/file/wxr', userToken).send({filename: filename2}).end(function (err, res) {
           verbs.get('/file/wxrList', userToken).end(function (err, res) {
             var WXRs = JSON.parse(res.text);
@@ -84,6 +88,17 @@ module.exports = function () {
         });
       });
 
+    });
+
+    test('POST to /user/wxr should return a user with the appropriate files set', function (done) {
+      //TODO generate some files against Filepicker and retrieve the paths
+      console.log('inkBlobs', inkBlob1, inkBlob2);
+      verbs.post('/user/wxr', userToken).send({paths: [inkBlob1.filename, inkBlob2.filename].join(',')}, function (err, res) {
+        console.log('res.text', res.text);
+        var user = JSON.parse(res.text);
+        console.log('user', user);
+        done();
+      });
     });
 
     test('DELETE to /file/wxr should delete one wxr', function (done) {

@@ -25,7 +25,6 @@ var fileService = {
           if (message.err) {
             resolver.reject(message.err);
           } else {
-            console.log('resolving wxrSave');
             fileService.wxrSave(userID, filename, message.res).then(resolver.resolve);
           }
         });
