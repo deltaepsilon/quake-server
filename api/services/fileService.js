@@ -1,116 +1,153 @@
 var awsService = require('./awsService.js'),
+  filepicker = require('node-filepicker')(),
+  defer = require('node-promise').defer,
+  all = require('node-promise').all,
   wxrWorker = require('./../workers/wxrWorker.js'),
-  fork = require('child_process').fork;
+  fork = require('child_process').fork,
+  Resolver = require('./../utilities/quake.js').resolver;
 
 var fileService = {
-  wxrParse: function (userID, filename, callback) {
+  wxrParse: function (userID, filename) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred);
     if (!userID) {
-      callback('wxrParse failed: User ID missing');
-    }
-    if (!filename) {
-      callback('wxrParse failed: Filename missing');
-    }
+      resolver.reject('wxrParse failed: User ID missing');
+    } else if (!filename) {
+      resolver.reject('wxrParse failed: Filename missing');
+    } else {
+      awsService.s3Get(userID + '/wxr/' + filename).then(function (result) {
+        var buffer = awsService.streamEncode(result.Body, 'utf8'),
+          workerProcess = fork(__dirname + './../workers/wxrWorker.js');
+        workerProcess.send({buffer: buffer});
 
-    awsService.s3Get(userID + '/wxr/' + filename, function (err, result) {
-      var buffer = awsService.streamEncode(result.Body, 'utf8'),
-        workerProcess = fork(__dirname + './../workers/wxrWorker.js');
-      workerProcess.send({buffer: buffer});
+        workerProcess.on('message', function (message) {
+          workerProcess.kill();
+          if (message.err) {
+            resolver.reject(message.err);
+          } else {
+            console.log('resolving wxrSave');
+            fileService.wxrSave(userID, filename, message.res).then(resolver.resolve);
+          }
+        });
 
-      workerProcess.on('message', function (message) {
-        workerProcess.kill();
-        if (message.err) {
-          callback(message.err)
+      });
+    }
+    return deferred.promise;
+
+  },
+  wxrSave: function (userID, filename, wxr) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred);
+    if (!userID) {
+      resolver.reject('wxrSave failed: User ID missing.');
+    } else if (!filename) {
+      resolver.reject('wxrSave failed: Filename missing');
+    } else if (!wxr) {
+      resolver.reject('wxrSave failed: WXR contents missing');
+    } else {
+      WXR.destroyWhere({userID: userID, filename: filename}, function (err) {
+        if (err) {
+          resolver.reject(err);
         } else {
-          fileService.wxrSave(userID, filename, message.res, callback);
+          WXR.create({userID: userID, filename: filename, meta: wxr.meta, items: wxr.items}, resolver.done);
         }
       });
-
-    });
+    }
+    return deferred.promise;
 
   },
-  wxrSave: function (userID, filename, wxr, callback) {
+  wxrGet: function (userID, filename) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred);
     if (!userID) {
-      callback('wxrSave failed: User ID missing.');
+      resolver.reject('wxrGet failed: User ID missing.');
+    } else if (!filename) {
+      resolver.reject('wxrGet failed: Filename missing');
+    } else {
+      WXR.find({userID: userID, filename: filename}, resolver.done);
     }
-    if (!filename) {
-      callback('wxrSave failed: Filename missing');
+
+
+    return deferred.promise;
+
+  },
+  wxrList: function (userID) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred);
+    if (!userID) {
+      resolver.reject('wxrList failed: User ID missing.');
+    } else {
+      WXR.findAll({userID: userID}, resolver.done);
     }
-    if (!wxr) {
-      callback('wxrSave failed: WXR contents missing');
+
+    return deferred.promise;
+
+  },
+  wxrDestroy: function (userID, filename) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred);
+    if (!userID) {
+      resolver.reject('wxrDelete failed: User ID missing.');
+    } else if (!filename) {
+      resolver.reject('wxrDelete failed: Filename missing');
+    } else {
+      WXR.destroy({userID: userID, filename: filename}, resolver.done);
     }
-    WXR.destroyWhere({userID: userID, filename: filename}, function (err, res) {
-      if (err) {
-        return callback(err, res);
+    return deferred.promise;
+
+  },
+  wxrDestroyAll: function (userID) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred);
+    if (!userID) {
+      resolver.reject('All failed: User ID missing.');
+    } else {
+      WXR.destroy({userID: userID}, resolver.done);
+    }
+    return deferred.promise;
+
+  },
+  wxrAdd: function (userID, paths) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred);
+    if (!userID) {
+      resolver.reject('wxrDelete failed: User ID missing.');
+    } else if (!paths) {
+      resolver.reject('wxrDelete failed: Paths missing.');
+    } else {
+      fileService.fileAdd(userID, paths, 'wxr').then(function (result) {
+        console.log('fileService just got the results');
+      }, resolver.reject);
+    }
+    return deferred.promise;
+  },
+  fileAdd: function (userID, paths, fileType) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred),
+      promises = [],
+      pathsArray = paths.split(','),
+      i = pathsArray.length;
+
+    return User.findById(userID).then(function (user) {
+      if (!user.files) { // Populate empty files attributes
+        user.files = {}
       }
-      WXR.create({userID: userID, filename: filename, meta: wxr.meta, items: wxr.items}, callback);
-    });
-
-  },
-  wxrGet: function (userID, filename, callback) {
-    if (!userID) {
-      callback('wxrGet failed: User ID missing.');
-    }
-    if (!filename) {
-      callback('wxrGet failed: Filename missing');
-    }
-    WXR.find({userID: userID, filename: filename}, callback);
-
-  },
-  wxrList: function (userID, callback) {
-    if (!userID) {
-      callback('wxrList failed: User ID missing.');
-    }
-    WXR.findAll({userID: userID}, callback);
-
-  },
-  wxrDestroy: function (userID, filename, callback) {
-    if (!userID) {
-      callback('wxrDelete failed: User ID missing.');
-    }
-    if (!filename) {
-      callback('wxrDelete failed: Filename missing');
-    }
-    WXR.destroy({userID: userID, filename: filename}, callback);
-
-  },
-  wxrDestroyAll: function (userID, callback) {
-    if (!userID) {
-      callback('All failed: User ID missing.');
-    }
-    WXR.destroy({userID: userID}, callback);
-
-  },
-
-  wxrAdd: function (userID, paths, callback) {
-    if (!userID) {
-      callback('wxrDelete failed: User ID missing.');
-    }
-    if (!paths) {
-      callback('wxrDelete failed: Paths missing.');
-    }
-    if (!filename) {
-      callback('wxrDelete failed: Filename missing');
-    }
-
-    User.findById(userID, function (err, user) {
-      if (err) {
-        callback(err);
-      } else {
-        var pathsArray = paths.split(','),
-          i = pathsArray.length;
-
-        if (!user.files) {
-          user.files = {}
-        }
-        if (!user.files.wxr) {
-          user.files.wxr = []
-        }
-
-        while (i--) {
-          user.files.wxr.push(pathsArray)
-        }
+      if (!user.files[fileType]) {
+        user.files[fileType] = [];
       }
-    });
+
+      while (i--) {
+        promises.push(filepicker.stat({url: pathsArray[i]}));
+//          user.files[fileType].push(pathsArray);
+      }
+      return all(promises).then(function (results) {
+        console.log('results', results);
+        deferred.resolve(result);
+      });
+
+    }, resolver.reject);
+    return deferred.promise;
+
   }
 };
 

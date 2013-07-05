@@ -4,14 +4,7 @@
 ---------------------*/
 var defer = require('node-promise').defer,
   _ = require('underscore'),
-  callback = function (res) {
-    return function (err, response) {
-      if (err) {
-        return res.error(err.message || err);
-      }
-      res.send(JSON.stringify(response));
-    }
-  },
+  Handler = require('./../utilities/quake.js').handler,
   defaultError = function (req, res, name) {
     res.error('Http verb: ' + req.method + ' not supported by ' + name);
   },
@@ -19,50 +12,50 @@ var defer = require('node-promise').defer,
 
 var FileController = {
   wxr: function (req, res) {
-    var localCallback = callback(res),
+    var handler = new Handler(res),
       query = _.extend(req.query || {}, req.params || {}, req.body || {});
 
     switch (req.method) {
       case 'GET':
-        fileService.wxrGet(req.user.clientID, query.filename, localCallback);
+        return fileService.wxrGet(req.user.clientID, query.filename).then(handler.success, handler.error);
         break;
       case 'DELETE':
-        fileService.wxrDestroy(req.user.clientID, query.filename, localCallback);
+        return fileService.wxrDestroy(req.user.clientID, query.filename).then(handler.success, handler.error);
         break;
       case 'POST':
-        fileService.wxrParse(req.user.clientID, query.filename, localCallback);
+        return fileService.wxrParse(req.user.clientID, query.filename).then(handler.success, handler.error);
         break;
       default:
-        defaultError(req, res, 'wxr');
+        return defaultError(req, res, 'wxr');
         break;
     }
 
   },
   wxrList: function (req, res) {
-    var localCallback = callback(res);
+    var handler = new Handler(res);
 
     switch (req.method) {
       case 'GET':
-        fileService.wxrList(req.user.clientID, localCallback);
+        return fileService.wxrList(req.user.clientID).then(handler.success, handler.error);
         break;
       case 'DELETE':
-        fileService.wxrDestroyAll(req.user.clientID, localCallback);
+        return fileService.wxrDestroyAll(req.user.clientID).then(handler.success, handler.error);
         break;
       default:
-        defaultError(req, res, 'wxrList');
+        return defaultError(req, res, 'wxrList');
         break;
     }
 
   },
-  wxrAdd: function (req, res) {
-    var localCallback = callback(res),
+  wxrFiles: function (req, res) {
+    var handler = new Handler(res),
       query = _.extend(req.query || {}, req.params || {}, req.body || {});
     switch (req.method) {
       case 'POST':
-        fileService.wxrAdd(req.user.clientID, query.paths, localCallback);
+        return fileService.wxrAdd(req.user.clientID, query.paths).then(handler.success, handler.error);
         break;
       default:
-        defaultError(req, res, 'wxrAdd');
+        return defaultError(req, res, 'wxrAdd');
         break;
     }
   }
