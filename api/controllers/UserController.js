@@ -6,6 +6,7 @@ var _ = require('underscore'),
   uuid = require('node-uuid'),
   userService = require('./../services/userService.js'),
   stripeService = require('./../services/stripeService.js'),
+  Handler = require('./../utilities/quake.js').handler,
   UserController = {
     findOrCreate: function (req, res, next) {
       var qUser = req.body;
@@ -76,7 +77,8 @@ var _ = require('underscore'),
 
 
 
-        var customer = req.body.stripe.customer,
+        var handler = new Handler(res),
+          customer = req.body.stripe.customer,
           customerType = customer ? customer.object : null,
           currentCustomer = user.stripe && user.stripe.customer,
           currentLast4 = currentCustomer && currentCustomer.active_card ? currentCustomer.active_card.last4 : null,
@@ -87,29 +89,24 @@ var _ = require('underscore'),
           currentPlan = (user.stripe && user.stripe.customer && user.stripe.customer.subscription && user.stripe.customer.subscription.plan) ? user.stripe.customer.subscription.plan.id : false,
           description = user.displayName + ": " + user.emails[0].value,
           coupon = req.body.stripe.coupon,
-          callback = function (err, customer) {
-            if (err) {
-              res.error(err.message);
-            } else {
-              req.body = {stripe: {customer: customer}};
-              UserController.update(req, res);
-            }
-
+          success = function (customer) {
+            req.body = {stripe: {customer: customer}};
+            UserController.update(req, res);
           };
 
 
         if (newCard) {
           if (!currentPlan && proposedPlan) { //Case 1: Create a new customer with subscription
-            stripeService.createSubscription(proposedPlan, customer, description, coupon, callback);
+            stripeService.createSubscription(proposedPlan, customer, description, coupon).then(success, handler.error);
 
           } else if (!proposedPlan || currentPlan === proposedPlan) { //Case 2: Just update card
             if (!customer || !currentCustomer) {
               return res.error('Update card failed: Stripe customer missing.');
             }
-            stripeService.updateCard(token, customer, currentCustomer, callback);
+            stripeService.updateCard(token, customer, currentCustomer).then(success, handler.error);
 
           } else if (currentPlan !== proposedPlan) { //Case 4: Update plan and card
-            stripeService.updateSubscription(token, proposedPlan, customer, currentCustomer, coupon, callback);
+            stripeService.updateSubscription(token, proposedPlan, customer, currentCustomer, coupon).then(success, handler.error);
 
           } else {
             res.error('Subscribe request was incomplete');
@@ -117,10 +114,10 @@ var _ = require('underscore'),
           }
 
         } else if (!currentPlan || currentPlan !== proposedPlan) { //Case 3: Update just subscription
-          stripeService.updateSubscription(token, proposedPlan, customer, currentCustomer, coupon, callback);
+          stripeService.updateSubscription(token, proposedPlan, customer, currentCustomer, coupon).then(success, handler.error);
 
         } else if (coupon) { // Update anything you can... this is currently used for updating promo codes
-          stripeService.updateSubscription(token, proposedPlan, customer, currentCustomer, coupon, callback);
+          stripeService.updateSubscription(token, proposedPlan, customer, currentCustomer, coupon).then(success, handler.error);
         } else {
           res.error('Subscribe request was incomplete');
 

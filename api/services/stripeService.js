@@ -1,11 +1,14 @@
 var _ = require('underscore'),
   conf = require('./../../config/convict.js'),
-  stripe = require('stripe')(conf.get('stripe_sk'));
+  stripe = require('stripe')(conf.get('stripe_sk')),
+  defer = require('node-promise').defer,
+  Resolver = require('./../utilities/quake.js').resolver;
 
 module.exports = {
-  createSubscription: function (plan, customer, description, coupon, callback) {
-
-    var payload = {
+  createSubscription: function (plan, customer, description, coupon) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred),
+      payload = {
       card: customer.id || customer.card,
       plan: plan,
       description: description
@@ -15,7 +18,8 @@ module.exports = {
       payload.coupon = coupon;
     }
 
-    stripe.customers.create(payload, callback);
+    stripe.customers.create(payload, resolver.done);
+    return deferred.promise;
 
   },
 
@@ -26,8 +30,10 @@ module.exports = {
 
 
 
-  updateSubscription: function (token, plan, proposedCustomer, customer, coupon, callback) {
-    var payload = {};
+  updateSubscription: function (token, plan, proposedCustomer, customer, coupon) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred),
+      payload = {};
 
     if (plan) {
       payload.plan = plan;
@@ -45,63 +51,84 @@ module.exports = {
 
     stripe.customers.update_subscription(customer.id, payload, function (err, subscription) {
       if (err) {
-        callback(err);
+        resolver.reject(err);
       } else {
-        stripe.customers.retrieve(customer.id, callback);
+        stripe.customers.retrieve(customer.id, resolver.done);
       }
 
     });
+    return deferred.promise;
   },
 
   updateCard: function (token, proposedCustomer, customer, callback) {
-    var updates = {
-      card: token || proposedCustomer.card
-    };
+    var deferred = defer(),
+      resolver = new Resolver(deferred),
+      updates = {
+        card: token || proposedCustomer.card
+      };
 
-    stripe.customers.update(customer.id, updates, callback);
+    stripe.customers.update(customer.id, updates, resolver.done);
+    return deferred.promise;
   },
 
-  getCustomer: function (id, callback) {
-    stripe.customers.retrieve(id, callback);
+  getCustomer: function (id) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred);
+    stripe.customers.retrieve(id, resolver.done);
+    return deferred.promise;
   },
 
-  deleteCustomer: function (id, callback) {
-    stripe.customers.del(id, callback);
+  deleteCustomer: function (id) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred);
+    stripe.customers.del(id, resolver.done);
+    return deferred.promise;
   },
 
-  updateCustomer: function (id, updates, callback) {
-    stripe.customers.update(id, updates, callback);
+  updateCustomer: function (id, updates) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred);
+    stripe.customers.update(id, updates, resolver.done);
+    return deferred.promise;
   },
 
-  listCustomers: function (count, offset, callback) {
-    stripe.customers.list(count || 10, offset || 0, callback);
+  listCustomers: function (count, offset) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred);
+    stripe.customers.list(count || 10, offset || 0, resolver.done);
+    return deferred.promise;
   },
 
   deleteCustomers: function (customerIDs, callback) {
-    if (!conf.get('env') === 'development') {
-      return callback('You cannot delete all customers outside of a development environment.');
-    }
-    if (!customerIDs) {
-      return callback('customerIDs missing from delete params');
-    }
+    var deferred = defer(),
+      resolver = new Resolver(deferred);
 
-    var originalIDs = _.clone(customerIDs),
-      customCallback = function (err, response) {
-        if (err) {
-          return callback(err);
-        }
-        callback(null, {deleted: true, ids: originalIDs});
-      },
-      deleteCustomers = function (ids, cb) {
-        stripe.customers.del(ids.pop(), function (err, deleted) {
-          if (err || !ids.length) {
-            cb(err, deleted);
+    if (!conf.get('env') === 'development') {
+      resolver.reject('You cannot delete all customers outside of a development environment.');
+    } else if (!customerIDs) {
+      resolver.reject('customerIDs missing from delete params');
+    } else {
+      var originalIDs = _.clone(customerIDs),
+        customCallback = function (err, response) {
+          if (err) {
+            resolver.reject(err);
           } else {
-            deleteCustomers(ids, customCallback);
+            resolver.resolve({deleted: true, ids: originalIDs});
           }
-        });
-      };
-    deleteCustomers(customerIDs, customCallback);
+
+        },
+        deleteCustomers = function (ids, cb) {
+          stripe.customers.del(ids.pop(), function (err, deleted) {
+            if (err || !ids.length) {
+              cb(err, deleted);
+            } else {
+              deleteCustomers(ids, customCallback);
+            }
+          });
+        };
+      deleteCustomers(customerIDs, customCallback);
+    }
+    return deferred.promise;
 
   }
 }

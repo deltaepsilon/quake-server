@@ -4,56 +4,49 @@
 ---------------------*/
 var _ = require('underscore'),
   stripeService = require('./../services/stripeService.js'),
-  callback = function (res) {
-    return function (err, response) {
-      if (err) {
-        return res.error(err.message || err);
-      }
-      res.send(JSON.stringify(response));
-    }
-  }
+  Handler = require('./../utilities/quake.js').handler,
+  defaultError = function (req, res, name) {
+    res.error('Http verb: ' + req.method + ' not supported by ' + name);
+  },
   StripeController = {
-
     customer: function (req, res) {
-      var localCallback = callback(res),
+      var handler = new Handler(res),
       query = _.extend(req.query || {}, req.params || {}, req.body || {}),
       id = query.customer_id || query.customerID;
 
       switch (req.method) {
         case 'GET':
-          stripeService.getCustomer(id, localCallback);
+          stripeService.getCustomer(id).then(handler.success, handler.error);
           break;
         case 'DELETE':
-          stripeService.deleteCustomer(id, localCallback);
+          stripeService.deleteCustomer(id).then(handler.success, handler.error);
           break;
         case 'PUT':
-          stripeService.updateCustomer(id, req.body, localCallback);
+          stripeService.updateCustomer(id, req.body).then(handler.success, handler.error);
           break;
         default:
-          localCallback('Stripe customer http verb ' + req.method + ' not supported.')
+          defaultError(req, res, 'stripe.customer');
           break;
       }
-
 
     },
 
     customers: function (req, res) {
-      var localCallback = callback(res),
+      var handler = new Handler(res),
         query = _.extend(req.query || {}, req.params || {}, req.body || {});
-
 
       switch (req.method) {
         case 'GET':
-          stripeService.listCustomers(query.count, query.offset, callback(res));
+          stripeService.listCustomers(query.count, query.offset).then(handler.success, handler.error);
           break;
         case 'DELETE':
-          stripeService.deleteCustomers(query.customerIDs, localCallback);
+          stripeService.deleteCustomers(query.customerIDs).then(handler.success, handler.error);
           break;
         default:
-          localCallback('Stripe customer http verb ' + req.method + ' not supported.')
+          defaultError(req, res, 'stripe.customers');
           break;
       }
-    }
 
+    }
   };
 module.exports = StripeController;
