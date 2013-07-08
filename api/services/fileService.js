@@ -4,7 +4,10 @@ var awsService = require('./awsService.js'),
   all = require('node-promise').all,
   wxrWorker = require('./../workers/wxrWorker.js'),
   fork = require('child_process').fork,
-  Resolver = require('./../utilities/quake.js').resolver;
+  Resolver = require('./../utilities/quake.js').resolver,
+  normalizePaths = function (paths) {
+    return paths.split(',');
+  };
 
 var fileService = {
   wxrParse: function (userID, filename) {
@@ -147,6 +150,53 @@ var fileService = {
     }, resolver.reject);
     return deferred.promise;
 
+  },
+  store: function (userID, payload, filename, mimetype, classification) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred),
+      path = userID + '/';
+
+    if (classification) {
+      path += classification + '/';
+    }
+
+    filepicker.store(payload, filename, mimetype, {path: path}).then(function (res) {
+      var inkBlob = JSON.parse(res);
+      fileService.create(userID, classification, inkBlob.url).then(resolver.resolve, resolver.reject);
+    });
+    return deferred.promise;
+
+  },
+  create: function (userID, classification, paths) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred),
+      paths = normalizePaths(paths),
+      i = paths.length,
+      promises = [],
+      promise;
+
+    while (i--) {
+      promise = filepicker.stat({url: paths[i]}).then(function (res) {
+        var deferred = defer(),
+          resolver = new Resolver(deferred),
+          inkBlob = JSON.parse(res);
+        inkBlob.userID = userID;
+        inkBlob.classification = classification;
+        File.create(inkBlob, resolver.done);
+        return deferred.promise;
+      });
+      promises.push(promise);
+    }
+
+    all(promises).then(resolver.resolve, resolver.reject);
+    return deferred.promise;
+
+  },
+  stat: function (userID, paths) {
+    var paths = normalizePaths(paths);
+  },
+  remove: function (userID, paths) {
+    var paths = normalizePaths(paths);
   }
 };
 

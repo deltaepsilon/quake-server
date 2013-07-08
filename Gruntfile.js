@@ -29,6 +29,10 @@ module.exports = function(grunt) {
       wxrWorker: {
         options: options,
         src: ['test/wxrWorker.js']
+      },
+      file: {
+        options: options,
+        src: ['test/file.js']
       }
     },
     keys = Object.keys(tests),

@@ -16,13 +16,11 @@ var _ = require('underscore'),
 
 var AwsController = {
   wxr: function (req, res) {
-    console.log('wxr');
     var handler = new Handler(res),
       query = _.extend(req.query || {}, req.params || {}, req.body || {});
 
     switch (req.method) {
       case 'GET':
-        console.log('get');
         awsService.s3List(req.user.clientID + '/wxr').then(handler.success, handler.error);
         break;
       case 'DELETE':

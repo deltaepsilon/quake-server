@@ -30,11 +30,14 @@ module.exports = function () {
     });
 
     suiteTeardown(function(done) {
-      quakeServer.cleanUser(user, function () {
-        quakeServer.stopApp(server, function () {
-          deferred.resolve(done);
+      quakeServer.refreshUser().then(function () { //Refresh user because the quiver bearer token got destroyed during the last test
+        quakeServer.cleanUser(user, function () {
+          quakeServer.stopApp(server, function () {
+            deferred.resolve(done);
+          });
         });
       });
+
     });
 
     test('Auth should fail at / route without token', function(done) {

@@ -43,6 +43,7 @@ module.exports = {
       var passport = require('passport'),
         ClientPasswordStrategy = require('passport-oauth2-client-password').Strategy,
         oauth2 = require('./../middleware/oauth2.js'),
+        quiver = require('./../middleware/quiver.js'),
         user = require('./../middleware/user.js'),
         BearerStrategy = require('passport-http-bearer').Strategy;
 
@@ -65,7 +66,13 @@ module.exports = {
         passport.authenticate('bearer', {session: false})(req, res, next);
       });
 
+
+      //Lock user controller
       app.all('/user*', user);
+
+      //Protect endpoints with mandatory userID params unless user is "quiver"
+      app.all('/file*', quiver);
+
 
       //  OAuth2 Routes
       app.get('/auth/authorize', oauth2.authorization);
