@@ -172,17 +172,20 @@ var fileService = {
       resolver = new Resolver(deferred),
       paths = normalizePaths(paths),
       i = paths.length,
+      path,
       promises = [],
       promise;
 
     while (i--) {
-      promise = filepicker.stat({url: paths[i]}).then(function (res) {
+      path = paths[i];
+      promise = filepicker.stat({url: path}).then(function (res) {
         var deferred = defer(),
           resolver = new Resolver(deferred),
           inkBlob = JSON.parse(res);
         inkBlob.userID = userID;
         inkBlob.classification = classification;
-        File.create(inkBlob, resolver.done);
+        inkBlob.url = path;
+        File.findOrCreate({url: inkBlob.url}, inkBlob, resolver.done);
         return deferred.promise;
       });
       promises.push(promise);
@@ -193,10 +196,44 @@ var fileService = {
 
   },
   stat: function (userID, paths) {
-    var paths = normalizePaths(paths);
+    var deferred = defer(),
+      resolver = new Resolver(deferred),
+      paths = normalizePaths(paths),
+      promises = [],
+      i = paths.length;
+
+    while (i--) {
+      promises.push(filepicker.stat({url: paths[i]}));
+    }
+
+    all(promises).then(function (results) {
+      var j = results.length,
+        inkBlobs = [];
+
+      while (j--) {
+        inkBlobs.push(JSON.parse(results[j]));
+      }
+      resolver.resolve(inkBlobs);
+
+    }, resolver.reject);
+
+    return deferred.promise;
+
   },
   remove: function (userID, paths) {
-    var paths = normalizePaths(paths);
+    var deferred = defer(),
+      resolver = new Resolver(deferred),
+      paths = normalizePaths(paths),
+      promises = [],
+      i = paths.length;
+
+    while (i--) {
+      promises.push(filepicker.remove({url: paths[i]}));
+    }
+
+    all(promises).then(resolver.resolve, resolver.reject);
+
+    return deferred.promise;
   }
 };
 
