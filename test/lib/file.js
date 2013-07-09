@@ -114,6 +114,7 @@ module.exports = function () {
 
         assert.equal(results[0], 'success', 'First image removed');
         assert.equal(results[1], 'success', 'Second image removed');
+        assert.deepEqual(results[2], [0, 0], 'File objects removed from server');
         done();
       });
 

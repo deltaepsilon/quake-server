@@ -12,28 +12,34 @@ var _ = require('underscore'),
     }
   },
   awsService = require('./../services/awsService.js'),
-  Handler = require('./../utilities/quake.js').handler;
+  Handler = require('./../utilities/quake.js').handler,
+  Query = require('./../utilities/quake.js').query;
 
 var AwsController = {
-  wxr: function (req, res) {
+  s3Object: function (req, res) {
     var handler = new Handler(res),
-      query = _.extend(req.query || {}, req.params || {}, req.body || {});
+      query = new Query(req).augment();
 
     switch (req.method) {
       case 'GET':
-        awsService.s3List(req.user.clientID + '/wxr').then(handler.success, handler.error);
+        awsService.s3Get(req.user.clientID + query.key).then(handler.success, handler.error);
         break;
       case 'DELETE':
-        awsService.s3Delete(req.user.clientID + '/wxr/' + query.filename).then(handler.success, handler.error);
+        awsService.s3Delete(req.user.clientID + query.key).then(handler.success, handler.error);
         break;
       case 'POST':
-        awsService.s3Save(req.user.clientID + '/wxr/' + query.filename, query.body).then(handler.success, handler.error);
+        awsService.s3Save(req.user.clientID + query.key, query.body).then(handler.success, handler.error);
         break;
       default:
         handler.error('AWS http verb ' + req.method + ' not supported.');
         break;
     }
 
+  },
+  s3List: function (req, res) {
+    var handler = new Handler(res),
+      query = new Query(req).augment();
+    awsService.s3List(req.user.clientID + query.key).then(handler.success, handler.error);
   }
 
 

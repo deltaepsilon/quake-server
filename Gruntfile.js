@@ -23,7 +23,10 @@ module.exports = function(grunt) {
         src: ['test/aws.js']
       },
       wxr: {
-        options: options,
+        options: {
+          ui: 'tdd',
+          timeout: 120000
+        },
         src: ['test/wxr.js']
       },
       wxrWorker: {

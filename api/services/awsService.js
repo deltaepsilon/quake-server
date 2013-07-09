@@ -7,41 +7,41 @@ var _ = require('underscore'),
   Resolver = require('./../utilities/quake.js').resolver;
 
 module.exports = {
-  s3Get: function (path) {
+  s3Get: function (key) {
     var deferred = defer(),
       resolver = new Resolver(deferred);
     s3Bucket.getObject({
       Bucket: bucketName,
-      Key: path
+      Key: key
     }, resolver.done);
     return deferred.promise;
   },
-  s3Save: function (path, body) {
+  s3Save: function (key, body) {
     var deferred = defer(),
       resolver = new Resolver(deferred);
 
     s3Bucket.putObject({
       Bucket: bucketName,
       Body: body,
-      Key: path
+      Key: key
     }, resolver.done);
     return deferred.promise;
   },
-  s3List: function (path) {
+  s3List: function (key) {
     var deferred = defer(),
       resolver = new Resolver(deferred);
     s3Bucket.listObjects({
       Bucket: bucketName,
-      Prefix: path
+      Prefix: key
     }, resolver.done);
     return deferred.promise;
   },
-  s3Delete: function (path) {
+  s3Delete: function (key) {
     var deferred = defer(),
       resolver = new Resolver(deferred);
     s3Bucket.deleteObject({
       Bucket: bucketName,
-      Key: path
+      Key: key
     }, resolver.done);
     return deferred.promise;
   },

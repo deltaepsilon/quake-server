@@ -21,7 +21,7 @@ var defer = require('node-promise').defer,
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; //Allow https testing with self-signed certs
 
 module.exports = function () {
-  suite('Stripe', function() {
+  suite('AWS', function() {
     suiteSetup(function(done) {
       quakeServer.startApp(function (aserver, aapp, auser, atoken, aheader, auserToken, auserHeader) {
         server = aserver;
@@ -43,8 +43,8 @@ module.exports = function () {
     });
 
 
-    test('POST to /aws/wxr should save a WXR file to the WXR folder.', function (done) {
-      verbs.post('/aws/wxr', userToken).send({filename: filename,body: mockWXR}).end(function (err, res) {
+    test('POST to /aws/s3Object should save a WXR file to the WXR folder.', function (done) {
+      verbs.post('/aws/s3Object', userToken).send({key: '/wxr/' + filename, body: mockWXR}).end(function (err, res) {
         var result = JSON.parse(res.text);
         assert.equal(result.ETag.length, 34, 'Valid ETag should be returned');
         assert.equal(result.RequestId.length, 16, 'Valid RequestId should be returned');
@@ -52,8 +52,8 @@ module.exports = function () {
       });
     });
 
-    test('GET to /aws/wxr should return a list of the wrx folder.', function (done) {
-      verbs.get('/aws/wxr', userToken).end(function (err, res) {
+    test('GET to /aws/s3List should return a list of the wrx folder.', function (done) {
+      verbs.get('/aws/s3List?key=' + '/wxr', userToken).end(function (err, res) {
         var response = JSON.parse(res.text),
           contents = response.Contents,
           i = contents.length,
@@ -74,13 +74,26 @@ module.exports = function () {
 
     var wxrResult;
     test('awsService be able to get the WXR object', function (done) {
-      awsService.s3Get(filepath, function (err, result) {
+      awsService.s3Get(filepath).then(function (result) {
         var buffer = new Buffer(result.Body, 'utf8');
         wxrResult = result;
         assert.equal(result.ETag.length, 34, 'ETag should be correct length');
         assert.equal(result.ContentLength, buffer.length.toString(), 'ContentLength should match uploaded file');
         done();
       });
+    });
+
+    test('GET /aws/s3Object be able to get the WXR object', function (done) {
+      verbs.get('/aws/s3Object?key=/wxr/' + filename, userToken).end(function (err, res) {
+        var result = JSON.parse(res.text),
+          buffer = new Buffer(result.Body, 'utf8');
+
+        wxrResult = result;
+        assert.equal(result.ETag.length, 34, 'ETag should be correct length');
+        assert.equal(result.ContentLength, buffer.length.toString(), 'ContentLength should match uploaded file');
+        done();
+      });
+
     });
 
     test('awsService streamEncode should return a utf8-encoded buffer', function (done) {
@@ -91,8 +104,8 @@ module.exports = function () {
         done();
     });
 
-    test('DELETE to /aws/wxr should delete the WXR file from the WXR folder.', function (done) {
-      verbs.del('/aws/wxr', userToken).send({filename: filename}).end(function (err, res) {
+    test('DELETE to /aws/s3Object should delete the WXR file from the WXR folder.', function (done) {
+      verbs.del('/aws/s3Object', userToken).send({key: '/wxr/' + filename}).end(function (err, res) {
         var result = JSON.parse(res.text);
         assert.equal(result.RequestId.length, 16, 'Valid RequestId should be returned');
         done();

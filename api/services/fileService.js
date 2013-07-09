@@ -10,147 +10,6 @@ var awsService = require('./awsService.js'),
   };
 
 var fileService = {
-  wxrParse: function (userID, filename) {
-    var deferred = defer(),
-      resolver = new Resolver(deferred);
-    if (!userID) {
-      resolver.reject('wxrParse failed: User ID missing');
-    } else if (!filename) {
-      resolver.reject('wxrParse failed: Filename missing');
-    } else {
-      awsService.s3Get(userID + '/wxr/' + filename).then(function (result) {
-        var buffer = awsService.streamEncode(result.Body, 'utf8'),
-          workerProcess = fork(__dirname + './../workers/wxrWorker.js');
-        workerProcess.send({buffer: buffer});
-
-        workerProcess.on('message', function (message) {
-          workerProcess.kill();
-          if (message.err) {
-            resolver.reject(message.err);
-          } else {
-            fileService.wxrSave(userID, filename, message.res).then(resolver.resolve);
-          }
-        });
-
-      });
-    }
-    return deferred.promise;
-
-  },
-  wxrSave: function (userID, filename, wxr) {
-    var deferred = defer(),
-      resolver = new Resolver(deferred);
-    if (!userID) {
-      resolver.reject('wxrSave failed: User ID missing.');
-    } else if (!filename) {
-      resolver.reject('wxrSave failed: Filename missing');
-    } else if (!wxr) {
-      resolver.reject('wxrSave failed: WXR contents missing');
-    } else {
-      WXR.destroyWhere({userID: userID, filename: filename}, function (err) {
-        if (err) {
-          resolver.reject(err);
-        } else {
-          WXR.create({userID: userID, filename: filename, meta: wxr.meta, items: wxr.items}, resolver.done);
-        }
-      });
-    }
-    return deferred.promise;
-
-  },
-  wxrGet: function (userID, filename) {
-    var deferred = defer(),
-      resolver = new Resolver(deferred);
-    if (!userID) {
-      resolver.reject('wxrGet failed: User ID missing.');
-    } else if (!filename) {
-      resolver.reject('wxrGet failed: Filename missing');
-    } else {
-      WXR.find({userID: userID, filename: filename}, resolver.done);
-    }
-
-
-    return deferred.promise;
-
-  },
-  wxrList: function (userID) {
-    var deferred = defer(),
-      resolver = new Resolver(deferred);
-    if (!userID) {
-      resolver.reject('wxrList failed: User ID missing.');
-    } else {
-      WXR.findAll({userID: userID}, resolver.done);
-    }
-
-    return deferred.promise;
-
-  },
-  wxrDestroy: function (userID, filename) {
-    var deferred = defer(),
-      resolver = new Resolver(deferred);
-    if (!userID) {
-      resolver.reject('wxrDelete failed: User ID missing.');
-    } else if (!filename) {
-      resolver.reject('wxrDelete failed: Filename missing');
-    } else {
-      WXR.destroy({userID: userID, filename: filename}, resolver.done);
-    }
-    return deferred.promise;
-
-  },
-  wxrDestroyAll: function (userID) {
-    var deferred = defer(),
-      resolver = new Resolver(deferred);
-    if (!userID) {
-      resolver.reject('All failed: User ID missing.');
-    } else {
-      WXR.destroy({userID: userID}, resolver.done);
-    }
-    return deferred.promise;
-
-  },
-  wxrAdd: function (userID, paths) {
-    var deferred = defer(),
-      resolver = new Resolver(deferred);
-    if (!userID) {
-      resolver.reject('wxrDelete failed: User ID missing.');
-    } else if (!paths) {
-      resolver.reject('wxrDelete failed: Paths missing.');
-    } else {
-      fileService.fileAdd(userID, paths, 'wxr').then(function (result) {
-        console.log('fileService just got the results');
-      }, resolver.reject);
-    }
-    return deferred.promise;
-  },
-  fileAdd: function (userID, paths, fileType) {
-    var deferred = defer(),
-      resolver = new Resolver(deferred),
-      promises = [],
-      pathsArray = paths.split(','),
-      i = pathsArray.length;
-
-    return User.findById(userID).then(function (user) {
-      if (!user.files) { // Populate empty files attributes
-        user.files = {}
-      }
-      if (!user.files[fileType]) {
-        user.files[fileType] = [];
-      }
-
-      while (i--) {
-        promises.push(filepicker.stat({url: pathsArray[i]}));
-//          user.files[fileType].push(pathsArray);
-      }
-      return all(promises).then(function (results) {
-        console.log('results', results);
-        deferred.resolve(result);
-      });
-
-    }, resolver.reject);
-    return deferred.promise;
-
-  },
   store: function (userID, payload, filename, mimetype, classification) {
     var deferred = defer(),
       resolver = new Resolver(deferred),
@@ -160,6 +19,7 @@ var fileService = {
       path += classification + '/';
     }
 
+    // Payload had better be Base64 encoded, or you're getting a pile of poop on the other end.
     filepicker.store(payload, filename, mimetype, {path: path}).then(function (res) {
       var inkBlob = JSON.parse(res);
       fileService.create(userID, classification, inkBlob.url).then(resolver.resolve, resolver.reject);
@@ -228,12 +88,86 @@ var fileService = {
       i = paths.length;
 
     while (i--) {
-      promises.push(filepicker.remove({url: paths[i]}));
+      promises.push(filepicker.remove({url: paths[i]})); // Remove files via Filepicker
     }
+
+    promises.push(fileService.destroyByPaths(userID, paths)); // Destroy File objects from server
 
     all(promises).then(resolver.resolve, resolver.reject);
 
     return deferred.promise;
+
+  },
+  destroyByPaths: function (userID, paths) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred),
+      destroy = function (path) {
+        var destroyDeferred = defer();
+        File.destroyWhere({path: path}, function (err, result) {
+          if (err) { return destroyDeferred.reject(err);}
+          destroyDeferred.resolve(result);
+        });
+
+        return destroyDeferred.promise;
+      },
+      paths = (typeof paths === 'string') ? normalizePaths(paths) : paths,
+      i = paths.length,
+      promises = [];
+
+    while (i--) {
+      promises.push(destroy(paths[i])); // Destroy each File object by path
+    }
+    all(promises).then(resolver.resolve, resolver.reject);
+
+    return deferred.promise;
+
+  },
+  wxrParse: function (userID, id) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred);
+
+    File.findById(id, function (err, file) {
+      if (err) { return resolver.reject(err);}
+
+      awsService.s3Get(file.path).then(function (result) {
+        var buffer = awsService.streamEncode(result.Body, 'utf8'),
+          workerProcess = fork(__dirname + './../workers/wxrWorker.js');
+        workerProcess.send({buffer: buffer});
+
+        workerProcess.on('message', function (message) {
+          workerProcess.kill();
+          if (message.err) {
+            resolver.reject(message.err);
+          } else {
+            fileService.wxrSave(userID, file, message.res)
+              .then(function (wxr) {
+                var removeDeferred = defer(),
+                  removeResolver = new Resolver(removeDeferred);
+                fileService.remove(userID, file.url).then(function () { removeResolver.resolve(wxr); }, removeResolver.reject);
+                return removeDeferred.promise;
+              })
+              .then(resolver.resolve, resolver.reject);
+          }
+        });
+      });
+
+    });
+    return deferred.promise;
+
+  },
+  wxrSave: function (userID, file, wxr) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred);
+    WXR.destroyWhere({userID: userID, fileID: file.id}, function (err) {
+      if (err) { return resolver.reject(err); }
+
+      wxr.userID = userID;
+      wxr.fileID = file.id;
+      WXR.create(wxr, resolver.done);
+
+    });
+    return deferred.promise;
+
   }
 };
 

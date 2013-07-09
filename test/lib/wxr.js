@@ -44,86 +44,97 @@ module.exports = function () {
 
 
     var inkBlob1;
-    test('POST to /aws/wxr should save a WXR file to the WXR folder.', function (done) {
-      verbs.post('/aws/wxr', userToken).send({filename: filename, body: mockWXR}).end(function (err, res) {
-        var result = JSON.parse(res.text);
-        inkBlob1 = result;
-        assert.equal(result.ETag.length, 34, 'Valid ETag should be returned');
-        assert.equal(result.RequestId.length, 16, 'Valid RequestId should be returned');
+    test('POST to /file/store should save a WXR file to the WXR folder.', function (done) {
+      verbs.post('/file/store', userToken).send({filename: filename, payload: new Buffer(mockWXR, 'utf8').toString('base64'), mimetype: 'text/xml', classification: 'wxr'}).end(function (err, res) {
+        var result = JSON.parse(res.text),
+          inkBlob = result[0];
+        inkBlob1 = inkBlob;
+        assert.equal(inkBlob.filename, filename, 'Valid File object should be returned');
         done();
       });
     });
 
+    var WXR;
     test('POST to /file/wxr should parse a WXR and return a saved object', function (done) {
-      verbs.post('/file/wxr', userToken).send({filename: filename}).end(function (err, res) {
+      verbs.post('/file/wxr', userToken).send({id: inkBlob1.id}).end(function (err, res) {
         var wxr = JSON.parse(res.text);
+        WXR = wxr;
         assert.equal(Object.keys(wxr.meta[0]).length, 20, 'Meta should have the right length');
         assert.equal(wxr.items.length, 24, 'Items should have the right length');
         done();
       });
     });
 
-
-    test('GET to /file/wxr should return the relevant wxr object', function (done) {
-      verbs.get('/file/wxr?filename=' + filename, userToken).end(function (err, res) {
-        var wxr = JSON.parse(res.text);
-        assert.equal(Object.keys(wxr.meta[0]).length, 20, 'Meta should have the right length');
-        assert.equal(wxr.items.length, 24, 'Items should have the right length');
+    test('GET to /aws/s3Object should return nothing, because the parse function cleaned out the WXR folder.', function (done) {
+      verbs.get('/aws/s3Object?key=/wxr/' + filename, userToken).end(function (err, res) {
+        assert.equal(JSON.parse(res.text).error, 'The specified key does not exist.', 'File should be missing.');
         done();
       });
     });
 
-    var inkBlob2;
-    test('GET to /file/wxrList should return the relevant wxr objects', function (done) {
-      // Upload second file
-      verbs.post('/aws/wxr', userToken).send({filename: filename2, body: mockWXR}).end(function (err, res) {
-        //Parse second file
-        inkBlob2 = JSON.parse(res.text);
-        verbs.post('/file/wxr', userToken).send({filename: filename2}).end(function (err, res) {
-          verbs.get('/file/wxrList', userToken).end(function (err, res) {
-            var WXRs = JSON.parse(res.text);
-            assert.equal(WXRs.length, 2, 'Should return two WXR files');
-            done();
-          });
-        });
-      });
+    test('POST to /file/wxrImport/:id should parse an existing WXR object, ');
 
-    });
-
-    test('POST to /user/wxr should return a user with the appropriate files set', function (done) {
-      //TODO generate some files against Filepicker and retrieve the paths
-      console.log('inkBlobs', inkBlob1, inkBlob2);
-      verbs.post('/user/wxr', userToken).send({paths: [inkBlob1.filename, inkBlob2.filename].join(',')}, function (err, res) {
-        console.log('res.text', res.text);
-        var user = JSON.parse(res.text);
-        console.log('user', user);
-        done();
-      });
-    });
-
-    test('DELETE to /file/wxr should delete one wxr', function (done) {
-      verbs.del('/file/wxr', userToken).send({filename: filename}).end(function (err, res) {
-        assert.equal(res.text, 1, 'Delete returns a 1');
-        done();
-      });
-
-    });
-
-    test('DELETE to /file/wxrList should delete all WXR files', function (done) {
-      verbs.del('/file/wxrList', userToken).end(function (err, res) {
-        assert.equal(res.text, 1, 'Delete returns a 1');
-        done();
-      });
-
-    });
-
-    test('DELETE to /aws/wxr should delete the WXR file from the WXR folder.', function (done) {
-      verbs.del('/aws/wxr', userToken).send({filename: filename}).end(function (err, res) {
-        var result = JSON.parse(res.text);
-        assert.equal(result.RequestId.length, 16, 'Valid RequestId should be returned');
-        done();
-      });
-    });
+//
+//    test('GET to /file/wxr should return the relevant wxr object', function (done) {
+//      verbs.get('/file/wxr?filename=' + filename, userToken).end(function (err, res) {
+//        var wxr = JSON.parse(res.text);
+//        assert.equal(Object.keys(wxr.meta[0]).length, 20, 'Meta should have the right length');
+//        assert.equal(wxr.items.length, 24, 'Items should have the right length');
+//        done();
+//      });
+//    });
+//
+//    var inkBlob2;
+//    test('GET to /file/wxrList should return the relevant wxr objects', function (done) {
+//      // Upload second file
+//      verbs.post('/aws/wxr', userToken).send({filename: filename2, body: mockWXR}).end(function (err, res) {
+//        //Parse second file
+//        inkBlob2 = JSON.parse(res.text);
+//        verbs.post('/file/wxr', userToken).send({filename: filename2}).end(function (err, res) {
+//          verbs.get('/file/wxrList', userToken).end(function (err, res) {
+//            var WXRs = JSON.parse(res.text);
+//            assert.equal(WXRs.length, 2, 'Should return two WXR files');
+//            done();
+//          });
+//        });
+//      });
+//
+//    });
+//
+//    test('POST to /user/wxr should return a user with the appropriate files set', function (done) {
+//      //TODO generate some files against Filepicker and retrieve the paths
+//      console.log('inkBlobs', inkBlob1, inkBlob2);
+//      verbs.post('/user/wxr', userToken).send({paths: [inkBlob1.filename, inkBlob2.filename].join(',')}, function (err, res) {
+//        console.log('res.text', res.text);
+//        var user = JSON.parse(res.text);
+//        console.log('user', user);
+//        done();
+//      });
+//    });
+//
+//    test('DELETE to /file/wxr should delete one wxr', function (done) {
+//      verbs.del('/file/wxr', userToken).send({filename: filename}).end(function (err, res) {
+//        assert.equal(res.text, 1, 'Delete returns a 1');
+//        done();
+//      });
+//
+//    });
+//
+//    test('DELETE to /file/wxrList should delete all WXR files', function (done) {
+//      verbs.del('/file/wxrList', userToken).end(function (err, res) {
+//        assert.equal(res.text, 1, 'Delete returns a 1');
+//        done();
+//      });
+//
+//    });
+//
+//    test('DELETE to /aws/wxr should delete the WXR file from the WXR folder.', function (done) {
+//      verbs.del('/aws/wxr', userToken).send({filename: filename}).end(function (err, res) {
+//        var result = JSON.parse(res.text);
+//        assert.equal(result.RequestId.length, 16, 'Valid RequestId should be returned');
+//        done();
+//      });
+//    });
 
 
   });

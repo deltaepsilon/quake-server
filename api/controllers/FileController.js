@@ -39,48 +39,12 @@ var defer = require('node-promise').defer,
   };
 
 var FileController = {
-  wxr: function (req, res) {
-    var handler = new Handler(res),
-      query = new Query(req);
-
-    switch (req.method) {
-      case 'GET':
-        fileService.wxrGet(req.user.clientID, query.filename).then(handler.success, handler.error);
-        break;
-      case 'DELETE':
-        fileService.wxrDestroy(req.user.clientID, query.filename).then(handler.success, handler.error);
-        break;
-      case 'POST':
-        fileService.wxrParse(req.user.clientID, query.filename).then(handler.success, handler.error);
-        break;
-      default:
-        defaultError(req, res, 'wxr');
-        break;
-    }
-
-  },
-  wxrList: function (req, res) {
-    var handler = new Handler(res);
-
-    switch (req.method) {
-      case 'GET':
-        fileService.wxrList(req.user.clientID).then(handler.success, handler.error);
-        break;
-      case 'DELETE':
-        fileService.wxrDestroyAll(req.user.clientID).then(handler.success, handler.error);
-        break;
-      default:
-        defaultError(req, res, 'wxrList');
-        break;
-    }
+  store: function (req, res) {
+    generic(req, res, fileService.store, ['userID', 'payload', 'filename', 'mimetype', 'classification']);
 
   },
   create: function (req, res) {
     generic(req, res, fileService.create, ['userID', 'classification', 'paths']);
-
-  },
-  store: function (req, res) {
-    generic(req, res, fileService.store, ['userID', 'payload', 'filename', 'mimetype', 'classification']);
 
   },
   stat: function (req, res) {
@@ -90,6 +54,9 @@ var FileController = {
   remove: function (req, res) {
     generic(req, res, fileService.remove, ['userID', 'paths']);
 
+  },
+  wxr: function (req, res) {
+    generic(req, res, fileService.wxrParse, ['userID', 'id']);
   }
 
 };
