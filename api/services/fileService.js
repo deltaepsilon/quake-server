@@ -122,7 +122,7 @@ var fileService = {
     return deferred.promise;
 
   },
-  wxrParse: function (userID, id) {
+  wxr: function (userID, id) {
     var deferred = defer(),
       resolver = new Resolver(deferred);
 
@@ -135,18 +135,18 @@ var fileService = {
         workerProcess.send({buffer: buffer});
 
         workerProcess.on('message', function (message) {
-          workerProcess.kill();
           if (message.err) {
             resolver.reject(message.err);
-          } else {
-            fileService.wxrSave(userID, file, message.res)
-              .then(function (wxr) {
-                var removeDeferred = defer(),
-                  removeResolver = new Resolver(removeDeferred);
-                fileService.remove(userID, file.url).then(function () { removeResolver.resolve(wxr); }, removeResolver.reject);
-                return removeDeferred.promise;
-              })
-              .then(resolver.resolve, resolver.reject);
+            workerProcess.kill();
+          } else if (message.res.step === 'complete') {
+            // TODO Handle POST save
+            console.log('You still need to save the post results');
+            console.log('message.res', message.res);
+            workerProcess.kill();
+
+          } else { // Emit progress events
+            deferred.progress({percent: message.res.percent, status: message.res.status});
+
           }
         });
       });
@@ -154,21 +154,8 @@ var fileService = {
     });
     return deferred.promise;
 
-  },
-  wxrSave: function (userID, file, wxr) {
-    var deferred = defer(),
-      resolver = new Resolver(deferred);
-    WXR.destroyWhere({userID: userID, fileID: file.id}, function (err) {
-      if (err) { return resolver.reject(err); }
-
-      wxr.userID = userID;
-      wxr.fileID = file.id;
-      WXR.create(wxr, resolver.done);
-
-    });
-    return deferred.promise;
-
   }
+
 };
 
 module.exports = fileService;

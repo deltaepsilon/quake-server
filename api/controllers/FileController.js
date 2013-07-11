@@ -25,13 +25,13 @@ var defer = require('node-promise').defer,
     return args;
 
   },
-  generic = function (req, res, action, requirements) {
+  generic = function (req, res, action, requirements, progress) {
     var handler = new Handler(res),
       query = new Query(req),
       args = getArgs(requirements, query.augment());
 
     if (Array.isArray(args)) {
-      action.apply({}, args).then(handler.success, handler.error);
+      action.apply({}, args).then(handler.success, handler.error, progress);
     } else {
       handler.error(args);
     }
@@ -56,7 +56,11 @@ var FileController = {
 
   },
   wxr: function (req, res) {
-    generic(req, res, fileService.wxrParse, ['userID', 'id']);
+    var progress = function (message) { // Broadcast progress events via websockets
+      res.publish('wxr', '/wxr', message);
+    };
+    generic(req, res, fileService.wxr, ['userID', 'id'], progress);
+
   }
 
 };

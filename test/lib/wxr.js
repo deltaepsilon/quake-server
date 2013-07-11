@@ -54,16 +54,16 @@ module.exports = function () {
       });
     });
 
-    var WXR;
-    test('POST to /file/wxr should parse a WXR and return a saved object', function (done) {
-      verbs.post('/file/wxr', userToken).send({id: inkBlob1.id}).end(function (err, res) {
-        var wxr = JSON.parse(res.text);
-        WXR = wxr;
-        assert.equal(Object.keys(wxr.meta[0]).length, 20, 'Meta should have the right length');
-        assert.equal(wxr.items.length, 24, 'Items should have the right length');
-        done();
-      });
-    });
+//    var WXR;
+//    test('POST to /file/wxr should parse a WXR and return a saved object', function (done) {
+//      verbs.post('/file/wxr', userToken).send({id: inkBlob1.id}).end(function (err, res) {
+//        var wxr = JSON.parse(res.text);
+//        WXR = wxr;
+//        assert.equal(Object.keys(wxr.meta[0]).length, 20, 'Meta should have the right length');
+//        assert.equal(wxr.items.length, 24, 'Items should have the right length');
+//        done();
+//      });
+//    });
 
     test('GET to /aws/s3Object should return nothing, because the parse function cleaned out the WXR folder.', function (done) {
       verbs.get('/aws/s3Object?key=/wxr/' + filename, userToken).end(function (err, res) {
