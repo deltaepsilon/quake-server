@@ -18,27 +18,27 @@
 
 <!-- generator="WordPress/3.5.1" created="2013-07-01 14:54" -->
 <rss version="2.0"
-	xmlns:excerpt="http://nothing.com/export/1.2/excerpt/"
-	xmlns:content="http://nothing.com/rss/1.0/modules/content/"
-	xmlns:wfw="http://nothing.com/CommentAPI/"
-	xmlns:dc="http://nothing.com/dc/elements/1.1/"
-	xmlns:wp="http://nothing.com/export/1.2/"
+	xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:wp="http://wordpress.org/export/1.2/"
 >
 
 <channel>
 	<title>ISLY &#124; I Still Love You</title>
-	<link>http://nothing.com</link>
+	<link>http://melissaesplin.com</link>
 	<description>Art, Sewing, Design, Bookbinding, Photography, Crafts</description>
 	<pubDate>Mon, 01 Jul 2013 14:54:19 +0000</pubDate>
 	<language>en-US</language>
 	<wp:wxr_version>1.2</wp:wxr_version>
-	<wp:base_site_url>http://nothing.com</wp:base_site_url>
-	<wp:base_blog_url>http://nothing.com</wp:base_blog_url>
+	<wp:base_site_url>http://melissaesplin.com</wp:base_site_url>
+	<wp:base_blog_url>http://melissaesplin.com</wp:base_blog_url>
 
-	<wp:author><wp:author_id>1</wp:author_id><wp:author_login>Melissa</wp:author_login><wp:author_email>melissa@nothing.com</wp:author_email><wp:author_display_name><![CDATA[Melissa]]></wp:author_display_name><wp:author_first_name><![CDATA[]]></wp:author_first_name><wp:author_last_name><![CDATA[]]></wp:author_last_name></wp:author>
-	<wp:author><wp:author_id>2</wp:author_id><wp:author_login>Chris</wp:author_login><wp:author_email>christopher.esplin@nothing.com</wp:author_email><wp:author_display_name><![CDATA[Chris]]></wp:author_display_name><wp:author_first_name><![CDATA[Chris]]></wp:author_first_name><wp:author_last_name><![CDATA[Esplin]]></wp:author_last_name></wp:author>
-	<wp:author><wp:author_id>7</wp:author_id><wp:author_login>Celeste</wp:author_login><wp:author_email>info@nothing.com</wp:author_email><wp:author_display_name><![CDATA[Celeste]]></wp:author_display_name><wp:author_first_name><![CDATA[Celeste]]></wp:author_first_name><wp:author_last_name><![CDATA[Rosenlof]]></wp:author_last_name></wp:author>
-	<wp:author><wp:author_id>6</wp:author_id><wp:author_login>Guest</wp:author_login><wp:author_email>islyblog@nothing.com</wp:author_email><wp:author_display_name><![CDATA[Guest]]></wp:author_display_name><wp:author_first_name><![CDATA[Guest]]></wp:author_first_name><wp:author_last_name><![CDATA[Poster]]></wp:author_last_name></wp:author>
+	<wp:author><wp:author_id>1</wp:author_id><wp:author_login>Melissa</wp:author_login><wp:author_email>melissa@nowhere.com</wp:author_email><wp:author_display_name><![CDATA[Melissa]]></wp:author_display_name><wp:author_first_name><![CDATA[]]></wp:author_first_name><wp:author_last_name><![CDATA[]]></wp:author_last_name></wp:author>
+	<wp:author><wp:author_id>2</wp:author_id><wp:author_login>Chris</wp:author_login><wp:author_email>christopher.esplin@nowhere.com</wp:author_email><wp:author_display_name><![CDATA[Chris]]></wp:author_display_name><wp:author_first_name><![CDATA[Chris]]></wp:author_first_name><wp:author_last_name><![CDATA[Esplin]]></wp:author_last_name></wp:author>
+	<wp:author><wp:author_id>7</wp:author_id><wp:author_login>Celeste</wp:author_login><wp:author_email>info@nowhere.com</wp:author_email><wp:author_display_name><![CDATA[Celeste]]></wp:author_display_name><wp:author_first_name><![CDATA[Celeste]]></wp:author_first_name><wp:author_last_name><![CDATA[Rosenlof]]></wp:author_last_name></wp:author>
+	<wp:author><wp:author_id>6</wp:author_id><wp:author_login>Guest</wp:author_login><wp:author_email>islyblog@nowhere.com</wp:author_email><wp:author_display_name><![CDATA[Guest]]></wp:author_display_name><wp:author_first_name><![CDATA[Guest]]></wp:author_first_name><wp:author_last_name><![CDATA[Poster]]></wp:author_last_name></wp:author>
 
 	<wp:category><wp:term_id>18</wp:term_id><wp:category_nicename>adventure</wp:category_nicename><wp:category_parent></wp:category_parent><wp:cat_name><![CDATA[adventure]]></wp:cat_name></wp:category>
 	<wp:category><wp:term_id>6</wp:term_id><wp:category_nicename>art</wp:category_nicename><wp:category_parent></wp:category_parent><wp:cat_name><![CDATA[art]]></wp:cat_name></wp:category>
@@ -92,7 +92,7 @@
 	<wp:tag><wp:term_id>811</wp:term_id><wp:tag_slug>ardor</wp:tag_slug><wp:tag_name><![CDATA[Ardor]]></wp:tag_name></wp:tag>
 	<wp:tag><wp:term_id>6</wp:term_id><wp:tag_slug>art</wp:tag_slug><wp:tag_name><![CDATA[art]]></wp:tag_name></wp:tag>
 	<wp:tag><wp:term_id>422</wp:term_id><wp:tag_slug>art-weekend</wp:tag_slug><wp:tag_name><![CDATA[art weekend]]></wp:tag_name></wp:tag>
-	<wp:tag><wp:term_id>779</wp:term_id><wp:tag_slug>art-com</wp:tag_slug><wp:tag_name><![CDATA[nothing.com]]></wp:tag_name></wp:tag>
+	<wp:tag><wp:term_id>779</wp:term_id><wp:tag_slug>art-com</wp:tag_slug><wp:tag_name><![CDATA[art.com]]></wp:tag_name></wp:tag>
 	<wp:tag><wp:term_id>309</wp:term_id><wp:tag_slug>artists</wp:tag_slug><wp:tag_name><![CDATA[artists]]></wp:tag_name></wp:tag>
 	<wp:tag><wp:term_id>748</wp:term_id><wp:tag_slug>arts-2</wp:tag_slug><wp:tag_name><![CDATA[arts]]></wp:tag_name></wp:tag>
 	<wp:tag><wp:term_id>612</wp:term_id><wp:tag_slug>artwork</wp:tag_slug><wp:tag_name><![CDATA[artwork]]></wp:tag_name></wp:tag>
@@ -890,16 +890,16 @@
 	<wp:term><wp:term_id>230</wp:term_id><wp:term_taxonomy>ngg_tag</wp:term_taxonomy><wp:term_slug>wedding-announcement</wp:term_slug><wp:term_parent></wp:term_parent><wp:term_name><![CDATA[wedding announcement]]></wp:term_name></wp:term>
 	<wp:term><wp:term_id>797</wp:term_id><wp:term_taxonomy>nav_menu</wp:term_taxonomy><wp:term_slug>header-links</wp:term_slug><wp:term_name><![CDATA[Header Links]]></wp:term_name></wp:term>
 
-	<generator>http://nothing.com/?v=3.5.1</generator>
+	<generator>http://wordpress.org/?v=3.5.1</generator>
 
 	<item>
 		<title>Let the Blogging Begin!</title>
-		<link>http://nothing.com/2007/10/hello-world/</link>
+		<link>http://melissaesplin.com/2007/10/hello-world/</link>
 		<pubDate>Mon, 29 Oct 2007 04:26:33 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
 		<guid isPermaLink="false"></guid>
 		<description></description>
-		<content:encoded><![CDATA[I'm just so excited that I could get nothing.com! I can't wait to get blogging about projects, work, family, etc. Feel free to check out the additional pages of past/current work, read and/or comment on posts. Your ideas and input are appreciated. Thanks!Also you can check out the old blog <a href="http://www.nothing.com/wordpress/">HERE</a>.]]></content:encoded>
+		<content:encoded><![CDATA[I'm just so excited that I could get MelissaEsplin.com! I can't wait to get blogging about projects, work, family, etc. Feel free to check out the additional pages of past/current work, read and/or comment on posts. Your ideas and input are appreciated. Thanks!Also you can check out the old blog <a href="http://www.untoldcircle.com/wordpress/">HERE</a>.]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1</wp:post_id>
 		<wp:post_date>2007-10-28 23:26:33</wp:post_date>
@@ -929,8 +929,8 @@
 		<wp:comment>
 			<wp:comment_id>118027</wp:comment_id>
 			<wp:comment_author><![CDATA[Johanna from Norway]]></wp:comment_author>
-			<wp:comment_author_email>jve93@nothing.com</wp:comment_author_email>
-			<wp:comment_author_url>http://www.jeikje.nothing.com</wp:comment_author_url>
+			<wp:comment_author_email>jve93@nowhere.com</wp:comment_author_email>
+			<wp:comment_author_url>http://www.jeikje.tumblr.com</wp:comment_author_url>
 			<wp:comment_author_IP>79.161.59.69</wp:comment_author_IP>
 			<wp:comment_date>2011-05-23 21:22:18</wp:comment_date>
 			<wp:comment_date_gmt>2011-05-23 21:22:18</wp:comment_date_gmt>
@@ -951,16 +951,16 @@
 	</item>
 	<item>
 		<title>More Baby Booties!</title>
-		<link>http://nothing.com/2007/11/more-baby-booties/</link>
+		<link>http://melissaesplin.com/2007/11/more-baby-booties/</link>
 		<pubDate>Fri, 09 Nov 2007 23:28:49 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/?p=32</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/?p=32</guid>
 		<description></description>
-		<content:encoded><![CDATA[Thanks to <a href="http://www.heatherbailey.nothing.com/">Heather Bailey</a>, I'm now obsessed with her pattern for <a href="http://www.nothing.com/Booties.html">baby booties</a>. It's so fabulously easy, especially when not using leather. The leather booties took me so long to sew, so when I set to work on some felt booties it was a MUCH faster process. I almost think that I should've embellished the booties just a little bit more. The <a href="http://heatherbailey.nothing.com/photos/how_to_make_a_yoyo/index.html">yo-yo</a> embellishment worked out nicely. I actually had originally planned on putting buttons in the middle, but I couldn't find any buttons that looked cute with the shoes. I am really happy that I didn't do the buttons. The stars in the middle make them look like little tomatoes. oh so cute! These booties went to my cousin (in-law) Tara. She's about to pop, from what I hear.
+		<content:encoded><![CDATA[Thanks to <a href="http://www.heatherbailey.typepad.com/">Heather Bailey</a>, I'm now obsessed with her pattern for <a href="http://www.heatherbaileydesign.com/Booties.html">baby booties</a>. It's so fabulously easy, especially when not using leather. The leather booties took me so long to sew, so when I set to work on some felt booties it was a MUCH faster process. I almost think that I should've embellished the booties just a little bit more. The <a href="http://heatherbailey.typepad.com/photos/how_to_make_a_yoyo/index.html">yo-yo</a> embellishment worked out nicely. I actually had originally planned on putting buttons in the middle, but I couldn't find any buttons that looked cute with the shoes. I am really happy that I didn't do the buttons. The stars in the middle make them look like little tomatoes. oh so cute! These booties went to my cousin (in-law) Tara. She's about to pop, from what I hear.
 
-I was sad not  to be able to see Tara (or Alexis) while in SLC, but I was able to see my aunt (her mom-in-law) and give them to her. I hope that she finds them useful. OH, also... the <a href="http://nothing.com/wordpress/?p=340">leather booties</a> I gave to Alexis work perfectly! I was hoping that she was going to have a girl. The girly, green leafy pattern of the leather booties would have looked a little funny on a little boy. Alexis had a healthy little Olivia Jane (such a cute name btw) either late Thursday night or Friday morning! Congratulations to Alexis and Chad! Yay for babies and families!
+I was sad not  to be able to see Tara (or Alexis) while in SLC, but I was able to see my aunt (her mom-in-law) and give them to her. I hope that she finds them useful. OH, also... the <a href="http://untoldcircle.com/wordpress/?p=340">leather booties</a> I gave to Alexis work perfectly! I was hoping that she was going to have a girl. The girly, green leafy pattern of the leather booties would have looked a little funny on a little boy. Alexis had a healthy little Olivia Jane (such a cute name btw) either late Thursday night or Friday morning! Congratulations to Alexis and Chad! Yay for babies and families!
 
-<img src="http://nothing.com/home/wp-content/uploads/2007/11/greenbabybootiessm.jpg" alt="greenbabybootiessm.jpg" />]]></content:encoded>
+<img src="http://melissaesplin.com/home/wp-content/uploads/2007/11/greenbabybootiessm.jpg" alt="greenbabybootiessm.jpg" />]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>32</wp:post_id>
 		<wp:post_date>2007-11-09 23:28:49</wp:post_date>
@@ -991,7 +991,7 @@ I was sad not  to be able to see Tara (or Alexis) while in SLC, but I was able t
 			<wp:comment_id>137650</wp:comment_id>
 			<wp:comment_author><![CDATA[Recycle Week: Leather Booties &raquo; ISLY | I Still Love You]]></wp:comment_author>
 			<wp:comment_author_email></wp:comment_author_email>
-			<wp:comment_author_url>http://nothing.com/home/2011/07/recycle-week-leather-booties/</wp:comment_author_url>
+			<wp:comment_author_url>http://melissaesplin.com/home/2011/07/recycle-week-leather-booties/</wp:comment_author_url>
 			<wp:comment_author_IP>174.120.254.166</wp:comment_author_IP>
 			<wp:comment_date>2011-07-05 17:55:25</wp:comment_date>
 			<wp:comment_date_gmt>2011-07-05 17:55:25</wp:comment_date_gmt>
@@ -1004,10 +1004,10 @@ I was sad not  to be able to see Tara (or Alexis) while in SLC, but I was able t
 	</item>
 	<item>
 		<title>greenbabybootiessm.jpg</title>
-		<link>http://nothing.com/2007/11/more-baby-booties/greenbabybootiessmjpg/</link>
+		<link>http://melissaesplin.com/2007/11/more-baby-booties/greenbabybootiessmjpg/</link>
 		<pubDate>Fri, 09 Nov 2007 23:23:36 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/wp-content/uploads/2007/11/greenbabybootiessm.jpg</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/wp-content/uploads/2007/11/greenbabybootiessm.jpg</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
@@ -1023,7 +1023,7 @@ I was sad not  to be able to see Tara (or Alexis) while in SLC, but I was able t
 		<wp:post_type>attachment</wp:post_type>
 		<wp:post_password></wp:post_password>
 		<wp:is_sticky>0</wp:is_sticky>
-		<wp:attachment_url>http://nothing.com/wp-content/uploads/2007/11/greenbabybootiessm.jpg</wp:attachment_url>
+		<wp:attachment_url>http://melissaesplin.com/wp-content/uploads/2007/11/greenbabybootiessm.jpg</wp:attachment_url>
 		<wp:postmeta>
 			<wp:meta_key>_wp_attached_file</wp:meta_key>
 			<wp:meta_value><![CDATA[/home/epsilon/public_html/home/wp-content/uploads/2007/11/greenbabybootiessm.jpg]]></wp:meta_value>
@@ -1035,18 +1035,18 @@ I was sad not  to be able to see Tara (or Alexis) while in SLC, but I was able t
 	</item>
 	<item>
 		<title>Baby Gifts</title>
-		<link>http://nothing.com/2007/11/baby-gifts/</link>
+		<link>http://melissaesplin.com/2007/11/baby-gifts/</link>
 		<pubDate>Wed, 14 Nov 2007 02:09:04 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/?p=61</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/?p=61</guid>
 		<description></description>
-		<content:encoded><![CDATA[Now that I'm home and only working part-time with no school in the way, I've decided that I have plenty of time to make things; particularly gifts. My goal this year is to make every gift for Christmas and birthday, in the hopes of a) saving money, b) expressing creativity and c) occupying my time with something other than Solitaire. This idea came mostly from reading <a href="http://www.nothing.com">Heather Bailey's</a> blog and several others.
+		<content:encoded><![CDATA[Now that I'm home and only working part-time with no school in the way, I've decided that I have plenty of time to make things; particularly gifts. My goal this year is to make every gift for Christmas and birthday, in the hopes of a) saving money, b) expressing creativity and c) occupying my time with something other than Solitaire. This idea came mostly from reading <a href="http://www.hellomynameisheather.com">Heather Bailey's</a> blog and several others.
 
 About two months ago my sister, Emily, had a baby, and so I set to work making her gift. I decided to make a photo album (this was before discovering the baby booties). I'll be honest, I think this will be the last time I make a photo album and make any book with a padded front. I decided to donate my old suede leather jacket to the cause, because it would just add something that new fabric wouldn't have, plus I was also interested in finding out how thin the leather from my jacket was and how it would be to work with in bookbinding. I left the original stitching on the jacket which really added to the visual interest in the front, and I decided not to worry about the darkened spots from wear and tear. I really like what happened. The bind was a little more difficult so it took me a lot longer to complete than I had anticipated. It also didn't help that I kept procrastinating the project to the last minute. I finally finished the book the morning Ayden was blessed, a few hours before I ended up giving it to her. Anyway, here are the pics...
 
-<a title="aydensbooksm.jpg" href="http://nothing.com/home/wp-content/uploads/2007/11/aydensbooksm.jpg"><img src="http://nothing.com/home/wp-content/uploads/2007/11/aydensbooksm.jpg" alt="aydensbooksm.jpg" /></a>
+<a title="aydensbooksm.jpg" href="http://melissaesplin.com/home/wp-content/uploads/2007/11/aydensbooksm.jpg"><img src="http://melissaesplin.com/home/wp-content/uploads/2007/11/aydensbooksm.jpg" alt="aydensbooksm.jpg" /></a>
 
-<a title="aydensbook1sm.jpg" href="http://nothing.com/home/wp-content/uploads/2007/11/aydensbook1sm.jpg"><img src="http://nothing.com/home/wp-content/uploads/2007/11/aydensbook1sm.jpg" alt="aydensbook1sm.jpg" /></a>]]></content:encoded>
+<a title="aydensbook1sm.jpg" href="http://melissaesplin.com/home/wp-content/uploads/2007/11/aydensbook1sm.jpg"><img src="http://melissaesplin.com/home/wp-content/uploads/2007/11/aydensbook1sm.jpg" alt="aydensbook1sm.jpg" /></a>]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>61</wp:post_id>
 		<wp:post_date>2007-11-14 02:09:04</wp:post_date>
@@ -1076,8 +1076,8 @@ About two months ago my sister, Emily, had a baby, and so I set to work making h
 		<wp:comment>
 			<wp:comment_id>3</wp:comment_id>
 			<wp:comment_author><![CDATA[Emily]]></wp:comment_author>
-			<wp:comment_author_email>emiroogus@nothing.com</wp:comment_author_email>
-			<wp:comment_author_url>http://alecandemily.nothing.com</wp:comment_author_url>
+			<wp:comment_author_email>emiroogus@nowhere.com</wp:comment_author_email>
+			<wp:comment_author_url>http://alecandemily.blogspot.com</wp:comment_author_url>
 			<wp:comment_author_IP>69.110.228.221</wp:comment_author_IP>
 			<wp:comment_date>2007-11-15 02:07:15</wp:comment_date>
 			<wp:comment_date_gmt>2007-11-15 02:07:15</wp:comment_date_gmt>
@@ -1090,8 +1090,8 @@ About two months ago my sister, Emily, had a baby, and so I set to work making h
 		<wp:comment>
 			<wp:comment_id>4</wp:comment_id>
 			<wp:comment_author><![CDATA[Michelle]]></wp:comment_author>
-			<wp:comment_author_email>michelleglauser@nothing.com</wp:comment_author_email>
-			<wp:comment_author_url>http://michelleglauser.nothing.com</wp:comment_author_url>
+			<wp:comment_author_email>michelleglauser@nowhere.com</wp:comment_author_email>
+			<wp:comment_author_url>http://michelleglauser.blogspot.com</wp:comment_author_url>
 			<wp:comment_author_IP>88.74.146.143</wp:comment_author_IP>
 			<wp:comment_date>2007-11-15 20:28:10</wp:comment_date>
 			<wp:comment_date_gmt>2007-11-15 20:28:10</wp:comment_date_gmt>
@@ -1104,7 +1104,7 @@ About two months ago my sister, Emily, had a baby, and so I set to work making h
 		<wp:comment>
 			<wp:comment_id>5</wp:comment_id>
 			<wp:comment_author><![CDATA[Peggy Scott]]></wp:comment_author>
-			<wp:comment_author_email>greenthumbslc@nothing.com</wp:comment_author_email>
+			<wp:comment_author_email>greenthumbslc@nowhere.com</wp:comment_author_email>
 			<wp:comment_author_url></wp:comment_author_url>
 			<wp:comment_author_IP>70.57.95.41</wp:comment_author_IP>
 			<wp:comment_date>2007-11-15 21:30:31</wp:comment_date>
@@ -1119,7 +1119,7 @@ I'm impressed with your creativity and talent. The booties are so cute.  You sho
 		<wp:comment>
 			<wp:comment_id>6</wp:comment_id>
 			<wp:comment_author><![CDATA[em bailey]]></wp:comment_author>
-			<wp:comment_author_email>emilybailey@nothing.com</wp:comment_author_email>
+			<wp:comment_author_email>emilybailey@nowhere.com</wp:comment_author_email>
 			<wp:comment_author_url></wp:comment_author_url>
 			<wp:comment_author_IP>71.219.4.22</wp:comment_author_IP>
 			<wp:comment_date>2007-11-22 19:43:28</wp:comment_date>
@@ -1134,8 +1134,8 @@ Hope you are feeling well. I can't wait till you find out what youare having:)]]
 		<wp:comment>
 			<wp:comment_id>42080</wp:comment_id>
 			<wp:comment_author><![CDATA[Swanky Blooms]]></wp:comment_author>
-			<wp:comment_author_email>mexemx@nothing.com</wp:comment_author_email>
-			<wp:comment_author_url>http://www.nothing.com</wp:comment_author_url>
+			<wp:comment_author_email>mexemx@nowhere.com</wp:comment_author_email>
+			<wp:comment_author_url>http://www.swankyblooms.com</wp:comment_author_url>
 			<wp:comment_author_IP>70.138.111.200</wp:comment_author_IP>
 			<wp:comment_date>2010-11-15 16:47:06</wp:comment_date>
 			<wp:comment_date_gmt>2010-11-15 16:47:06</wp:comment_date_gmt>
@@ -1149,10 +1149,10 @@ Congrats!]]></wp:comment_content>
 	</item>
 	<item>
 		<title>aydensbooksm.jpg</title>
-		<link>http://nothing.com/2007/11/baby-gifts/aydensbooksmjpg/</link>
+		<link>http://melissaesplin.com/2007/11/baby-gifts/aydensbooksmjpg/</link>
 		<pubDate>Wed, 14 Nov 2007 02:01:50 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/wp-content/uploads/2007/11/aydensbooksm.jpg</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/wp-content/uploads/2007/11/aydensbooksm.jpg</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
@@ -1168,7 +1168,7 @@ Congrats!]]></wp:comment_content>
 		<wp:post_type>attachment</wp:post_type>
 		<wp:post_password></wp:post_password>
 		<wp:is_sticky>0</wp:is_sticky>
-		<wp:attachment_url>http://nothing.com/wp-content/uploads/2007/11/aydensbooksm.jpg</wp:attachment_url>
+		<wp:attachment_url>http://melissaesplin.com/wp-content/uploads/2007/11/aydensbooksm.jpg</wp:attachment_url>
 		<wp:postmeta>
 			<wp:meta_key>_wp_attached_file</wp:meta_key>
 			<wp:meta_value><![CDATA[/home/epsilon/public_html/home/wp-content/uploads/2007/11/aydensbooksm.jpg]]></wp:meta_value>
@@ -1180,10 +1180,10 @@ Congrats!]]></wp:comment_content>
 	</item>
 	<item>
 		<title>aydensbook1sm.jpg</title>
-		<link>http://nothing.com/2007/11/baby-gifts/aydensbook1smjpg/</link>
+		<link>http://melissaesplin.com/2007/11/baby-gifts/aydensbook1smjpg/</link>
 		<pubDate>Wed, 14 Nov 2007 02:08:54 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/wp-content/uploads/2007/11/aydensbook1sm.jpg</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/wp-content/uploads/2007/11/aydensbook1sm.jpg</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
@@ -1199,7 +1199,7 @@ Congrats!]]></wp:comment_content>
 		<wp:post_type>attachment</wp:post_type>
 		<wp:post_password></wp:post_password>
 		<wp:is_sticky>0</wp:is_sticky>
-		<wp:attachment_url>http://nothing.com/wp-content/uploads/2007/11/aydensbook1sm.jpg</wp:attachment_url>
+		<wp:attachment_url>http://melissaesplin.com/wp-content/uploads/2007/11/aydensbook1sm.jpg</wp:attachment_url>
 		<wp:postmeta>
 			<wp:meta_key>_wp_attached_file</wp:meta_key>
 			<wp:meta_value><![CDATA[/home/epsilon/public_html/home/wp-content/uploads/2007/11/aydensbook1sm.jpg]]></wp:meta_value>
@@ -1211,16 +1211,16 @@ Congrats!]]></wp:comment_content>
 	</item>
 	<item>
 		<title>Breakfast of Champions</title>
-		<link>http://nothing.com/2007/11/breakfast-of-champions/</link>
+		<link>http://melissaesplin.com/2007/11/breakfast-of-champions/</link>
 		<pubDate>Thu, 29 Nov 2007 01:34:44 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/?p=65</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/?p=65</guid>
 		<description></description>
 		<content:encoded><![CDATA[Yesterday I was on my way to my favorite cheap grocery store when I saw a sign at another favorite store of mine (Sigona's–a local farmer's market) advertising a sale on oranges, five pounds for $1. Oh yeah, it was my lucky day! One of my favorite things about winter/Christmas is orange season. I was in heaven. There were tons of beautifully ripe oranges right at my fingertips! So, I did what any smart shopper would do... I bought 20 pounds of oranges! 10 pounds of the oranges went to friends, and the rest to my kitchen to be consumed.
 
 Last night I tried out a citrus juicer that Chris and I got for our wedding. Yeah, it's been almost a year and a half, and it was the first time we've used the thing. It was great! I made some orange chicken, which turned out fabulous. I'm a little disappointed that I wasn't able to get a picture of the dish last night (the sun has been setting at 5:30). I do, however have a lovely picture of what we did with six oranges this morning, the orange juice was so good. mmmm...
 
-<img src="http://nothing.com/home/wp-content/uploads/2007/11/breakfast-eggssm.jpg" alt="breakfast-eggssm.jpg" />]]></content:encoded>
+<img src="http://melissaesplin.com/home/wp-content/uploads/2007/11/breakfast-eggssm.jpg" alt="breakfast-eggssm.jpg" />]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>65</wp:post_id>
 		<wp:post_date>2007-11-29 01:34:44</wp:post_date>
@@ -1242,10 +1242,10 @@ Last night I tried out a citrus juicer that Chris and I got for our wedding. Yea
 	</item>
 	<item>
 		<title>breakfast-eggssm.jpg</title>
-		<link>http://nothing.com/2007/11/breakfast-of-champions/breakfast-eggssmjpg/</link>
+		<link>http://melissaesplin.com/2007/11/breakfast-of-champions/breakfast-eggssmjpg/</link>
 		<pubDate>Thu, 29 Nov 2007 01:33:24 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/wp-content/uploads/2007/11/breakfast-eggssm.jpg</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/wp-content/uploads/2007/11/breakfast-eggssm.jpg</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
@@ -1261,7 +1261,7 @@ Last night I tried out a citrus juicer that Chris and I got for our wedding. Yea
 		<wp:post_type>attachment</wp:post_type>
 		<wp:post_password></wp:post_password>
 		<wp:is_sticky>0</wp:is_sticky>
-		<wp:attachment_url>http://nothing.com/wp-content/uploads/2007/11/breakfast-eggssm.jpg</wp:attachment_url>
+		<wp:attachment_url>http://melissaesplin.com/wp-content/uploads/2007/11/breakfast-eggssm.jpg</wp:attachment_url>
 		<wp:postmeta>
 			<wp:meta_key>_wp_attached_file</wp:meta_key>
 			<wp:meta_value><![CDATA[/home/epsilon/public_html/home/wp-content/uploads/2007/11/breakfast-eggssm.jpg]]></wp:meta_value>
@@ -1273,24 +1273,24 @@ Last night I tried out a citrus juicer that Chris and I got for our wedding. Yea
 	</item>
 	<item>
 		<title>Purses, Bags &amp; Totes, Oh MY!</title>
-		<link>http://nothing.com/2007/11/purses-bags-totes-oh-my/</link>
+		<link>http://melissaesplin.com/2007/11/purses-bags-totes-oh-my/</link>
 		<pubDate>Thu, 29 Nov 2007 06:36:39 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/?p=67</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/?p=67</guid>
 		<description></description>
 		<content:encoded><![CDATA[I'm obsessed. Thoroughly.
 
-My friend Carrie showed me a site, <a href="http://www.nothing.com">nothing.com</a> that has a bunch of fun ideas, plus links to other bloggers that have tutorials, etc. Since then, I've tried to look at every link (there are tons) for Christmas ideas. I have been fortunate to find a few purse tutorials, to help me with my quest. I have also had the great fortune to have found a couple that go around to different interior design studios collecting discontinued fabric. I've collected quite a bit of it, thankfully finding scraps large enough for bags.
+My friend Carrie showed me a site, <a href="http://www.thepurlbee.com">thepurlbee.com</a> that has a bunch of fun ideas, plus links to other bloggers that have tutorials, etc. Since then, I've tried to look at every link (there are tons) for Christmas ideas. I have been fortunate to find a few purse tutorials, to help me with my quest. I have also had the great fortune to have found a couple that go around to different interior design studios collecting discontinued fabric. I've collected quite a bit of it, thankfully finding scraps large enough for bags.
 
-<img src="http://nothing.com/home/wp-content/uploads/2007/11/bagspursesandtotessm.jpg" alt="bagspursesandtotessm.jpg" />
+<img src="http://melissaesplin.com/home/wp-content/uploads/2007/11/bagspursesandtotessm.jpg" alt="bagspursesandtotessm.jpg" />
 
-<a href="http://nothing.com/home/wp-content/uploads/2007/11/brownpursesm.jpg" title="brownpursesm.jpg">                                        <img src="http://nothing.com/home/wp-content/uploads/2007/11/brownpursesm.thumbnail.jpg" alt="brownpursesm.jpg" /></a>                                                            <a href="http://nothing.com/home/wp-content/uploads/2007/11/greypursesm.jpg" title="greypursesm.jpg"><img src="http://nothing.com/home/wp-content/uploads/2007/11/greypursesm.thumbnail.jpg" alt="greypursesm.jpg" /></a>                                                            <a href="http://nothing.com/home/wp-content/uploads/2007/11/greenpursesm.jpg" title="greenpursesm.jpg"><img src="http://nothing.com/home/wp-content/uploads/2007/11/greenpursesm.thumbnail.jpg" alt="greenpursesm.jpg" /></a>
+<a href="http://melissaesplin.com/home/wp-content/uploads/2007/11/brownpursesm.jpg" title="brownpursesm.jpg">                                        <img src="http://melissaesplin.com/home/wp-content/uploads/2007/11/brownpursesm.thumbnail.jpg" alt="brownpursesm.jpg" /></a>                                                            <a href="http://melissaesplin.com/home/wp-content/uploads/2007/11/greypursesm.jpg" title="greypursesm.jpg"><img src="http://melissaesplin.com/home/wp-content/uploads/2007/11/greypursesm.thumbnail.jpg" alt="greypursesm.jpg" /></a>                                                            <a href="http://melissaesplin.com/home/wp-content/uploads/2007/11/greenpursesm.jpg" title="greenpursesm.jpg"><img src="http://melissaesplin.com/home/wp-content/uploads/2007/11/greenpursesm.thumbnail.jpg" alt="greenpursesm.jpg" /></a>
 
-Left: The fabric for the brown purse was free, and the pattern/tutorial can be found <a href="http://www.nothing.com/category/tutorials/" target="_blank">HERE.</a>
+Left: The fabric for the brown purse was free, and the pattern/tutorial can be found <a href="http://www.colorfool.net/category/tutorials/" target="_blank">HERE.</a>
 
 Middle: Fabric was free, there was a price tag on the fabric noting that it had, at one point, gone for $160 a yard!! Cool. The pattern was modified from the above tutorial, I brought the opening in a couple of inches just to add a little dimension to the shape.
 
-Right: Fabric was also free, I love freebies. The Pleated tote pattern can be found <a href="http://artsycraftybabe.nothing.com/artsycrafty_babe/2007/07/off-on-an-adven.html" target="_blank">HERE.</a>]]></content:encoded>
+Right: Fabric was also free, I love freebies. The Pleated tote pattern can be found <a href="http://artsycraftybabe.typepad.com/artsycrafty_babe/2007/07/off-on-an-adven.html" target="_blank">HERE.</a>]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>67</wp:post_id>
 		<wp:post_date>2007-11-29 06:36:39</wp:post_date>
@@ -1313,7 +1313,7 @@ Right: Fabric was also free, I love freebies. The Pleated tote pattern can be fo
 			<wp:comment_id>78</wp:comment_id>
 			<wp:comment_author><![CDATA[. . . . . . . &raquo; Tote and Tute]]></wp:comment_author>
 			<wp:comment_author_email></wp:comment_author_email>
-			<wp:comment_author_url>http://nothing.com/home/?p=116</wp:comment_author_url>
+			<wp:comment_author_url>http://melissaesplin.com/home/?p=116</wp:comment_author_url>
 			<wp:comment_author_IP>208.79.232.22</wp:comment_author_IP>
 			<wp:comment_date>2008-02-28 21:24:52</wp:comment_date>
 			<wp:comment_date_gmt>2008-02-28 21:24:52</wp:comment_date_gmt>
@@ -1326,10 +1326,10 @@ Right: Fabric was also free, I love freebies. The Pleated tote pattern can be fo
 	</item>
 	<item>
 		<title>bagspursesandtotessm.jpg</title>
-		<link>http://nothing.com/2007/11/purses-bags-totes-oh-my/bagspursesandtotessmjpg/</link>
+		<link>http://melissaesplin.com/2007/11/purses-bags-totes-oh-my/bagspursesandtotessmjpg/</link>
 		<pubDate>Thu, 29 Nov 2007 02:22:07 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/wp-content/uploads/2007/11/bagspursesandtotessm.jpg</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/wp-content/uploads/2007/11/bagspursesandtotessm.jpg</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
@@ -1345,7 +1345,7 @@ Right: Fabric was also free, I love freebies. The Pleated tote pattern can be fo
 		<wp:post_type>attachment</wp:post_type>
 		<wp:post_password></wp:post_password>
 		<wp:is_sticky>0</wp:is_sticky>
-		<wp:attachment_url>http://nothing.com/wp-content/uploads/2007/11/bagspursesandtotessm.jpg</wp:attachment_url>
+		<wp:attachment_url>http://melissaesplin.com/wp-content/uploads/2007/11/bagspursesandtotessm.jpg</wp:attachment_url>
 		<wp:postmeta>
 			<wp:meta_key>_wp_attached_file</wp:meta_key>
 			<wp:meta_value><![CDATA[/home/epsilon/public_html/home/wp-content/uploads/2007/11/bagspursesandtotessm.jpg]]></wp:meta_value>
@@ -1357,10 +1357,10 @@ Right: Fabric was also free, I love freebies. The Pleated tote pattern can be fo
 	</item>
 	<item>
 		<title>brownpursesm.jpg</title>
-		<link>http://nothing.com/2007/11/purses-bags-totes-oh-my/brownpursesmjpg/</link>
+		<link>http://melissaesplin.com/2007/11/purses-bags-totes-oh-my/brownpursesmjpg/</link>
 		<pubDate>Thu, 29 Nov 2007 06:28:56 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/wp-content/uploads/2007/11/brownpursesm.jpg</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/wp-content/uploads/2007/11/brownpursesm.jpg</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
@@ -1376,7 +1376,7 @@ Right: Fabric was also free, I love freebies. The Pleated tote pattern can be fo
 		<wp:post_type>attachment</wp:post_type>
 		<wp:post_password></wp:post_password>
 		<wp:is_sticky>0</wp:is_sticky>
-		<wp:attachment_url>http://nothing.com/wp-content/uploads/2007/11/brownpursesm.jpg</wp:attachment_url>
+		<wp:attachment_url>http://melissaesplin.com/wp-content/uploads/2007/11/brownpursesm.jpg</wp:attachment_url>
 		<wp:postmeta>
 			<wp:meta_key>_wp_attached_file</wp:meta_key>
 			<wp:meta_value><![CDATA[/home/epsilon/public_html/home/wp-content/uploads/2007/11/brownpursesm.jpg]]></wp:meta_value>
@@ -1388,10 +1388,10 @@ Right: Fabric was also free, I love freebies. The Pleated tote pattern can be fo
 	</item>
 	<item>
 		<title>greypursesm.jpg</title>
-		<link>http://nothing.com/2007/11/purses-bags-totes-oh-my/greypursesmjpg/</link>
+		<link>http://melissaesplin.com/2007/11/purses-bags-totes-oh-my/greypursesmjpg/</link>
 		<pubDate>Thu, 29 Nov 2007 06:29:25 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/wp-content/uploads/2007/11/greypursesm.jpg</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/wp-content/uploads/2007/11/greypursesm.jpg</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
@@ -1407,7 +1407,7 @@ Right: Fabric was also free, I love freebies. The Pleated tote pattern can be fo
 		<wp:post_type>attachment</wp:post_type>
 		<wp:post_password></wp:post_password>
 		<wp:is_sticky>0</wp:is_sticky>
-		<wp:attachment_url>http://nothing.com/wp-content/uploads/2007/11/greypursesm.jpg</wp:attachment_url>
+		<wp:attachment_url>http://melissaesplin.com/wp-content/uploads/2007/11/greypursesm.jpg</wp:attachment_url>
 		<wp:postmeta>
 			<wp:meta_key>_wp_attached_file</wp:meta_key>
 			<wp:meta_value><![CDATA[/home/epsilon/public_html/home/wp-content/uploads/2007/11/greypursesm.jpg]]></wp:meta_value>
@@ -1419,10 +1419,10 @@ Right: Fabric was also free, I love freebies. The Pleated tote pattern can be fo
 	</item>
 	<item>
 		<title>greenpursesm.jpg</title>
-		<link>http://nothing.com/2007/11/purses-bags-totes-oh-my/greenpursesmjpg/</link>
+		<link>http://melissaesplin.com/2007/11/purses-bags-totes-oh-my/greenpursesmjpg/</link>
 		<pubDate>Thu, 29 Nov 2007 06:29:45 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/wp-content/uploads/2007/11/greenpursesm.jpg</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/wp-content/uploads/2007/11/greenpursesm.jpg</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
@@ -1438,7 +1438,7 @@ Right: Fabric was also free, I love freebies. The Pleated tote pattern can be fo
 		<wp:post_type>attachment</wp:post_type>
 		<wp:post_password></wp:post_password>
 		<wp:is_sticky>0</wp:is_sticky>
-		<wp:attachment_url>http://nothing.com/wp-content/uploads/2007/11/greenpursesm.jpg</wp:attachment_url>
+		<wp:attachment_url>http://melissaesplin.com/wp-content/uploads/2007/11/greenpursesm.jpg</wp:attachment_url>
 		<wp:postmeta>
 			<wp:meta_key>_wp_attached_file</wp:meta_key>
 			<wp:meta_value><![CDATA[/home/epsilon/public_html/home/wp-content/uploads/2007/11/greenpursesm.jpg]]></wp:meta_value>
@@ -1450,16 +1450,16 @@ Right: Fabric was also free, I love freebies. The Pleated tote pattern can be fo
 	</item>
 	<item>
 		<title>A Magical Time of Year...</title>
-		<link>http://nothing.com/2007/12/a-magic-time-of-year/</link>
+		<link>http://melissaesplin.com/2007/12/a-magic-time-of-year/</link>
 		<pubDate>Thu, 06 Dec 2007 22:41:50 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/?p=75</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/?p=75</guid>
 		<description></description>
 		<content:encoded><![CDATA[So, this Christmas has been just as busy as any other, even though I no longer have to worry about school. Saturday, Chris and I went to the Oakland Temple at the perfect time to enjoy the Christmas lights. It was definitely different from Temple Square, but the effect was the same. We also had the chance to see an 1830 edition of the Book of Mormon (so cool). The Oakland Mission President bought it at an auction some time ago and decided to put it on display at the visitor's center. There were a lot of sister missionaries around, so I thought I'd ask them if they perhaps knew my cousin James. They did! When I asked them, their eyes got big and both of them exclaimed how funny and great he is. So cool.
 
-Wednesday, I volunteered for the <a href="http://www.nothing.com/" target="_blank">Christmas Crèche</a> exhibit at the LDS Stake Center in Palo Alto. It was so neat to be able to get in the spirit of Christmas. I volunteered for 2+ hours in the children's room, which was the perfect place for me. I got to sit, color, clean up after little kids and just have fun. I didn't wander around much, but I did make a point to see Brian Kershisnik's <em>Nativity</em>. Stunning. When I took a class from him a while back (almost 2 years ago) he had started working on it. His goal was to have 100 attending angels in the scene, and I think he reached it. The 8'x17' piece is just commanding of your attention. I love how he portrayed Mary and Joseph. Joseph seems to perfectly embody the exhaustion and magnitude of the event while Mary seems so calm and relieved to have the baby out and in her loving arms. I love how humble it is, yet so powerful. This, in my opinion, is how the nativity would have been.
+Wednesday, I volunteered for the <a href="http://www.christmascreche.org/" target="_blank">Christmas Crèche</a> exhibit at the LDS Stake Center in Palo Alto. It was so neat to be able to get in the spirit of Christmas. I volunteered for 2+ hours in the children's room, which was the perfect place for me. I got to sit, color, clean up after little kids and just have fun. I didn't wander around much, but I did make a point to see Brian Kershisnik's <em>Nativity</em>. Stunning. When I took a class from him a while back (almost 2 years ago) he had started working on it. His goal was to have 100 attending angels in the scene, and I think he reached it. The 8'x17' piece is just commanding of your attention. I love how he portrayed Mary and Joseph. Joseph seems to perfectly embody the exhaustion and magnitude of the event while Mary seems so calm and relieved to have the baby out and in her loving arms. I love how humble it is, yet so powerful. This, in my opinion, is how the nativity would have been.
 
-<a href="http://www.nothing.com/change-image.php?current_image=28" target="_blank"><img src="http://nothing.com/home/wp-content/uploads/2007/12/nativity_full_01_web.jpg" alt="nativity_full_01_web.jpg" /></a>Brian Kershisnik, <em>Nativity</em>]]></content:encoded>
+<a href="http://www.kershisnik.com/change-image.php?current_image=28" target="_blank"><img src="http://melissaesplin.com/home/wp-content/uploads/2007/12/nativity_full_01_web.jpg" alt="nativity_full_01_web.jpg" /></a>Brian Kershisnik, <em>Nativity</em>]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>75</wp:post_id>
 		<wp:post_date>2007-12-06 22:41:50</wp:post_date>
@@ -1481,10 +1481,10 @@ Wednesday, I volunteered for the <a href="http://www.nothing.com/" target="_blan
 	</item>
 	<item>
 		<title>nativity_full_01_web.jpg</title>
-		<link>http://nothing.com/2007/12/a-magic-time-of-year/nativity_full_01_webjpg/</link>
+		<link>http://melissaesplin.com/2007/12/a-magic-time-of-year/nativity_full_01_webjpg/</link>
 		<pubDate>Thu, 06 Dec 2007 22:44:59 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/wp-content/uploads/2007/12/nativity_full_01_web.jpg</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/wp-content/uploads/2007/12/nativity_full_01_web.jpg</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
@@ -1500,7 +1500,7 @@ Wednesday, I volunteered for the <a href="http://www.nothing.com/" target="_blan
 		<wp:post_type>attachment</wp:post_type>
 		<wp:post_password></wp:post_password>
 		<wp:is_sticky>0</wp:is_sticky>
-		<wp:attachment_url>http://nothing.com/wp-content/uploads/2007/12/nativity_full_01_web.jpg</wp:attachment_url>
+		<wp:attachment_url>http://melissaesplin.com/wp-content/uploads/2007/12/nativity_full_01_web.jpg</wp:attachment_url>
 		<wp:postmeta>
 			<wp:meta_key>_wp_attached_file</wp:meta_key>
 			<wp:meta_value><![CDATA[/home/epsilon/public_html/home/wp-content/uploads/2007/12/nativity_full_01_web.jpg]]></wp:meta_value>
@@ -1512,14 +1512,14 @@ Wednesday, I volunteered for the <a href="http://www.nothing.com/" target="_blan
 	</item>
 	<item>
 		<title>Orange (Supposed to be Lemon) Chicken</title>
-		<link>http://nothing.com/2007/12/orange-supposed-to-be-lemon-chicken/</link>
+		<link>http://melissaesplin.com/2007/12/orange-supposed-to-be-lemon-chicken/</link>
 		<pubDate>Sat, 08 Dec 2007 22:49:07 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/?p=78</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/?p=78</guid>
 		<description></description>
 		<content:encoded><![CDATA[Oranges are still 5lbs. for a dollar, which makes me just so happy! Oranges are such a happy fruit not only because they're my favorite fruit, but they also because embody my favorite color. I finally got around to making Orange Chicken during the day so that I could photograph it for my recipe book (Chris was very happy to have something for lunch other than a grilled cheese sandwich). It was a nice bright day –especially compared to the depressingly rainy day the day before– so it was ideal for taking photographs of my culinary masterpiece. YUM!
 
-<a href="http://nothing.com/home/wp-content/uploads/2007/12/orangechicken2sm.jpg" title="orangechicken2sm.jpg"><img src="http://nothing.com/home/wp-content/uploads/2007/12/orangechicken2sm.jpg" alt="orangechicken2sm.jpg" /></a>
+<a href="http://melissaesplin.com/home/wp-content/uploads/2007/12/orangechicken2sm.jpg" title="orangechicken2sm.jpg"><img src="http://melissaesplin.com/home/wp-content/uploads/2007/12/orangechicken2sm.jpg" alt="orangechicken2sm.jpg" /></a>
 
 Here's the recipe... it's really, really easy and delicious!
 
@@ -1560,8 +1560,8 @@ Combine chicken 1/2 t. salt, egg yolk, rice wine, pepper and soy sauce. Let stan
 		<wp:comment>
 			<wp:comment_id>10</wp:comment_id>
 			<wp:comment_author><![CDATA[Lindsey Shaw]]></wp:comment_author>
-			<wp:comment_author_email>L.shaw.07@nothing.com</wp:comment_author_email>
-			<wp:comment_author_url>http://jlshaw.nothing.com</wp:comment_author_url>
+			<wp:comment_author_email>L.shaw.07@nowhere.com</wp:comment_author_email>
+			<wp:comment_author_url>http://jlshaw.blogspot.com</wp:comment_author_url>
 			<wp:comment_author_IP>71.198.60.167</wp:comment_author_IP>
 			<wp:comment_date>2007-12-20 23:46:41</wp:comment_date>
 			<wp:comment_date_gmt>2007-12-20 23:46:41</wp:comment_date_gmt>
@@ -1574,10 +1574,10 @@ Combine chicken 1/2 t. salt, egg yolk, rice wine, pepper and soy sauce. Let stan
 	</item>
 	<item>
 		<title>orangechicken2sm.jpg</title>
-		<link>http://nothing.com/2007/12/orange-supposed-to-be-lemon-chicken/orangechicken2smjpg/</link>
+		<link>http://melissaesplin.com/2007/12/orange-supposed-to-be-lemon-chicken/orangechicken2smjpg/</link>
 		<pubDate>Sat, 08 Dec 2007 22:33:57 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/wp-content/uploads/2007/12/orangechicken2sm.jpg</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/wp-content/uploads/2007/12/orangechicken2sm.jpg</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
@@ -1593,7 +1593,7 @@ Combine chicken 1/2 t. salt, egg yolk, rice wine, pepper and soy sauce. Let stan
 		<wp:post_type>attachment</wp:post_type>
 		<wp:post_password></wp:post_password>
 		<wp:is_sticky>0</wp:is_sticky>
-		<wp:attachment_url>http://nothing.com/wp-content/uploads/2007/12/orangechicken2sm.jpg</wp:attachment_url>
+		<wp:attachment_url>http://melissaesplin.com/wp-content/uploads/2007/12/orangechicken2sm.jpg</wp:attachment_url>
 		<wp:postmeta>
 			<wp:meta_key>_wp_attached_file</wp:meta_key>
 			<wp:meta_value><![CDATA[/home/epsilon/public_html/home/wp-content/uploads/2007/12/orangechicken2sm.jpg]]></wp:meta_value>
@@ -1605,10 +1605,10 @@ Combine chicken 1/2 t. salt, egg yolk, rice wine, pepper and soy sauce. Let stan
 	</item>
 	<item>
 		<title>bookbinding</title>
-		<link>http://nothing.com/bookbinding-2/</link>
+		<link>http://melissaesplin.com/bookbinding-2/</link>
 		<pubDate>Fri, 11 Jan 2008 22:02:20 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/?page_id=97</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/?page_id=97</guid>
 		<description></description>
 		<content:encoded><![CDATA[Here are a few images of the books I've bound...
 
@@ -1641,10 +1641,10 @@ Combine chicken 1/2 t. salt, egg yolk, rice wine, pepper and soy sauce. Let stan
 	</item>
 	<item>
 		<title>Saturday in San Fran</title>
-		<link>http://nothing.com/2008/01/saturday-in-san-fran/</link>
+		<link>http://melissaesplin.com/2008/01/saturday-in-san-fran/</link>
 		<pubDate>Tue, 15 Jan 2008 02:11:01 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/?p=99</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/?p=99</guid>
 		<description></description>
 		<content:encoded><![CDATA[This last Saturday we decided since the weather was impeccable we needed to go out on an adventure. It was kind of a gamble to head up to San Francisco, but we did anyway. We drove up and parked by the Golden Gate Park, and got our bikes out and rode around the park, along the coast, up to the Legion of Honour and ALMOST to the Golden Gate bridge.  I say almost because I pooped out about 1/2 mile away from the bridge. It was just so much uphill for me and my pregnant belly!! It didn't help that I was hauling up the hills on a 40lb 2-speed 1960s Schwinn. It was so worth it, though. I had such a great time exploring the nature and architecture that San Francisco has to offer. Many thanks to Chris for suggesting the excursion.
 
@@ -1684,7 +1684,7 @@ P.S. I've added a couple of pictures of me in there... my belly is getting bigge
 		<wp:comment>
 			<wp:comment_id>41</wp:comment_id>
 			<wp:comment_author><![CDATA[Kate]]></wp:comment_author>
-			<wp:comment_author_email>specialk4ry@nothing.com</wp:comment_author_email>
+			<wp:comment_author_email>specialk4ry@nowhere.com</wp:comment_author_email>
 			<wp:comment_author_url></wp:comment_author_url>
 			<wp:comment_author_IP>67.188.124.104</wp:comment_author_IP>
 			<wp:comment_date>2008-01-18 18:02:29</wp:comment_date>
@@ -1698,7 +1698,7 @@ P.S. I've added a couple of pictures of me in there... my belly is getting bigge
 		<wp:comment>
 			<wp:comment_id>37</wp:comment_id>
 			<wp:comment_author><![CDATA[lindsey]]></wp:comment_author>
-			<wp:comment_author_email>l.shaw.07@nothing.com</wp:comment_author_email>
+			<wp:comment_author_email>l.shaw.07@nowhere.com</wp:comment_author_email>
 			<wp:comment_author_url></wp:comment_author_url>
 			<wp:comment_author_IP>71.198.60.167</wp:comment_author_IP>
 			<wp:comment_date>2008-01-18 02:21:56</wp:comment_date>
@@ -1712,7 +1712,7 @@ P.S. I've added a couple of pictures of me in there... my belly is getting bigge
 		<wp:comment>
 			<wp:comment_id>34</wp:comment_id>
 			<wp:comment_author><![CDATA[lindsey]]></wp:comment_author>
-			<wp:comment_author_email>l.shaw.07@nothing.com</wp:comment_author_email>
+			<wp:comment_author_email>l.shaw.07@nowhere.com</wp:comment_author_email>
 			<wp:comment_author_url></wp:comment_author_url>
 			<wp:comment_author_IP>71.198.60.167</wp:comment_author_IP>
 			<wp:comment_date>2008-01-17 00:11:22</wp:comment_date>
@@ -1726,8 +1726,8 @@ P.S. I've added a couple of pictures of me in there... my belly is getting bigge
 		<wp:comment>
 			<wp:comment_id>390</wp:comment_id>
 			<wp:comment_author><![CDATA[Harmony]]></wp:comment_author>
-			<wp:comment_author_email>harmony@nothing.com</wp:comment_author_email>
-			<wp:comment_author_url>http://www.nothing.com/harmony</wp:comment_author_url>
+			<wp:comment_author_email>harmony@nowhere.com</wp:comment_author_email>
+			<wp:comment_author_url>http://www.roundbook.com/harmony</wp:comment_author_url>
 			<wp:comment_author_IP>62.203.164.79</wp:comment_author_IP>
 			<wp:comment_date>2008-07-21 07:52:05</wp:comment_date>
 			<wp:comment_date_gmt>2008-07-21 07:52:05</wp:comment_date_gmt>
@@ -1740,16 +1740,16 @@ P.S. I've added a couple of pictures of me in there... my belly is getting bigge
 	</item>
 	<item>
 		<title>Penelope&#039;s First Smile</title>
-		<link>http://nothing.com/2008/06/penelopes-first-smile/</link>
+		<link>http://melissaesplin.com/2008/06/penelopes-first-smile/</link>
 		<pubDate>Wed, 18 Jun 2008 17:33:38 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/?p=203</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/?p=203</guid>
 		<description></description>
 		<content:encoded><![CDATA[It by far hasn't been her first smile, but the first one that I've managed to catch on camera. I was pretty proud of this little moment we had. I had the camera all set up with the timer and as soon as I hit the shutter button I ran over towards her and started making all manner of faces and cooing noises. She just might be smiling because I probably looked pretty desperate and funny running from the camera to her, then back again. She's a pretty cute baby, if I do say so myself.
 
-<a href="http://nothing.com/home/wp-content/uploads/2008/06/smilingnp1sm.jpg"><img class="alignnone size-full wp-image-206" title="Smiling 1" src="http://nothing.com/home/wp-content/uploads/2008/06/smilingnp1sm.jpg" alt="" width="500" height="330" /></a>
+<a href="http://melissaesplin.com/home/wp-content/uploads/2008/06/smilingnp1sm.jpg"><img class="alignnone size-full wp-image-206" title="Smiling 1" src="http://melissaesplin.com/home/wp-content/uploads/2008/06/smilingnp1sm.jpg" alt="" width="500" height="330" /></a>
 
-<a href="http://nothing.com/home/wp-content/uploads/2008/06/smilingnpsm.jpg"><img class="alignnone size-full wp-image-207" title="Smiling 2" src="http://nothing.com/home/wp-content/uploads/2008/06/smilingnpsm.jpg" alt="" width="500" height="330" /></a>]]></content:encoded>
+<a href="http://melissaesplin.com/home/wp-content/uploads/2008/06/smilingnpsm.jpg"><img class="alignnone size-full wp-image-207" title="Smiling 2" src="http://melissaesplin.com/home/wp-content/uploads/2008/06/smilingnpsm.jpg" alt="" width="500" height="330" /></a>]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>203</wp:post_id>
 		<wp:post_date>2008-06-18 17:33:38</wp:post_date>
@@ -1779,10 +1779,10 @@ P.S. I've added a couple of pictures of me in there... my belly is getting bigge
 	</item>
 	<item>
 		<title>Christmas Boxes AND Caramels</title>
-		<link>http://nothing.com/2007/12/christmas-boxes/</link>
+		<link>http://melissaesplin.com/2007/12/christmas-boxes/</link>
 		<pubDate>Mon, 24 Dec 2007 07:39:05 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/?p=80</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/?p=80</guid>
 		<description></description>
 		<content:encoded><![CDATA[This Christmas season has been different from any other Christmas that I've had since I realized that Santa Claus didn't exist. I've actually looked forward to it. I'm not necessarily looking forward to Christmas morning, but I've had so much fun getting ready for Christmas! This year I've realized that it's up to me to initiate Christmas traditions and also spread the excitement for the Christmas season.
 
@@ -1790,9 +1790,9 @@ In order to spread my Christmas cheer, the first thing I needed to do was to mak
 
 I tweaked the pattern just a little, and digitized it (which made the process of doing 19 boxes for friends so much easier), and now I give it to you with simple instructions, so you too can spread your holiday cheer (whatever holiday or occasion that may be) with your own personal touch!
 
-<a title="christmasboxessm.jpg" href="http://nothing.com/home/wp-content/uploads/2007/12/christmasboxessm.jpg"><img src="http://nothing.com/home/wp-content/uploads/2007/12/christmasboxessm.jpg" alt="christmasboxessm.jpg" /></a>
+<a title="christmasboxessm.jpg" href="http://melissaesplin.com/home/wp-content/uploads/2007/12/christmasboxessm.jpg"><img src="http://melissaesplin.com/home/wp-content/uploads/2007/12/christmasboxessm.jpg" alt="christmasboxessm.jpg" /></a>
 
-First, print out the <strong><a title="Box Template" href="http://nothing.com/home/wp-content/uploads/2007/12/boxes1.pdf">Box Template</a> </strong>on heavy cardstock. The thicker the better– I printed out the box template on a coated 100 lb dull cover. Any sort of thick scrapbook paper would do well, too.
+First, print out the <strong><a title="Box Template" href="http://melissaesplin.com/home/wp-content/uploads/2007/12/boxes1.pdf">Box Template</a> </strong>on heavy cardstock. The thicker the better– I printed out the box template on a coated 100 lb dull cover. Any sort of thick scrapbook paper would do well, too.
 
 Second, cut out the template. I glued on wrapping paper to the back of the template to dress up the paper before cutting the template out. If you plan on doing that or something similar, use PVA glue (Elmer's glue might work) and apply with a thick brush. Then place the decorative paper on the back of the template and work flat with a bonefolder.
 
@@ -1816,9 +1816,9 @@ OH... and... Here's the caramel recipe:
 2 cans evaporated milk
 
 Melt butter, add karo, then sugar. Cook until boiling. Add evaporated milk a little at a time (so candy won't stop boiling), stirring continuously. cook to firm ball stage (235º on candy thermometer). Pour into buttered jelly roll pan. Use a long handled wooden spoon for stirring.
-<p style="text-align: center;"><a href="http://nothing.com/home/2010/12/2010-christmas-candy-box/" target="_self"><strong>For the 2010 Christmas candy box, click here.</strong></a></p>
-<p style="text-align: center;"><a href="http://nothing.com/home/2009/12/2009-christmas-candy-box/" target="_blank"><strong>For the 2009 Christmas candy box, click here.</strong></a></p>
-<p style="text-align: center;"><strong><a href="http://nothing.com/home/2008/12/second-annual-christmascandy-box/" target="_blank">For the 2008 Christmas candy box, click here.</a></strong></p>]]></content:encoded>
+<p style="text-align: center;"><a href="http://melissaesplin.com/home/2010/12/2010-christmas-candy-box/" target="_self"><strong>For the 2010 Christmas candy box, click here.</strong></a></p>
+<p style="text-align: center;"><a href="http://melissaesplin.com/home/2009/12/2009-christmas-candy-box/" target="_blank"><strong>For the 2009 Christmas candy box, click here.</strong></a></p>
+<p style="text-align: center;"><strong><a href="http://melissaesplin.com/home/2008/12/second-annual-christmascandy-box/" target="_blank">For the 2008 Christmas candy box, click here.</a></strong></p>]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>80</wp:post_id>
 		<wp:post_date>2007-12-24 07:39:05</wp:post_date>
@@ -1854,7 +1854,7 @@ Melt butter, add karo, then sugar. Cook until boiling. Add evaporated milk a lit
 		<wp:comment>
 			<wp:comment_id>15</wp:comment_id>
 			<wp:comment_author><![CDATA[Kate]]></wp:comment_author>
-			<wp:comment_author_email>specialk4ry@nothing.com</wp:comment_author_email>
+			<wp:comment_author_email>specialk4ry@nowhere.com</wp:comment_author_email>
 			<wp:comment_author_url></wp:comment_author_url>
 			<wp:comment_author_IP>24.23.250.2</wp:comment_author_IP>
 			<wp:comment_date>2008-01-07 18:12:16</wp:comment_date>
@@ -1868,7 +1868,7 @@ Melt butter, add karo, then sugar. Cook until boiling. Add evaporated milk a lit
 		<wp:comment>
 			<wp:comment_id>10849</wp:comment_id>
 			<wp:comment_author><![CDATA[tanveer]]></wp:comment_author>
-			<wp:comment_author_email>tanveer_asistant@nothing.com</wp:comment_author_email>
+			<wp:comment_author_email>tanveer_asistant@nowhere.com</wp:comment_author_email>
 			<wp:comment_author_url></wp:comment_author_url>
 			<wp:comment_author_IP>202.163.80.233</wp:comment_author_IP>
 			<wp:comment_date>2009-12-21 06:29:15</wp:comment_date>
@@ -1886,7 +1886,7 @@ keep it up]]></wp:comment_content>
 			<wp:comment_id>10718</wp:comment_id>
 			<wp:comment_author><![CDATA[IS•LY | I Still Love you &raquo; Blog Archive &raquo; 2009 Christmas Candy Box]]></wp:comment_author>
 			<wp:comment_author_email></wp:comment_author_email>
-			<wp:comment_author_url>http://nothing.com/home/2009/12/2009-christmas-candy-box/</wp:comment_author_url>
+			<wp:comment_author_url>http://melissaesplin.com/home/2009/12/2009-christmas-candy-box/</wp:comment_author_url>
 			<wp:comment_author_IP>174.120.37.75</wp:comment_author_IP>
 			<wp:comment_date>2009-12-16 15:41:50</wp:comment_date>
 			<wp:comment_date_gmt>2009-12-16 15:41:50</wp:comment_date_gmt>
@@ -1900,7 +1900,7 @@ keep it up]]></wp:comment_content>
 			<wp:comment_id>47377</wp:comment_id>
 			<wp:comment_author><![CDATA[2010 Christmas Candy Box | IS•LY | I Still Love you]]></wp:comment_author>
 			<wp:comment_author_email></wp:comment_author_email>
-			<wp:comment_author_url>http://nothing.com/home/2010/12/2010-christmas-candy-box/</wp:comment_author_url>
+			<wp:comment_author_url>http://melissaesplin.com/home/2010/12/2010-christmas-candy-box/</wp:comment_author_url>
 			<wp:comment_author_IP>174.120.37.75</wp:comment_author_IP>
 			<wp:comment_date>2010-12-03 23:54:24</wp:comment_date>
 			<wp:comment_date_gmt>2010-12-03 23:54:24</wp:comment_date_gmt>
@@ -1913,8 +1913,8 @@ keep it up]]></wp:comment_content>
 		<wp:comment>
 			<wp:comment_id>52100</wp:comment_id>
 			<wp:comment_author><![CDATA[denice johnson]]></wp:comment_author>
-			<wp:comment_author_email>denice@nothing.com</wp:comment_author_email>
-			<wp:comment_author_url>http://nothing.com</wp:comment_author_url>
+			<wp:comment_author_email>denice@nowhere.com</wp:comment_author_email>
+			<wp:comment_author_url>http://littlelightmagazine.com</wp:comment_author_url>
 			<wp:comment_author_IP>207.161.126.246</wp:comment_author_IP>
 			<wp:comment_date>2010-12-17 19:45:14</wp:comment_date>
 			<wp:comment_date_gmt>2010-12-17 19:45:14</wp:comment_date_gmt>
@@ -1928,7 +1928,7 @@ keep it up]]></wp:comment_content>
 			<wp:comment_id>221194</wp:comment_id>
 			<wp:comment_author><![CDATA[Cum sa faci o cutie de cadouri | tutoriale handmade]]></wp:comment_author>
 			<wp:comment_author_email></wp:comment_author_email>
-			<wp:comment_author_url>http://tutoriale.nothing.com/cum-sa-faci-o-cutie-de-cadouri/</wp:comment_author_url>
+			<wp:comment_author_url>http://tutoriale.igorette.com/cum-sa-faci-o-cutie-de-cadouri/</wp:comment_author_url>
 			<wp:comment_author_IP>178.63.26.66</wp:comment_author_IP>
 			<wp:comment_date>2011-12-14 05:09:40</wp:comment_date>
 			<wp:comment_date_gmt>2011-12-14 05:09:40</wp:comment_date_gmt>
@@ -1949,10 +1949,10 @@ keep it up]]></wp:comment_content>
 	</item>
 	<item>
 		<title>christmasboxessm.jpg</title>
-		<link>http://nothing.com/2007/12/christmas-boxes/christmasboxessmjpg/</link>
+		<link>http://melissaesplin.com/2007/12/christmas-boxes/christmasboxessmjpg/</link>
 		<pubDate>Mon, 24 Dec 2007 07:19:10 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/wp-content/uploads/2007/12/christmasboxessm.jpg</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/wp-content/uploads/2007/12/christmasboxessm.jpg</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
@@ -1968,7 +1968,7 @@ keep it up]]></wp:comment_content>
 		<wp:post_type>attachment</wp:post_type>
 		<wp:post_password></wp:post_password>
 		<wp:is_sticky>0</wp:is_sticky>
-		<wp:attachment_url>http://nothing.com/wp-content/uploads/2007/12/christmasboxessm.jpg</wp:attachment_url>
+		<wp:attachment_url>http://melissaesplin.com/wp-content/uploads/2007/12/christmasboxessm.jpg</wp:attachment_url>
 		<wp:postmeta>
 			<wp:meta_key>_wp_attached_file</wp:meta_key>
 			<wp:meta_value><![CDATA[/home/epsilon/public_html/home/wp-content/uploads/2007/12/christmasboxessm.jpg]]></wp:meta_value>
@@ -1980,10 +1980,10 @@ keep it up]]></wp:comment_content>
 	</item>
 	<item>
 		<title>Box Template</title>
-		<link>http://nothing.com/?attachment_id=82</link>
+		<link>http://melissaesplin.com/?attachment_id=82</link>
 		<pubDate>Mon, 24 Dec 2007 07:34:13 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/wp-content/uploads/2007/12/boxes.pdf</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/wp-content/uploads/2007/12/boxes.pdf</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
@@ -1999,7 +1999,7 @@ keep it up]]></wp:comment_content>
 		<wp:post_type>attachment</wp:post_type>
 		<wp:post_password></wp:post_password>
 		<wp:is_sticky>0</wp:is_sticky>
-		<wp:attachment_url>http://nothing.com/wp-content/uploads/2007/12/boxes.pdf</wp:attachment_url>
+		<wp:attachment_url>http://melissaesplin.com/wp-content/uploads/2007/12/boxes.pdf</wp:attachment_url>
 		<wp:postmeta>
 			<wp:meta_key>_wp_attached_file</wp:meta_key>
 			<wp:meta_value><![CDATA[/home/epsilon/public_html/home/wp-content/uploads/2007/12/boxes.pdf]]></wp:meta_value>
@@ -2011,10 +2011,10 @@ keep it up]]></wp:comment_content>
 	</item>
 	<item>
 		<title>Box Template</title>
-		<link>http://nothing.com/2007/12/christmas-boxes/box-template/</link>
+		<link>http://melissaesplin.com/2007/12/christmas-boxes/box-template/</link>
 		<pubDate>Mon, 24 Dec 2007 07:36:06 +0000</pubDate>
 		<dc:creator>Melissa</dc:creator>
-		<guid isPermaLink="false">http://nothing.com/home/wp-content/uploads/2007/12/boxes1.pdf</guid>
+		<guid isPermaLink="false">http://melissaesplin.com/home/wp-content/uploads/2007/12/boxes1.pdf</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
@@ -2030,7 +2030,7 @@ keep it up]]></wp:comment_content>
 		<wp:post_type>attachment</wp:post_type>
 		<wp:post_password></wp:post_password>
 		<wp:is_sticky>0</wp:is_sticky>
-		<wp:attachment_url>http://nothing.com/wp-content/uploads/2007/12/boxes1.pdf</wp:attachment_url>
+		<wp:attachment_url>http://melissaesplin.com/wp-content/uploads/2007/12/boxes1.pdf</wp:attachment_url>
 		<wp:postmeta>
 			<wp:meta_key>_wp_attached_file</wp:meta_key>
 			<wp:meta_value><![CDATA[/home/epsilon/public_html/home/wp-content/uploads/2007/12/boxes1.pdf]]></wp:meta_value>

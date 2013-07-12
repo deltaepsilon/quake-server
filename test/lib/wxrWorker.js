@@ -31,8 +31,8 @@ module.exports = function () {
           assert.equal(meta.meta.term.length, 37, 'Must extract correct number of terms');
           assert.equal(meta.meta.category.length, 24, 'Must extract correct number of categories');
           assert.equal(meta.meta.author.length, 4, 'Must extract correct number of authors');
-          assert.equal(meta.meta.base_site_url, 'http://nothing.com', 'Base site url should match');
-          assert.equal(meta.meta.base_blog_url, 'http://nothing.com', 'Base blog url should match');
+          assert.equal(meta.meta.base_site_url, 'http://melissaesplin.com', 'Base site url should match');
+          assert.equal(meta.meta.base_blog_url, 'http://melissaesplin.com', 'Base blog url should match');
           assert.equal(meta.meta.description, 'Art, Sewing, Design, Bookbinding, Photography, Crafts', 'Description should match');
           assert.equal(meta.meta.title, 'ISLY | I Still Love You', 'Title should match');
 
@@ -45,8 +45,18 @@ module.exports = function () {
     });
 
     test('wxxWorker.postsProcess should correctly process posts', function (done) {
-      wxrWorker.postsProcess(posts).then(function (posts) {
-          console.log('posts', posts);
+      wxrWorker.postsProcess('fakeuserid', posts).then(function (res) {
+          var posts = res.posts,
+            first = posts[0];
+
+          assert.equal(first.link, 'http://melissaesplin.com/2007/10/hello-world/', 'Link');
+          assert.equal(first.date.getTime(), 1193631993000, 'Pubdate');
+          assert.equal(first.category.canonical, 'adventure', 'Category');
+          assert.equal(first.meta[0].canonical, '_edit_last', 'Meta');
+
+          assert.equal(posts.length, 11, 'Should return 11 posts.');
+          assert.equal(res.percent, 100, 'Should be 100% done.');
+          assert.equal(res.status, 'complete', 'Should be complete.');
 
           done();
         },
