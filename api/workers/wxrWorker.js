@@ -92,20 +92,58 @@ var _ = require('underscore'),
     return result;
 
   },
+
+  /*
+   * Builds tag object with best guesses as to file types
+   *
+   * Skips tags that don't have a forward slash and some extension... we wouldn't want to capture TLDs
+   * Skips tags that have .html, .htm or no file extension. These are likely non-asset uris
+   * Indicates whether a tag is img, video, audio or binary (Anything unrecognized is binary)
+   */
   buildTag = function (tag) {
     var imageExt = ['jpg', 'jpeg', 'gif', 'png', 'tiff'],
       videoExt = ['mp4', 'webm', 'ogg', 'ogv'],
       audioExt = ['mp3', 'ogg', 'opus', 'webm', 'aac', 'aiff', 'wav'],
-      ATTR_REGEX = /(\w+?)="(.+?)"/ig;
+      extensions = imageExt.concat(videoExt, audioExt),
+      ATTR_REGEXG = /(\w+?)="(.+?)"/ig,
+      ATTR_REGEX = /(\w+?)="((.+?)\/\w+?\.(\w+?))"/i,
+      KEY_REGEX = /(\w+?)="(.+?)"/i,
+      attributes = tag.match(ATTR_REGEXG),
+      i = attributes.length,
+      attribute,
+      cleanAttributes = {source: null, attributes: {}},
+      type;
 
-    /*
-     * TODO Searches through each tag and returns a broken-out object with all of the tag attributes
-     * TODO Indicates whether a tag is img, video, audio or binary (Anything unrecognized is binary)
-     * TODO Skips tags that have .html, .htm or no file extension. These are likely non-asset uris
-    */
+    while (i--) {
+      attribute = attributes[i].match(ATTR_REGEX)
 
+      if (attribute && attribute[1] && _.contains(['href', 'src'], attribute[1]) && !_.contains(['html', 'htm'], attribute[4])) {
+        // Video and audio tags do overlap... this tends to categorize them as video
+        if (_.contains(imageExt, attribute[4])) {
+          type = 'image';
+        } else if (_.contains(['a', 'video'], attribute[1]) && _.contains(videoExt, attribute[4])) {
+          type = 'video';
+        } else if (_.contains(['a', 'audio'], attribute[1]) && _.contains(audioExt, attribute[4])) {
+          type = 'audio';
+        } else {
+          type = 'binary';
+        }
+        cleanAttributes.source = {
+          original: attribute[2],
+          extension: attribute[4],
+          type: type
+        };
 
-    return tag;
+      } else { // Attempt to collect extra attributes
+        attribute = attributes[i].match(KEY_REGEX); // Reassign attribute to the more permissive REGEX
+        if (attribute) {
+          cleanAttributes.attributes[attribute[1]] = attribute[2];
+        }
+
+      }
+    }
+    return cleanAttributes;
+
   },
   importFiles = function (files, post) {
     var deferred = defer(),
@@ -288,10 +326,15 @@ var wxrWorker = {
       text = post.content + post.excerpt,
       tags = text.match(/<(video|img|a|audio).*?>/gi) || [],
       i = tags.length,
-      files = [];
+      files = [],
+      tag;
 
     while (i--) {
-      files.push(buildTag(tags[i]));
+      tag = buildTag(tags[i]);
+      if (tag.source) {
+        files.push(tag);
+      }
+
     }
     importFiles(files, post).then(deferred.resolve);
     return deferred.promise;
