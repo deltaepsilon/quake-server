@@ -18,26 +18,17 @@ var _ = require('underscore'),
     return Math.round(numerator/denominator * 100);
   },
   errorHandler = function (err) {
-    var message = {err: err};
-    if (process.send) {
-      process.send(message);
-    } else {
-      console.log(message);
-    }
+    process.send({err: err});
+
   },
   broadcastStatus = function (percent, status) {
-    var message = {res: {percent: percent, status: status}};
-    if (process.send) {
-      process.send(message);
-    } else {
-      console.log(message);
-    }
+    process.send({res: {percent: percent, status: status}});
+
   },
   getValue = function (source, key, canonical) { // Pluck the value from keys. Be resourceful in finding a value that can be returned.
-//    console.log('source[key] key:', source[key]);
     var result;
     if (!source[key] || !source[key]['#']) { // Return undefined if the key doesn't have a value
-      return;
+      return '';
     } else if (source[key]['@'] && Object.keys(source[key]['@']).length) { // Attempt to extend the value with its metadata
       if (typeof source[key]['#'] === 'object') {
         result = _.extend(source[key]['@'], source[key]['#']);
@@ -145,25 +136,73 @@ var _ = require('underscore'),
     return cleanAttributes;
 
   },
+
+/*
+   * Requests file import and replaces original URLs with new URLs in post content and excerpt
+   *
+   * If file has a source, request files from parent process
+   * Listens using a process.on() listener for a specifically-coded message
+   * On receipt of coded message, listener resolves the deferred with {post: post, files: newFiles}
+   * Listener tears itself down with process.removeListener('message', callback);
+   *
+   * Once all files have been returned from server, make necessary replacements
+   */
   importFiles = function (files, post) {
     var deferred = defer(),
-      promises = [];
+      i = files.length,
+      file,
+      sources = [],
+      promises = [],
+      getFile = function (afile) {
+        var adeferred = defer(),
+          callback = function (message) {
+            if (message.original && message.original === afile.source.original) { // Test for matching file
+              process.removeListener('message', callback); // Clean up listener
+              adeferred.resolve(message);
+            }
+          };
+        process.on('message', callback);
+        process.send({res: afile});
+        return adeferred.promise;
 
-    /*
-     * TODO Analyze images to determine which need to be slurped
-     * TODO Asks fileService to slurp files
-     * TODO Listens using a process.on() listener for a specifically-coded message
-     * TODO On receipt of coded message, listener resolves the deferred with {post: post, files: newFiles}
-     * TODO Listener tears itself down with process.removeListener('message', callback);
-    */
-    all(promises).then(function () { // Wait until all of the file objects have returned from
+      };
+
+    while (i--) {
+      file = files[i];
+      if (!_.contains(sources, file.source.original)) {
+        promises.push(getFile(file));
+      }
+    }
+
+    if (promises.length) {
+
       /*
-       * TODO Runs a global regex-replace through post.content and post.excerpt for URIs that match new files
-       * TODO Resolves initial promise with the updated post
+       * Runs a global regex-replace through post.content and post.excerpt for URIs that match new files
+       * Skips duplicate replacements
+       * Resolves initial promise with the updated post
        */
+      all(promises).then(function (newFiles) {
+        var i = newFiles.length,
+          replacements = {},
+          newFile,
+          regex;
 
+        while (i--) {
+          newFile = newFiles[i];
+          if (!replacements[newFile.original]) {
+            regex = new RegExp(newFile.original);
+            post.content = post.content.replace(regex, newFile.url);
+            post.excerpt = post.excerpt.replace(regex, newFile.url);
+          }
+
+        }
+        deferred.resolve(post);
+
+      });
+    } else {
       deferred.resolve(post);
-    });
+
+    }
     return deferred.promise;
 
   };
@@ -254,7 +293,7 @@ var wxrWorker = {
   /*
    * Process FeedParser posts
    */
-  postsProcess: function (userID, posts) {
+  postsProcess: function (posts) {
     var deferred = defer(),
       incrementPercent = function () {
         numerator += 1;
@@ -263,7 +302,9 @@ var wxrWorker = {
       i = posts.length,
       post,
       postObject,
-      result = [],
+      orderedTitles = [],
+      result = {},
+      orderedResult = [],
       promises = [],
       promise;
 
@@ -293,10 +334,11 @@ var wxrWorker = {
 
 
       if (postObject.post_type !== 'attachment') { // Don't include lame attachment posts. They don't really help.
-        promise = wxrWorker.imageProcess(userID, postObject);
+        orderedTitles.unshift(postObject.title);
+        promise = wxrWorker.imageProcess(postObject);
         promise.then(function (postClean) {
           incrementPercent();
-          result.unshift(postClean);
+          result[postClean.title] =  postClean;
         });
         promises.push(promise);
 
@@ -307,10 +349,16 @@ var wxrWorker = {
     }
 
     all(promises).then(function () { // Wait until all of the posts are image-processed
+      var i = orderedTitles.length;
+
+      while (i--) { // The promises return randomly, so the orderedTitles array becomes the key to sorting them out
+        orderedResult.unshift(result[orderedTitles[i]]);
+      }
+
       deferred.resolve({
         status: 'complete',
         percent: getPercent(),
-        posts: result
+        posts: orderedResult
       });
     });
 
@@ -321,7 +369,7 @@ var wxrWorker = {
   /*
    * Image
   */
-  imageProcess: function (userID, post) {
+  imageProcess: function (post) {
     var deferred = defer(),
       text = post.content + post.excerpt,
       tags = text.match(/<(video|img|a|audio).*?>/gi) || [],
@@ -336,9 +384,25 @@ var wxrWorker = {
       }
 
     }
+    process.setMaxListeners(0); // Do not limit listeners... potential memory leak from hell... I know
     importFiles(files, post).then(deferred.resolve);
     return deferred.promise;
 
+  },
+
+  /*
+   * Set up fake process emitter for testing purposes
+   * process.send ends up emitting the event back on the process...
+   * so the test runner can emit against the process and listen to it as well
+  */
+  fakeEmitter: function () {
+    var wxrProcess = process,
+      emitter = {
+        send: function (req) {
+          wxrProcess.emit('message', req);
+        }
+    };
+    return _.extend(process, emitter);
   }
 };
 
@@ -348,10 +412,12 @@ var wxrWorker = {
  * Step through parsing, metadata extraction and posts extraction
  * Message results back to parent process to provide percent complete
 */
-process.once('message', function (message) {
+var messageHandler = function (message) {
   var meta,
-    posts,
-    userID = message.userID;
+    posts;
+  if (!message.buffer) { // This is really for testing, but also just to make sure that this only response to valid events
+    return;
+  }
   wxrWorker.parse(message.buffer)
     .then(function (res) {
       process.send({res: res});
@@ -362,7 +428,7 @@ process.once('message', function (message) {
     }, errorHandler)
     .then(function (res) {
       process.send({res: res});
-      return wxrWorker.postsProcess(userID, posts);
+      return wxrWorker.postsProcess(posts);
 
     }, errorHandler)
     .then(function (res) {
@@ -370,7 +436,9 @@ process.once('message', function (message) {
 
     }, errorHandler);
 
-});
+  process.removeListener('message', messageHandler); // Clean yourself up.
+}
+process.on('message', messageHandler);
 
 module.exports = wxrWorker;
 

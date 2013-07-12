@@ -144,6 +144,10 @@ var fileService = {
             console.log('message.res', message.res);
             workerProcess.kill();
 
+          } else if (message.res.source) { // Download file
+            fileService.download(message.res).then(function (file) {
+              workerProcess.message(file);
+            });
           } else { // Emit progress events
             deferred.progress({percent: message.res.percent, status: message.res.status});
 
@@ -153,6 +157,9 @@ var fileService = {
 
     });
     return deferred.promise;
+
+  },
+  download: function (file) {
 
   }
 
