@@ -72,7 +72,13 @@ module.exports = function () {
       });
     });
 
-    test('POST to /file/wxrImport/:id should parse an existing WXR object, ');
+    test('POST to /file/wxr should import an existing WXR file', function (done) {
+      //TODO Grab socket.io for node and run this test with actual websockets
+      verbs.post('/file/wxr', userToken).send({id: inkBlob1.id}).end(function (err, res) {
+        console.log('res', res);
+        done();
+      })
+    });
 
 //
 //    test('GET to /file/wxr should return the relevant wxr object', function (done) {

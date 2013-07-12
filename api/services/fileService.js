@@ -131,28 +131,44 @@ var fileService = {
 
       awsService.s3Get(file.path).then(function (result) {
         var buffer = awsService.streamEncode(result.Body, 'utf8'),
-          workerProcess = fork(__dirname + './../workers/wxrWorker.js');
-        workerProcess.send({buffer: buffer});
+          workerProcess = fork(__dirname + './../workers/wxrWorker.js'),
+          metaDeferred = defer(),
+          metaResolver = new Resolver(metaDeferred),
+          postsDeferred = defer(),
+          postsResolver= new Resolver(postsDeferred);
+
 
         workerProcess.on('message', function (message) {
           if (message.err) {
             resolver.reject(message.err);
             workerProcess.kill();
+          } else if (message.res.meta) {
+            Meta.create(meta, metaResolver);
           } else if (message.res.step === 'complete') {
             // TODO Handle POST save
             console.log('You still need to save the post results');
             console.log('message.res', message.res);
+            Post.createEach(meta, metaResolver);
             workerProcess.kill();
 
           } else if (message.res.source) { // Download file
-            fileService.download(message.res).then(function (file) {
-              workerProcess.message(file);
-            });
+            fileService.download(message.res).then(workerProcess.send);
+
           } else { // Emit progress events
             deferred.progress({percent: message.res.percent, status: message.res.status});
 
           }
         });
+
+        // Start parsing process
+        workerProcess.send({buffer: buffer});
+
+        // Clean up
+        all([metaDeferred.promise, postsDeferred.promise]).then(function (res) {
+          workerProcess.removeAllListeners();
+          deferred.resolve(res);
+        });
+
       });
 
     });
@@ -160,7 +176,10 @@ var fileService = {
 
   },
   download: function (file) {
-
+    var deferred = defer();
+    console.log('need to download file...', file);
+    deferred.resolve({original: 'http://melissaesplin.com', url: 'http://test.com'})
+    return deferred.promise;
   }
 
 };
