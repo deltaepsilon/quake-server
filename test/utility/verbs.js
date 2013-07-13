@@ -1,4 +1,6 @@
-var request = require('supertest');
+var request = require('supertest'),
+  io = require('socket.io-client'),
+  conf = require('./../../config/convict.js');
 
 module.exports = function (app) {
   return {
@@ -13,6 +15,9 @@ module.exports = function (app) {
     },
     get: function (path, token) {
       return request(app).get(path).query({access_token: token || global.quakeSDKToken}).query({token_type: 'bearer'});
+    },
+    io: function (token) {
+      return io.connect(conf.get('quake_external') + '?token_type=bearer&access_token=' + token);
     }
   };
 };

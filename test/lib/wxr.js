@@ -43,41 +43,53 @@ module.exports = function () {
     });
 
 
-    var inkBlob1;
-    test('POST to /file/store should save a WXR file to the WXR folder.', function (done) {
-      verbs.post('/file/store', userToken).send({filename: filename, payload: new Buffer(mockWXR, 'utf8').toString('base64'), mimetype: 'text/xml', classification: 'wxr'}).end(function (err, res) {
-        var result = JSON.parse(res.text),
-          inkBlob = result[0];
-        inkBlob1 = inkBlob;
-        assert.equal(inkBlob.filename, filename, 'Valid File object should be returned');
-        done();
-      });
-    });
-
-//    var WXR;
-//    test('POST to /file/wxr should parse a WXR and return a saved object', function (done) {
-//      verbs.post('/file/wxr', userToken).send({id: inkBlob1.id}).end(function (err, res) {
-//        var wxr = JSON.parse(res.text);
-//        WXR = wxr;
-//        assert.equal(Object.keys(wxr.meta[0]).length, 20, 'Meta should have the right length');
-//        assert.equal(wxr.items.length, 24, 'Items should have the right length');
+//    var inkBlob1;
+//    test('POST to /file/store should save a WXR file to the WXR folder.', function (done) {
+//      verbs.post('/file/store', userToken).send({filename: filename, payload: new Buffer(mockWXR, 'utf8').toString('base64'), mimetype: 'text/xml', classification: 'wxr'}).end(function (err, res) {
+//        var result = JSON.parse(res.text),
+//          inkBlob = result[0];
+//        inkBlob1 = inkBlob;
+//        assert.equal(inkBlob.filename, filename, 'Valid File object should be returned');
+//        done();
+//      });
+//    });
+//
+////    var WXR;
+////    test('POST to /file/wxr should parse a WXR and return a saved object', function (done) {
+////      verbs.post('/file/wxr', userToken).send({id: inkBlob1.id}).end(function (err, res) {
+////        var wxr = JSON.parse(res.text);
+////        WXR = wxr;
+////        assert.equal(Object.keys(wxr.meta[0]).length, 20, 'Meta should have the right length');
+////        assert.equal(wxr.items.length, 24, 'Items should have the right length');
+////        done();
+////      });
+////    });
+//
+//    test('GET to /aws/s3Object should return nothing, because the parse function cleaned out the WXR folder.', function (done) {
+//      verbs.get('/aws/s3Object?key=/wxr/' + filename, userToken).end(function (err, res) {
+//        assert.equal(JSON.parse(res.text).error, 'The specified key does not exist.', 'File should be missing.');
 //        done();
 //      });
 //    });
 
-    test('GET to /aws/s3Object should return nothing, because the parse function cleaned out the WXR folder.', function (done) {
-      verbs.get('/aws/s3Object?key=/wxr/' + filename, userToken).end(function (err, res) {
-        assert.equal(JSON.parse(res.text).error, 'The specified key does not exist.', 'File should be missing.');
-        done();
-      });
-    });
-
     test('POST to /file/wxr should import an existing WXR file', function (done) {
       //TODO Grab socket.io for node and run this test with actual websockets
-      verbs.post('/file/wxr', userToken).send({id: inkBlob1.id}).end(function (err, res) {
-        console.log('res', res);
-        done();
-      })
+      //TODO Set up security for web sockets
+      var socket = verbs.io(userToken);
+
+      socket.on('connect', function () {
+//        console.log('id', inkBlob1.id);
+        socket.emit('message', JSON.stringify({url: '/file/wxr', data: {id: '51e082af6826423b88000006', 'access_token': userToken, 'token_type': 'bearer'}}));
+
+        socket.on('message', function (result) {
+          console.log('receiving message: ');
+        });
+      });
+
+//      verbs.post('/file/wxr', userToken).send({id: inkBlob1.id}).end(function (err, res) {
+//        console.log('res', res);
+//        done();
+//      });
     });
 
 //

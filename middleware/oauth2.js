@@ -3,6 +3,9 @@ var conf = require('./../config/convict.js')
   oauth2orize = require('oauth2orize'),
   server = oauth2orize.createServer(),
   uuid = require('node-uuid'),
+  defer = require('node-promise').defer,
+  Resolver = require('./../api/utilities/quake.js').resolver,
+  Query = require('./../api/utilities/quake.js').query,
   User = sails.models.user,
   AuthorizationCode = sails.models.authorizationcode,
   AccessToken = sails.models.accesstoken;
@@ -66,7 +69,7 @@ server.exchange(oauth2orize.exchange.code(function(client, code, redirectURI, do
   });
 }));
 
-module.exports = {
+var oauth2 = {
   authorization: [
     server.authorization(function(clientID, redirectURI, done) {
       if (clientID === conf.get('client_id')) {
@@ -94,23 +97,60 @@ module.exports = {
     server.errorHandler()
   ],
   findByClientID: function (clientID, clientSecret, done) { // Let the Quiver app through. TODO let individual users authenticate as well
+    var deferred = defer(),
+      resolver = new Resolver(deferred),
+      quiver = {id: 'quiver'};
     if (clientID === conf.get('client_id') && clientSecret === conf.get('client_secret')) {
-      done(null, {id: 'quiver'});
+      resolver.done(null, quiver);
+      if (typeof done === 'function') {
+        done(null, quiver);
+      }
+
     } else {
       User.find({clientID: clientID, clientSecret: clientSecret}, function (err, user) {
-        if (err) {
-          return done(err);
+        resolver.done(err, user);
+        if (typeof done === 'function') {
+          done(err, user);
         }
-        return done(null, user);
+
       });
     }
   },
   findByToken: function (token, done) { // Find and return users.
+    var deferred = defer(),
+      resolver = new Resolver(deferred);
     AccessToken.find({token: token}, function (err, foundToken) {
-      if (err) {
-        return done(err);
+      resolver.done(err, foundToken);
+      if (typeof done === 'function') {
+        done(null, foundToken);
       }
-      done(null, foundToken);
+
     });
+    return deferred.promise;
+
+  },
+  authSocket: function (req) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred),
+      query = new Query(req).augment(),
+      token = query ? query.access_token : null;
+
+    if (!token) {
+      deferred.reject('Auth token missing')
+    } else {
+
+      oauth2.findByToken(token).then(function (token) {
+        if (!token || !token.clientID) {
+          resolver.reject('Auth token not found');
+        } else {
+          User.findById(token.clientID, resolver.done);
+        }
+
+      }, resolver.reject);
+    }
+    return deferred.promise;
+
   }
 }
+
+module.exports = oauth2;

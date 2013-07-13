@@ -79,6 +79,23 @@ module.exports = {
       app.post('/auth/authorize/decision', oauth2.decision);
       app.post('/auth/token', oauth2.token);
     }
+  },
+
+  websockets: {
+    authorization: function (data, accept) {
+      var oauth2 = require('./../middleware/oauth2.js');
+
+      oauth2.authSocket(data).then(function (user) {
+        data.user = user;
+        data.query.userID = user.id;
+        data.isAuthenticated = function () {
+          return true;
+        }
+
+        accept(null, true);
+      }, accept);
+
+    }
   }
 
 };

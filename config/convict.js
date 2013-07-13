@@ -131,6 +131,12 @@ conf = convict({
     format: "*",
     default: "You should really change this",
     env: "AMAZON_ASSETS_BUCKET"
+  },
+  session_secret: {
+    doc: "Needed for websocket connections",
+    format: "*",
+    default: "You should really change this",
+    env: "QUAKE_SESSION_SECRET"
   }
 });
 
