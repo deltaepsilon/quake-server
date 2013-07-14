@@ -26,15 +26,24 @@ var defer = require('node-promise').defer,
 
   },
   generic = function (req, res, action, requirements, progress) {
-    var handler = new Handler(res),
+    var deferred = defer(),
+      handler = new Handler(res),
       query = new Query(req),
       args = getArgs(requirements, query.augment());
 
     if (Array.isArray(args)) {
-      action.apply({}, args).then(handler.success, handler.error, progress);
+      action.apply({}, args).then(function (result) {
+        handler.success(result);
+        deferred.resolve(result);
+      }, function (err) {
+        handler.error(err);
+        deferred.resolve(err);
+      }, progress);
     } else {
       handler.error(args);
+      deferred.reject(args);
     }
+    return deferred.promise;
 
   };
 
@@ -57,10 +66,12 @@ var FileController = {
   },
   wxr: function (req, res) {
     var progress = function (message) { // Broadcast progress events via websockets
-      console.log('publishing', message);
-      res.publish('wxr', '/wxr', message);
+      req.socket.emit('wxr', message);
     };
-    generic(req, res, fileService.wxr, ['userID', 'id'], progress);
+    generic(req, res, fileService.wxr, ['userID', 'id'], progress).then(function (result) {
+      console.log('fileController result: \n', result);
+      req.socket.emit('wxr', {complete: true});
+    });
 
   }
 

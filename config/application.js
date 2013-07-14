@@ -88,9 +88,6 @@ module.exports = {
       oauth2.authSocket(data).then(function (user) {
         data.user = user;
         data.query.userID = user.id;
-        data.isAuthenticated = function () {
-          return true;
-        }
 
         accept(null, true);
       }, accept);

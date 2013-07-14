@@ -4,7 +4,8 @@ var awsService = require('./awsService.js'),
   all = require('node-promise').all,
   wxrWorker = require('./../workers/wxrWorker.js'),
   fork = require('child_process').fork,
-  Resolver = require('./../utilities/quake.js').resolver,
+  quakeUtil = require('./../utilities/quake.js'),
+  Resolver = quakeUtil.resolver,
   normalizePaths = function (paths) {
     return paths.split(',');
   };
@@ -124,7 +125,11 @@ var fileService = {
   },
   wxr: function (userID, id) {
     var deferred = defer(),
-      resolver = new Resolver(deferred);
+      resolver = new Resolver(deferred),
+      processPosts = function (posts) {
+
+        return posts;
+      };
 
     File.findById(id, function (err, file) {
       if (err) { return resolver.reject(err);}
@@ -140,19 +145,20 @@ var fileService = {
 
         workerProcess.on('message', function (message) {
           if (message.err) {
-            resolver.reject(message.err);
             workerProcess.kill();
+            resolver.reject(message.err);
+
           } else if (message.res.meta) {
-            Meta.create(meta, metaResolver);
-          } else if (message.res.step === 'complete') {
-            // TODO Handle POST save
-            console.log('You still need to save the post results');
-            console.log('message.res', message.res);
-            Post.createEach(meta, metaResolver);
+            Meta.create(quakeUtil.addUserID(userID, message.res.meta), metaResolver.done);
+
+          } else if (message.res.status === 'complete') {
+            Post.create(quakeUtil.addUserID(userID, message.res.posts), postsResolver.done);
             workerProcess.kill();
 
           } else if (message.res.source) { // Download file
-            fileService.download(message.res).then(workerProcess.send);
+            fileService.download(message.res).then(function (result) {
+              workerProcess.send(result);
+            });
 
           } else { // Emit progress events
             deferred.progress({percent: message.res.percent, status: message.res.status});
@@ -177,8 +183,8 @@ var fileService = {
   },
   download: function (file) {
     var deferred = defer();
-    console.log('need to download file...', file);
-    deferred.resolve({original: 'http://melissaesplin.com', url: 'http://test.com'})
+    console.log('need to download file...', file.source.original);
+    deferred.resolve({original: file.source.original, url: 'http://test.com'})
     return deferred.promise;
   }
 

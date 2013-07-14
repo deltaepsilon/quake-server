@@ -81,10 +81,22 @@ module.exports = function () {
 //        console.log('id', inkBlob1.id);
         socket.emit('message', JSON.stringify({url: '/file/wxr', data: {id: '51e082af6826423b88000006', 'access_token': userToken, 'token_type': 'bearer'}}));
 
-        socket.on('message', function (result) {
-          console.log('receiving message: ');
-        });
       });
+
+      socket.on('wxr', function (message) {
+        if (message.complete) {
+          console.warn('run assertions...');
+          done();
+        } else {
+          console.log('wxr: ', message);
+        }
+
+      });
+
+      socket.on('error', function (message) {
+        console.warn('receiving error: ', message);
+      });
+
 
 //      verbs.post('/file/wxr', userToken).send({id: inkBlob1.id}).end(function (err, res) {
 //        console.log('res', res);

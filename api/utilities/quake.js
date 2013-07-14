@@ -37,6 +37,16 @@ module.exports = {
       }
     }
   },
+  addUserID: function (userID, models) {
+    var models = Array.isArray(models) ? models : [models],
+      i = models.length;
+
+    while (i--) {
+      models[i].userID = userID;
+    }
+    return models;
+
+  },
   paramNormalizer: function (url, id) {
     var params = url.split('/');
     if (params[0] === '') {

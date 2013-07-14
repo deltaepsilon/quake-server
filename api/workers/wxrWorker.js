@@ -295,9 +295,9 @@ var wxrWorker = {
    */
   postsProcess: function (posts) {
     var deferred = defer(),
-      incrementPercent = function () {
+      incrementPercent = function (title) {
         numerator += 1;
-        broadcastStatus(getPercent(), 'posts');
+        broadcastStatus(getPercent(), 'post: ' + title);
       },
       i = posts.length,
       post,
@@ -337,13 +337,13 @@ var wxrWorker = {
         orderedTitles.unshift(postObject.title);
         promise = wxrWorker.imageProcess(postObject);
         promise.then(function (postClean) {
-          incrementPercent();
+          incrementPercent(postClean.title + ' - Downloaded');
           result[postClean.title] =  postClean;
         });
         promises.push(promise);
 
       } else {
-        incrementPercent();
+        incrementPercent(postObject.title + ' - Attachment');
       }
 
     }
@@ -399,7 +399,12 @@ var wxrWorker = {
     var wxrProcess = process,
       emitter = {
         send: function (req) {
-          wxrProcess.emit('message', req);
+          if (wxrProcess.emit) {
+            wxrProcess.emit('message', req);
+          } else {
+            process.send(req);
+          }
+
         }
     };
     return _.extend(process, emitter);
@@ -420,7 +425,7 @@ var messageHandler = function (message) {
   }
   wxrWorker.parse(message.buffer)
     .then(function (res) {
-      process.send({res: res});
+//      process.send({res: res});
       meta = res.meta;
       posts = res.posts;
       return wxrWorker.metaProcess(meta);
@@ -439,6 +444,10 @@ var messageHandler = function (message) {
   process.removeListener('message', messageHandler); // Clean yourself up.
 }
 process.on('message', messageHandler);
+
+//process.on('message', function (message) {
+//  console.log('child received: message', message);
+//});
 
 module.exports = wxrWorker;
 

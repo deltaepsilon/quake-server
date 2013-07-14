@@ -9,7 +9,7 @@ module.exports = function (req, res, next) {
       return res.error("You are not permitted to perform this action.", 403);
     } else {
       console.log(new Error(message).stack);
-      this.send({error: message}, 400);
+      req.socket.emit('error', message);
 
     }
 
@@ -17,6 +17,8 @@ module.exports = function (req, res, next) {
 	
 	// User is allowed, proceed to controller
   if (req.isSocket) { // Do a quick token search for socket connections
+//    console.log('req', req.socket.manager.rooms);
+//    console.log('\n\n\n\n\nres', res);
     oauth2.authSocket(req).then(function (user) {
       req.user = user;
       req.params.userID = user.id;
