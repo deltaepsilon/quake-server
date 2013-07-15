@@ -156,7 +156,7 @@ var _ = require('underscore'),
       getFile = function (afile) {
         var adeferred = defer(),
           callback = function (message) {
-            if (message.original && message.original === afile.source.original) { // Test for matching file
+            if (message.source && message.source.original === afile.source.original) { // Test for matching file
               process.removeListener('message', callback); // Clean up listener
               adeferred.resolve(message);
             }
@@ -311,8 +311,6 @@ var wxrWorker = {
     while (i--) {
       post = posts[i];
 
-//      console.log('post', Object.keys(post));
-//      console.log('category', post['rss:category']);
       postObject = {
         title: getValue(post, 'rss:title'),
         link: getValue(post, 'rss:link'),

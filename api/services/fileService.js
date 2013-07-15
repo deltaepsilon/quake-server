@@ -1,14 +1,17 @@
-var awsService = require('./awsService.js'),
+var conf = require('./../../config/convict.js'),
+  awsService = require('./awsService.js'),
   filepicker = require('node-filepicker')(),
   defer = require('node-promise').defer,
   all = require('node-promise').all,
+  request = require('superagent'),
   wxrWorker = require('./../workers/wxrWorker.js'),
   fork = require('child_process').fork,
   quakeUtil = require('./../utilities/quake.js'),
   Resolver = quakeUtil.resolver,
   normalizePaths = function (paths) {
     return paths.split(',');
-  };
+  },
+  ROOT_REGEX = /http(s)?:\/\/[^\/]+/;
 
 var fileService = {
   store: function (userID, payload, filename, mimetype, classification) {
@@ -123,16 +126,25 @@ var fileService = {
     return deferred.promise;
 
   },
+  destroyById: function (id) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred);
+
+    File.findById(id, function (err, file) {
+      awsService.s3Delete(file.path).then(function () {
+        File.destroyWhere({id: id}, resolver.done);
+      }, resolver.reject);
+    });
+    return deferred.promise;
+
+  },
   wxr: function (userID, id) {
     var deferred = defer(),
-      resolver = new Resolver(deferred),
-      processPosts = function (posts) {
-
-        return posts;
-      };
+      resolver = new Resolver(deferred);
 
     File.findById(id, function (err, file) {
       if (err) { return resolver.reject(err);}
+      console.log('wxr file', file);
 
       awsService.s3Get(file.path).then(function (result) {
         var buffer = awsService.streamEncode(result.Body, 'utf8'),
@@ -140,9 +152,32 @@ var fileService = {
           metaDeferred = defer(),
           metaResolver = new Resolver(metaDeferred),
           postsDeferred = defer(),
-          postsResolver= new Resolver(postsDeferred);
+          postsResolver= new Resolver(postsDeferred),
+          wxrDeferred = defer(),
+          wxrResolver= new Resolver(wxrDeferred),
+          imported = {},
+          importPromise = function (afile) { // Search for file. If it's there, return it... otherwise, download it, save it, and resolve
+            var adeferred = defer();
+
+            File.find({original: afile.source.original}, function (err, bfile) {
+              if (bfile) {
+                adeferred.resolve(bfile);
+              } else {
+                fileService.download(userID, afile).then(adeferred.resolve, adeferred.reject);
+              }
+            });
+            return adeferred.promise;
+
+          };
 
 
+        /*
+         * Filter messages based on their keys
+         * Meta: message.res.meta
+         * Complete: message.res.status === 'complete'
+         * File download: message.res.source
+         * Progress: default
+        */
         workerProcess.on('message', function (message) {
           if (message.err) {
             workerProcess.kill();
@@ -151,12 +186,19 @@ var fileService = {
           } else if (message.res.meta) {
             Meta.create(quakeUtil.addUserID(userID, message.res.meta), metaResolver.done);
 
-          } else if (message.res.status === 'complete') {
+          } else if (message.res.status === 'complete') { // Complete
             Post.create(quakeUtil.addUserID(userID, message.res.posts), postsResolver.done);
+            fileService.remove(userID, file.url).then(wxrResolver.resolve, wxrResolver.reject);
             workerProcess.kill();
 
           } else if (message.res.source) { // Download file
-            fileService.download(message.res).then(function (result) {
+
+            if (!imported[message.res.source.original]) { // Create a promise if it's missing
+              imported[message.res.source.original] = {
+                promise: importPromise(message.res)
+              };
+            }
+            imported[message.res.source.original].promise.then(function (result) {
               workerProcess.send(result);
             });
 
@@ -170,7 +212,7 @@ var fileService = {
         workerProcess.send({buffer: buffer});
 
         // Clean up
-        all([metaDeferred.promise, postsDeferred.promise]).then(function (res) {
+        all([metaDeferred.promise, postsDeferred.promise, wxrDeferred.promise]).then(function (res) {
           workerProcess.removeAllListeners();
           deferred.resolve(res);
         });
@@ -181,11 +223,46 @@ var fileService = {
     return deferred.promise;
 
   },
-  download: function (file) {
-    var deferred = defer();
-    console.log('need to download file...', file.source.original);
-    deferred.resolve({original: file.source.original, url: 'http://test.com'})
+  download: function (userID, file) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred),
+      original = file.source.original;
+
+    // Http request for file
+    request.get(file.source.original)
+      .set('X-NO-STREAM', true)
+      .set('connection', 'keep-alive')
+      .set('Accept-Encoding', 'gzip,deflate,sdch')
+      .set('Accept', 'text/javascript, text/html, application/xml, text/xml, */*')
+      .parse(function (res) {
+        res.text = '';
+        res.setEncoding('binary');
+        res.on('data', function (data) {
+          res.text += data;
+        });
+        res.on('end', function () { // Save this sucker... yes, we're in callback hell. Sorry y'all
+          var key = userID + original.replace(ROOT_REGEX, '');
+          awsService.s3Save(key, new Buffer(res.text, 'binary')).then(function () {
+            file.url = 'http://' + conf.get('amazon_assets_bucket') + '/' + key;
+            file.userID = userID;
+            file.classification = file.source.type;
+            file.path = key;
+            File.create(file, function (err, newFile) {
+             if (err) {
+               resolver.reject(err);
+             } else {
+               resolver.resolve(newFile);
+             }
+            });
+          }, resolver.reject);
+
+        });
+      })
+      .end(function (err, res) {
+        //Don't do jack... the callback is handled in the parse
+      });
     return deferred.promise;
+
   }
 
 };

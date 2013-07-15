@@ -16,14 +16,15 @@ module.exports = {
     }, resolver.done);
     return deferred.promise;
   },
-  s3Save: function (key, body) {
+  s3Save: function (key, body, acl) {
     var deferred = defer(),
       resolver = new Resolver(deferred);
 
     s3Bucket.putObject({
       Bucket: bucketName,
       Body: body,
-      Key: key
+      Key: key,
+      ACL: acl || 'public-read'
     }, resolver.done);
     return deferred.promise;
   },

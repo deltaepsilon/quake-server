@@ -8,6 +8,7 @@ var defer = require('node-promise').defer,
   quake = require('quake-sdk'),
   quakeServer = require('./../utility/server.js'),
   fs = require('fs'),
+  fileService = require('./../../api/services/fileService.js'),
   mockWXR = fs.readFileSync(__dirname + '/../mocks/mockWXR.xml', 'utf8'),
   verbs,
   server,
@@ -15,7 +16,6 @@ var defer = require('node-promise').defer,
   user,
   userToken,
   filename = 'testWXR1.xml',
-  filename2 = 'testWXR2.xml',
   filepath;
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; //Allow https testing with self-signed certs
@@ -41,36 +41,40 @@ module.exports = function () {
         });
       });
     });
-
-
-//    var inkBlob1;
-//    test('POST to /file/store should save a WXR file to the WXR folder.', function (done) {
-//      verbs.post('/file/store', userToken).send({filename: filename, payload: new Buffer(mockWXR, 'utf8').toString('base64'), mimetype: 'text/xml', classification: 'wxr'}).end(function (err, res) {
-//        var result = JSON.parse(res.text),
-//          inkBlob = result[0];
-//        inkBlob1 = inkBlob;
-//        assert.equal(inkBlob.filename, filename, 'Valid File object should be returned');
-//        done();
+//
+//    test('fileService.download should retrieve and save files.', function (done) {
+//      var mockUpload = { source: {
+//          original: 'http://images.melissaesplin.com/wp-content/uploads/2007/12/nativity_full_01_web.jpg',
+//          extension: 'zip',
+//          type: 'binary'
+//        },
+//          attributes: {}
+//        },
+//        mockUploadUrl = 'http://' + conf.get('amazon_assets_bucket') + '/' + user.id + mockUpload.source.original.replace(/http(s)?:\/\/[^\/]+/, '');
+//
+//      fileService.download(user.id, mockUpload).then(function (file) {
+//        assert.deepEqual(file.source, mockUpload.source, 'File should match the mock');
+//        assert.equal(file.url, mockUploadUrl, 'The url best match');
+//
+//        fileService.destroyById(file.id).then(function (result) {
+//          assert.equal(result, 1, 'One downloaded file removed from DB');
+//          done();
+//        });
+//
 //      });
 //    });
-//
-////    var WXR;
-////    test('POST to /file/wxr should parse a WXR and return a saved object', function (done) {
-////      verbs.post('/file/wxr', userToken).send({id: inkBlob1.id}).end(function (err, res) {
-////        var wxr = JSON.parse(res.text);
-////        WXR = wxr;
-////        assert.equal(Object.keys(wxr.meta[0]).length, 20, 'Meta should have the right length');
-////        assert.equal(wxr.items.length, 24, 'Items should have the right length');
-////        done();
-////      });
-////    });
-//
-//    test('GET to /aws/s3Object should return nothing, because the parse function cleaned out the WXR folder.', function (done) {
-//      verbs.get('/aws/s3Object?key=/wxr/' + filename, userToken).end(function (err, res) {
-//        assert.equal(JSON.parse(res.text).error, 'The specified key does not exist.', 'File should be missing.');
-//        done();
-//      });
-//    });
+
+
+    var inkBlob1;
+    test('POST to /file/store should save a WXR file to the WXR folder.', function (done) {
+      verbs.post('/file/store', userToken).send({filename: filename, payload: new Buffer(mockWXR, 'utf8').toString('base64'), mimetype: 'text/xml', classification: 'wxr'}).end(function (err, res) {
+        var result = JSON.parse(res.text),
+          inkBlob = result[0];
+        inkBlob1 = inkBlob;
+        assert.equal(inkBlob.filename, filename, 'Valid File object should be returned');
+        done();
+      });
+    });
 
     test('POST to /file/wxr should import an existing WXR file', function (done) {
       //TODO Grab socket.io for node and run this test with actual websockets
@@ -79,7 +83,7 @@ module.exports = function () {
 
       socket.on('connect', function () {
 //        console.log('id', inkBlob1.id);
-        socket.emit('message', JSON.stringify({url: '/file/wxr', data: {id: '51e082af6826423b88000006', 'access_token': userToken, 'token_type': 'bearer'}}));
+        socket.emit('message', JSON.stringify({url: '/file/wxr', data: {id: inkBlob1.id, 'access_token': userToken, 'token_type': 'bearer'}}));
 
       });
 
@@ -97,12 +101,21 @@ module.exports = function () {
         console.warn('receiving error: ', message);
       });
 
-
-//      verbs.post('/file/wxr', userToken).send({id: inkBlob1.id}).end(function (err, res) {
-//        console.log('res', res);
-//        done();
-//      });
     });
+
+    test('GET to /aws/s3Object should return nothing, because the parse function cleaned out the WXR folder.', function (done) {
+      verbs.get('/aws/s3Object?key=/wxr/' + filename, userToken).end(function (err, res) {
+        assert.equal(JSON.parse(res.text).error, 'The specified key does not exist.', 'File should be missing.');
+        done();
+      });
+    });
+
+
+
+
+
+
+
 
 //
 //    test('GET to /file/wxr should return the relevant wxr object', function (done) {
