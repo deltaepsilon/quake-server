@@ -41,28 +41,29 @@ module.exports = function () {
         });
       });
     });
-//
-//    test('fileService.download should retrieve and save files.', function (done) {
-//      var mockUpload = { source: {
-//          original: 'http://images.melissaesplin.com/wp-content/uploads/2007/12/nativity_full_01_web.jpg',
-//          extension: 'zip',
-//          type: 'binary'
-//        },
-//          attributes: {}
-//        },
-//        mockUploadUrl = 'http://' + conf.get('amazon_assets_bucket') + '/' + user.id + mockUpload.source.original.replace(/http(s)?:\/\/[^\/]+/, '');
-//
-//      fileService.download(user.id, mockUpload).then(function (file) {
-//        assert.deepEqual(file.source, mockUpload.source, 'File should match the mock');
-//        assert.equal(file.url, mockUploadUrl, 'The url best match');
-//
-//        fileService.destroyById(file.id).then(function (result) {
-//          assert.equal(result, 1, 'One downloaded file removed from DB');
-//          done();
-//        });
-//
-//      });
-//    });
+
+    test('fileService.download should retrieve and save files.', function (done) {
+      var mockUpload = { source: {
+          original: 'http://images.melissaesplin.com/wp-content/uploads/2007/12/nativity_full_01_web.jpg',
+          extension: 'zip',
+          type: 'binary',
+          mimetype: 'application/binary'
+        },
+          attributes: {}
+        },
+        mockUploadUrl = 'http://' + conf.get('amazon_assets_bucket') + '/' + user.id + mockUpload.source.original.replace(/http(s)?:\/\/[^\/]+/, '');
+
+      fileService.download(user.id, mockUpload).then(function (file) {
+        assert.deepEqual(file.source, mockUpload.source, 'File should match the mock');
+        assert.equal(file.url, mockUploadUrl, 'The url best match');
+
+        fileService.destroyById(file.id).then(function (result) {
+          assert.equal(result, 1, 'One downloaded file removed from DB');
+          done();
+        });
+
+      });
+    });
 
 
     var inkBlob1;
