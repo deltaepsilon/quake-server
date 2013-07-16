@@ -1,6 +1,4 @@
-var Mongo = require('mongodb'),
-  ObjectId = Mongo.ObjectID,
-  post = {
+module.exports = {
   "title" : "Let the Blogging Begin!",
   "link" : "http://melissaesplin.com/2007/10/hello-world/",
   "date" : "2007-10-29T04:26:33.000Z",
@@ -33,8 +31,5 @@ var Mongo = require('mongodb'),
       "canonical" : "image"
     }
   ],
-  "comment" : [ ],
-  "userID" : ObjectId("51e5a2ab725b54c7db000003")
-}
-
-module.exports = post;
+  "comment" : [ ]
+};

@@ -114,15 +114,23 @@ module.exports = function () {
     //TODO Delete posts, meta and file object. Make sure files are off of s3.
     test('Should be able to remove all existing files by userID', function (done) {
       verbs.del('/file/destroy', userToken).end(function (err, res) {
-        assert.equal(res.text, 30, 'Should remove files.');
+        assert.equal(res.text, 31, 'Should remove files.');
         done();
       });
 
     });
 
     test('Should be able to remove all existing posts by userID', function (done) {
-      verbs.del('/post/destroyWhere', userToken).send({where: {userID: user.id}}).end(function (err, res) {
-        console.log('post destroy result', err, res.text);
+      verbs.del('/post/destroyWhere', userToken).end(function (err, res) {
+        assert.equal(res.text, 11, 'Posts removed');
+        done();
+      });
+
+    });
+
+    test('Should be able to remove Meta', function (done) {
+      verbs.del('/meta/destroyWhere', userToken).end(function (err, res) {
+        assert.equal(res.text, 1, 'Meta removed');
         done();
       });
 

@@ -165,8 +165,6 @@ var fileService = {
       resolver = new Resolver(deferred),
       where = where || {userID: quakeUtil.getMongoID(userID)};
 
-    console.log('\nDestroy where: ', where);
-
     File.findAll(where, function (err, files) {
       var i = files ? files.length : 0,
         promises = [];
@@ -288,22 +286,17 @@ var fileService = {
           res.text += data;
         });
         res.on('end', function () { // Save this sucker... yes, we're in callback hell. Sorry y'all
-          var key = userID + original.replace(ROOT_REGEX, '');
+          var key = userID + original.replace(ROOT_REGEX, ''),
+            params = {ACL: 'public-read', ContentType: file.source.mimetype},
+            body = new Buffer(res.text, 'binary');
 
-          //TODO Rework to use fileService.save
-          awsService.s3Save(key, new Buffer(res.text, 'binary'), {ACL: 'public-read', ContentType: file.source.mimetype}).then(function () {
-            file.url = 'http://' + conf.get('amazon_assets_bucket') + '/' + key;
-            file.userID = userID;
-            file.classification = file.source.type;
-            file.path = key;
-            File.create(file, function (err, newFile) {
-             if (err) {
-               resolver.reject(err);
-             } else {
-               resolver.resolve(newFile);
-             }
-            });
-          }, resolver.reject);
+          file.url = 'http://' + conf.get('amazon_assets_bucket') + '/' + key;
+          file.userID = userID;
+          file.classification = file.source.type;
+          file.path = key;
+
+          fileService.save(userID, key, body, file, params)
+            .then(resolver.resolve, resolver.reject);
 
         });
       })

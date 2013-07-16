@@ -8,7 +8,7 @@ var defer = require('node-promise').defer,
   quakeUtil = require('./../../api/utilities/quake.js'),
   Resolver = quakeUtil.resolver,
   fs = require('fs'),
-  mockPost = require('./../mocks/post.js'),
+  mockMeta = require('./../mocks/meta.js'),
   verbs,
   server,
   app,
@@ -25,7 +25,7 @@ module.exports = function () {
         app = aapp;
         user = auser;
         userToken = auserToken;
-        mockPost.userID = user.id;
+        mockMeta.userID = user.id;
         verbs = require('./../utility/verbs.js')(app);
         done();
       })
@@ -40,19 +40,19 @@ module.exports = function () {
     });
 
 
-    test('POST to /post/create should create a post.', function (done) {
-      verbs.post('/post/create', userToken).send(mockPost).end(function (err, res) {
-        var post = JSON.parse(res.text);
-        assert.equal(post.title, mockPost.title, 'Title');
+    test('POST to /meta/create should create a Meta object.', function (done) {
+      verbs.post('/meta/create', userToken).send(mockMeta).end(function (err, res) {
+        var meta = JSON.parse(res.text);
+        assert.equal(meta.title, mockMeta.title, 'Title');
         done();
       });
 
     });
 
-    test('/post/destroyWhere should destroy matching posts', function (done) {
-      var mockPost1 = _.extend(_.clone(mockPost), {title: 'mockPost1'}),
-        mockPost2 = _.extend(_.clone(mockPost), {title: 'mockPost2'}),
-        mockPost3 = _.extend(_.clone(mockPost), {title: 'mockPost3'}),
+    test('/meta/destroyWhere should destroy matching Metas', function (done) {
+      var mockMeta1 = _.extend(_.clone(mockMeta), {title: 'mockMeta1'}),
+        mockMeta2 = _.extend(_.clone(mockMeta), {title: 'mockMeta2'}),
+        mockMeta3 = _.extend(_.clone(mockMeta), {title: 'mockMeta3'}),
         deferred1 = defer(),
         deferred2 = defer(),
         deferred3 = defer(),
@@ -66,15 +66,15 @@ module.exports = function () {
         promisesCreate = [deferred1.promise, deferred2.promise, deferred3.promise],
         promisesDestroy = [deferred4.promise, deferred5.promise];
 
-      verbs.post('/post/create', userToken).send(mockPost1).end(resolver1.done);
-      verbs.post('/post/create', userToken).send(mockPost2).end(resolver2.done);
-      verbs.post('/post/create', userToken).send(mockPost3).end(resolver3.done);
+      verbs.post('/meta/create', userToken).send(mockMeta1).end(resolver1.done);
+      verbs.post('/meta/create', userToken).send(mockMeta2).end(resolver2.done);
+      verbs.post('/meta/create', userToken).send(mockMeta3).end(resolver3.done);
 
       all(promisesCreate).then(function () {
-        verbs.del('/post/destroyWhere', userToken).send({where: {title: mockPost1.title}}).end(resolver4.done);
+        verbs.del('/meta/destroyWhere', userToken).send({where: {title: mockMeta1.title}}).end(resolver4.done);
         deferred4.promise.then(function (res) {
           assert.equal(res.text, 1, 'Deleted one');
-          verbs.del('/post/destroyWhere', userToken).end(resolver5.done);
+          verbs.del('/meta/destroyWhere', userToken).end(resolver5.done);
         });
 
       });
@@ -97,4 +97,5 @@ module.exports = function () {
   return deferred.promise;
 
 };
+
 
