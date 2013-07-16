@@ -96,7 +96,7 @@ var oauth2 = {
     server.token(),
     server.errorHandler()
   ],
-  findByClientID: function (clientID, clientSecret, done) { // Let the Quiver app through. TODO let individual users authenticate as well
+  findByClientID: function (clientID, clientSecret, done) { // Let the Quiver app through.
     var deferred = defer(),
       resolver = new Resolver(deferred),
       quiver = {id: 'quiver'};

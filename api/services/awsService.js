@@ -7,48 +7,55 @@ var _ = require('underscore'),
   Resolver = require('./../utilities/quake.js').resolver;
 
 module.exports = {
-  s3Get: function (key) {
+  s3Get: function (key, params) {
     var deferred = defer(),
-      resolver = new Resolver(deferred);
-    s3Bucket.getObject({
-      Bucket: bucketName,
-      Key: key
-    }, resolver.done);
+      resolver = new Resolver(deferred),
+      defaultParams = {
+        Bucket: bucketName,
+        Key: key
+      };
+    s3Bucket.getObject(_.extend(defaultParams, params), resolver.done);
     return deferred.promise;
-  },
-  s3Save: function (key, body, acl) {
-    var deferred = defer(),
-      resolver = new Resolver(deferred);
 
-    s3Bucket.putObject({
-      Bucket: bucketName,
-      Body: body,
-      Key: key,
-      ACL: acl || 'public-read'
-    }, resolver.done);
-    return deferred.promise;
   },
-  s3List: function (key) {
+  s3Save: function (key, body, params) {
     var deferred = defer(),
-      resolver = new Resolver(deferred);
-    s3Bucket.listObjects({
-      Bucket: bucketName,
-      Prefix: key
-    }, resolver.done);
+      resolver = new Resolver(deferred),
+      defaultParams = {
+        Bucket: bucketName,
+        Body: body,
+        Key: key
+      };
+    s3Bucket.putObject(_.extend(defaultParams, params), resolver.done);
     return deferred.promise;
+
   },
-  s3Delete: function (key) {
+  s3List: function (key, params) {
     var deferred = defer(),
-      resolver = new Resolver(deferred);
-    s3Bucket.deleteObject({
-      Bucket: bucketName,
-      Key: key
-    }, resolver.done);
+      resolver = new Resolver(deferred),
+      defaultParams = {
+        Bucket: bucketName,
+        Prefix: key
+      };
+    s3Bucket.listObjects(_.extend(defaultParams, params), resolver.done);
     return deferred.promise;
+
+  },
+  s3Delete: function (key, params) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred),
+      defaultParams = {
+        Bucket: bucketName,
+        Key: key
+      };
+    s3Bucket.deleteObject(_.extend(defaultParams, params), resolver.done);
+    return deferred.promise;
+
   },
   streamEncode: function (stream, encoding) {
     //Requires node >=v0.10.12. The old buffer class couldn't handle everything
     buffer = new Buffer(stream, encoding || 'utf8');
     return buffer.toString();
+
   }
 }

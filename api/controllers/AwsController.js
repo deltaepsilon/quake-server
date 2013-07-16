@@ -38,8 +38,13 @@ var AwsController = {
   },
   s3List: function (req, res) {
     var handler = new Handler(res),
-      query = new Query(req).augment();
-    awsService.s3List(req.user.clientID + query.key).then(handler.success, handler.error);
+      query = new Query(req).augment(),
+      key = req.user.clientID.toString();
+
+    if (query.key) {
+      key += query.key;
+    }
+    awsService.s3List(key).then(handler.success, handler.error);
   }
 
 

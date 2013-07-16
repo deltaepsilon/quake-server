@@ -112,17 +112,18 @@ var _ = require('underscore'),
         // Video and audio tags do overlap... this tends to categorize them as video
         if (_.contains(imageExt, attribute[4])) {
           type = 'image';
-        } else if (_.contains(['a', 'video'], attribute[1]) && _.contains(videoExt, attribute[4])) {
-          type = 'video';
-        } else if (_.contains(['a', 'audio'], attribute[1]) && _.contains(audioExt, attribute[4])) {
-          type = 'audio';
+        } else if (_.contains(['a', 'src'], attribute[1]) && _.contains(videoExt, attribute[4])) {
+          type = 'application';
+        } else if (_.contains(['a', 'src'], attribute[1]) && _.contains(audioExt, attribute[4])) {
+          type = 'application';
         } else {
-          type = 'binary';
+          type = 'application';
         }
         cleanAttributes.source = {
           original: attribute[2],
           extension: attribute[4],
-          type: type
+          type: type,
+          mimetype: type + '/' + attribute[4]
         };
 
       } else { // Attempt to collect extra attributes
@@ -189,8 +190,8 @@ var _ = require('underscore'),
 
         while (i--) {
           newFile = newFiles[i];
-          if (!replacements[newFile.original]) {
-            regex = new RegExp(newFile.original);
+          if (!replacements[newFile.source.original]) {
+            regex = new RegExp(newFile.source.original, 'gi');
             post.content = post.content.replace(regex, newFile.url);
             post.excerpt = post.excerpt.replace(regex, newFile.url);
           }

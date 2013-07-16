@@ -138,13 +138,59 @@ var fileService = {
     return deferred.promise;
 
   },
+  save: function (userID, key, body, file, params) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred),
+      file = _.extend(file, {
+        url: 'http://' + conf.get('amazon_assets_bucket') + '/' + key,
+        userID: userID,
+        path: userID + '/' + key,
+        mimetype: params.ContentType || file.mimetype
+      }),
+      params = params || {};
+    awsService.s3Save(userID.toString() + '/' + key, body, params).then(function () {
+      File.create(file, function (err, newFile) {
+        if (err) {
+          resolver.reject(err);
+        } else {
+          resolver.resolve(newFile);
+        }
+      });
+    }, deferred.reject);
+    return deferred.promise;
+
+  },
+  destroy: function (userID, where) {
+    var deferred = defer(),
+      resolver = new Resolver(deferred),
+      where = where || {userID: quakeUtil.getMongoID(userID)};
+
+    console.log('\nDestroy where: ', where);
+
+    File.findAll(where, function (err, files) {
+      var i = files ? files.length : 0,
+        promises = [];
+
+      if (err) { return resolver.reject(err); }
+
+      while (i--) {
+        promises.push(awsService.s3Delete(files[i].path));
+      }
+      all(promises).then(function () {
+        File.destroyWhere(where, resolver.done);
+      }, resolver.reject);
+
+    });
+    return deferred.promise;
+
+  },
   wxr: function (userID, id) {
     var deferred = defer(),
-      resolver = new Resolver(deferred);
+      resolver = new Resolver(deferred),
+      userID = quakeUtil.getMongoID(userID);
 
     File.findById(id, function (err, file) {
       if (err) { return resolver.reject(err);}
-      console.log('wxr file', file);
 
       awsService.s3Get(file.path).then(function (result) {
         var buffer = awsService.streamEncode(result.Body, 'utf8'),
@@ -226,7 +272,8 @@ var fileService = {
   download: function (userID, file) {
     var deferred = defer(),
       resolver = new Resolver(deferred),
-      original = file.source.original;
+      original = file.source.original,
+      userID = quakeUtil.getMongoID(userID);
 
     // Http request for file
     request.get(file.source.original)
@@ -242,7 +289,9 @@ var fileService = {
         });
         res.on('end', function () { // Save this sucker... yes, we're in callback hell. Sorry y'all
           var key = userID + original.replace(ROOT_REGEX, '');
-          awsService.s3Save(key, new Buffer(res.text, 'binary')).then(function () {
+
+          //TODO Rework to use fileService.save
+          awsService.s3Save(key, new Buffer(res.text, 'binary'), {ACL: 'public-read', ContentType: file.source.mimetype}).then(function () {
             file.url = 'http://' + conf.get('amazon_assets_bucket') + '/' + key;
             file.userID = userID;
             file.classification = file.source.type;

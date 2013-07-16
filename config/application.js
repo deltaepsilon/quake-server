@@ -56,7 +56,11 @@ module.exports = {
       app.use(function (req, res, next) {
         res.setHeader('Access-Control-Allow-Origin', "*"); // Necessary for cross-domain requests
         res.error = function (message, status) {
-          this.send({error: message}, status || 400);
+          if (!this.send) {
+            this.emit('error', message);
+          } else {
+            this.send({error: message}, status || 400);
+          }
           console.log(new Error(message).stack);
         }
 
@@ -72,6 +76,9 @@ module.exports = {
 
       //Protect endpoints with mandatory userID params unless user is "quiver"
       app.all('/file*', quiver);
+      app.all('/post*', quiver);
+      app.all('/meta*', quiver);
+      app.all('/aws*', quiver);
 
 
       //  OAuth2 Routes

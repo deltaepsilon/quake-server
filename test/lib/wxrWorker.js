@@ -27,7 +27,7 @@ module.exports = function () {
           status = res.status;
         } else if (res.source) {
           emitter.emit('message', {
-            original: res.source.original,
+            source: { original: res.source.original },
             url: 'http://assets.quiver.is/fakeuserid/' + res.source.original.replace(/http:\/\/.+?\//, '')
           });
         }

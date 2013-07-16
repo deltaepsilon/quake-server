@@ -77,20 +77,21 @@ module.exports = function () {
     });
 
     test('POST to /file/wxr should import an existing WXR file', function (done) {
-      //TODO Grab socket.io for node and run this test with actual websockets
-      //TODO Set up security for web sockets
       var socket = verbs.io(userToken);
 
       socket.on('connect', function () {
-//        console.log('id', inkBlob1.id);
         socket.emit('message', JSON.stringify({url: '/file/wxr', data: {id: inkBlob1.id, 'access_token': userToken, 'token_type': 'bearer'}}));
 
       });
 
       socket.on('wxr', function (message) {
         if (message.complete) {
-          console.warn('run assertions...');
-          done();
+          verbs.post('/post/findAll', userToken).end(function (err, res) {
+            var posts = JSON.parse(res.text);
+            assert.equal(posts.length, 11, 'Should import correct number of posts.');
+            done();
+          });
+
         } else {
           console.log('wxr: ', message);
         }
@@ -110,74 +111,22 @@ module.exports = function () {
       });
     });
 
+    //TODO Delete posts, meta and file object. Make sure files are off of s3.
+    test('Should be able to remove all existing files by userID', function (done) {
+      verbs.del('/file/destroy', userToken).end(function (err, res) {
+        assert.equal(res.text, 30, 'Should remove files.');
+        done();
+      });
 
+    });
 
+    test('Should be able to remove all existing posts by userID', function (done) {
+      verbs.del('/post/destroyWhere', userToken).send({where: {userID: user.id}}).end(function (err, res) {
+        console.log('post destroy result', err, res.text);
+        done();
+      });
 
-
-
-
-
-//
-//    test('GET to /file/wxr should return the relevant wxr object', function (done) {
-//      verbs.get('/file/wxr?filename=' + filename, userToken).end(function (err, res) {
-//        var wxr = JSON.parse(res.text);
-//        assert.equal(Object.keys(wxr.meta[0]).length, 20, 'Meta should have the right length');
-//        assert.equal(wxr.items.length, 24, 'Items should have the right length');
-//        done();
-//      });
-//    });
-//
-//    var inkBlob2;
-//    test('GET to /file/wxrList should return the relevant wxr objects', function (done) {
-//      // Upload second file
-//      verbs.post('/aws/wxr', userToken).send({filename: filename2, body: mockWXR}).end(function (err, res) {
-//        //Parse second file
-//        inkBlob2 = JSON.parse(res.text);
-//        verbs.post('/file/wxr', userToken).send({filename: filename2}).end(function (err, res) {
-//          verbs.get('/file/wxrList', userToken).end(function (err, res) {
-//            var WXRs = JSON.parse(res.text);
-//            assert.equal(WXRs.length, 2, 'Should return two WXR files');
-//            done();
-//          });
-//        });
-//      });
-//
-//    });
-//
-//    test('POST to /user/wxr should return a user with the appropriate files set', function (done) {
-//      //TODO generate some files against Filepicker and retrieve the paths
-//      console.log('inkBlobs', inkBlob1, inkBlob2);
-//      verbs.post('/user/wxr', userToken).send({paths: [inkBlob1.filename, inkBlob2.filename].join(',')}, function (err, res) {
-//        console.log('res.text', res.text);
-//        var user = JSON.parse(res.text);
-//        console.log('user', user);
-//        done();
-//      });
-//    });
-//
-//    test('DELETE to /file/wxr should delete one wxr', function (done) {
-//      verbs.del('/file/wxr', userToken).send({filename: filename}).end(function (err, res) {
-//        assert.equal(res.text, 1, 'Delete returns a 1');
-//        done();
-//      });
-//
-//    });
-//
-//    test('DELETE to /file/wxrList should delete all WXR files', function (done) {
-//      verbs.del('/file/wxrList', userToken).end(function (err, res) {
-//        assert.equal(res.text, 1, 'Delete returns a 1');
-//        done();
-//      });
-//
-//    });
-//
-//    test('DELETE to /aws/wxr should delete the WXR file from the WXR folder.', function (done) {
-//      verbs.del('/aws/wxr', userToken).send({filename: filename}).end(function (err, res) {
-//        var result = JSON.parse(res.text);
-//        assert.equal(result.RequestId.length, 16, 'Valid RequestId should be returned');
-//        done();
-//      });
-//    });
+    });
 
 
   });

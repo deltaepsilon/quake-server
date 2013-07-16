@@ -1,6 +1,9 @@
-var _ = require('underscore');
+var _ = require('underscore'),
+  Mongo = require('mongodb'),
+  ObjectID = Mongo.ObjectID,
+  defer = require('node-promise').defer;
 
-module.exports = {
+var util = {
   resolver: function (deferred) {
     return {
       done: function (err, res) {
@@ -21,9 +24,11 @@ module.exports = {
   handler: function (res) {
     var success = function (response) {
         res.send(JSON.stringify(response));
+
       },
       error = function (err) {
         res.error(err.message || err);
+
       };
     return {
       success: success,
@@ -41,6 +46,10 @@ module.exports = {
     var models = Array.isArray(models) ? models : [models],
       i = models.length;
 
+    if (typeof userID === 'string') {
+      userID = new ObjectID(userID);
+    }
+
     while (i--) {
       models[i].userID = userID;
     }
@@ -48,17 +57,67 @@ module.exports = {
 
   },
   paramNormalizer: function (url, id) {
-    var params = url.split('/');
+    var query = url.split('?'),
+      params = query[0].split('/'),
+      queryClean = query[1] ? '?' + query[1] : '';
     if (params[0] === '') {
       params.shift();
     }
     if (params[params.length - 1] === '') {
       params.pop();
     }
-    if (params.length < 3) {
+    if (params.length < 3 && id) {
       params.push(id);
     }
-    return '/' + params.join('/');
+    return '/' + params.join('/') + queryClean;
+
+  },
+  getMongoID: function (id) {
+    if (typeof id === 'object' && id.id) {
+      return id;
+    }
+    return new ObjectID(id);
+
+  },
+  getArgs: function (required, params, optional) {
+    var i = required.length,
+      args = [],
+      param;
+    while (i--) {
+      param = params[required[i]];
+      if (!param && !optional) {
+        return required[i]+ ' missing';
+      } else {
+        args.unshift(param);
+      }
+    }
+    return args;
+
+  },
+  generic: function (req, res, action, requirements, optional, progress) {
+    var deferred = defer(),
+      handler = new util.handler(res),
+      query = new util.query(req),
+      optional = optional ? util.getArgs(optional, query.augment(), true) : [],
+      args = util.getArgs(requirements, query.augment());
+
+    if (Array.isArray(args)) {
+      args = args.concat(optional);
+      action.apply({}, args).then(function (result) {
+        handler.success(result);
+        deferred.resolve(result);
+      }, function (err) {
+        handler.error(err);
+        deferred.resolve(err);
+      }, progress);
+    } else {
+      handler.error(args);
+      deferred.reject(args);
+    }
+    return deferred.promise;
+
   }
 
-}
+};
+
+module.exports = util;

@@ -1,3 +1,5 @@
+var fs = require('fs');
+
 module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-contrib-watch');
@@ -9,40 +11,25 @@ module.exports = function(grunt) {
       ui: 'tdd',
       timeout: 20000
     },
-    tests = {
-      user: {
-        options: options,
-        src: ['test/user.js']
-      },
-      stripe: {
-        options: options,
-        src: ['test/stripe.js']
-      },
-      aws: {
-        options: options,
-        src: ['test/aws.js']
-      },
-      wxr: {
-        options: {
-          ui: 'tdd',
-          timeout: 120000
-        },
-        src: ['test/wxr.js']
-      },
-      wxrWorker: {
-        options: options,
-        src: ['test/wxrWorker.js']
-      },
-      file: {
-        options: options,
-        src: ['test/file.js']
-      }
-    },
-    keys = Object.keys(tests),
+    tests = {},
     shellTests = [],
-    i = keys.length;
+    testFiles = fs.readdirSync(__dirname + '/test'),
+    i = testFiles.length,
+    name;
+
   while (i--) {
-    shellTests.push('grunt mochaTest:' + keys[i]);
+    name = testFiles[i].match(/(\w+)\.js/);
+    if (name) {
+      tests[name[1]] = {options: options, src: ['test/' + name[0]]};
+    }
+
+  }
+
+  var keys = Object.keys(tests),
+    j = keys.length;
+
+  while (j--) {
+    shellTests.push('grunt mochaTest:' + keys[j]);
   }
 
   grunt.initConfig({

@@ -17,8 +17,14 @@ module.exports = function (req, res, next) {
 	
 	// User is allowed, proceed to controller
   if (req.isSocket) { // Do a quick token search for socket connections
-//    console.log('req', req.socket.manager.rooms);
-//    console.log('\n\n\n\n\nres', res);
+
+    res.send = function (message) { // Patch res.send to emit instead
+      req.socket.emit('message', message);
+    };
+    res.error = function (message) { // Patch res.error to emit instead
+      req.socket.emit('error', message);
+    }
+
     oauth2.authSocket(req).then(function (user) {
       req.user = user;
       req.params.userID = user.id;

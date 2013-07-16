@@ -7,6 +7,8 @@ var defer = require('node-promise').defer,
   conf = require('./../../config/convict.js'),
   request = require('supertest'),
   quake = require('quake-sdk'),
+  quakeUtil = require('./../../api/utilities/quake.js'),
+  Resolver = quakeUtil.resolver,
   quakeServer = require('./../utility/server.js'),
   filepicker = require('node-filepicker')(),
   fs = require('fs'),
@@ -118,6 +120,37 @@ module.exports = function () {
         done();
       });
 
+    });
+
+    test('POST to /file/save should save a buffer to s3 and save a file object', function (done) {
+      var image1 = { body: image, key: 'test/test1.jpg', file: { classification: 'image' }, params: { ContentType: 'image/jpg', ACL: 'public-read' }},
+        image2 = { body: image, key: 'test/test2.jpg', file: { classification: 'image' }, params: { ContentType: 'image/jpg', ACL: 'public-read' }},
+        image1deferred = defer(),
+        image2deferred = defer(),
+        image1resolver = new Resolver(image1deferred),
+        image2resolver = new Resolver(image2deferred);
+
+      verbs.post('/file/save', userToken).send(image1).end(image1resolver.done);
+      verbs.post('/file/save', userToken).send(image2).end(image2resolver.done);
+
+      all(image1deferred.promise, image2deferred.promise).then(function (images) {
+        var image1result = JSON.parse(images[0].text),
+          image2result = JSON.parse(images[0].text);
+        assert.equal(image1.params.ContentType, image1result.mimetype, 'Mimetype');
+        assert.equal(image2.params.ContentType, image2result.mimetype, 'Mimetype');
+
+        verbs.post('/file/destroy', userToken).send({where: {mimetype: 'image/jpg'}}).end(function (err, res) {
+          assert.equal(res.text, 2, 'Deleted two files.');
+
+          verbs.get('/aws/s3List', userToken).end(function (err, res) {
+            var files = JSON.parse(res.text);
+            assert.equal(files.Contents.length, 0, 'Files deleted');
+            done();
+          });
+
+        });
+
+      });
     });
 
   });
