@@ -25,7 +25,7 @@ module.exports = function(grunt) {
 
   }
 
-  tests.wxr.options.timeout = 60000;
+  tests.wxr.options.timeout = 120000;
 
   var keys = Object.keys(tests),
     j = keys.length;

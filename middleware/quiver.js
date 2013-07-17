@@ -18,7 +18,7 @@ module.exports = function (req, res, next) {
       where = req.param('where');
       where = where ? JSON.parse(where) : {};
       where.userID = getMongoID(req.user.clientID);
-      req.query.where = JSON.stringify(where);
+      req.body.where = JSON.stringify(where);
     } else {
       req.query.userID = getMongoID(req.user.clientID); //Force all user queries to have an id query param that matches the user's id.
     }
@@ -38,8 +38,9 @@ module.exports = function (req, res, next) {
 
   where = req.param('where');
   if (where) {
+    where = JSON.parse(where);
     where.userID = getMongoID(req.user.clientID);
-    req.query.where = JSON.stringify(where);
+    req.body.where = where;
   }
 
   next();
