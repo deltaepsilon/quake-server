@@ -107,7 +107,8 @@ var fileService = {
       resolver = new Resolver(deferred),
       destroy = function (path) {
         var destroyDeferred = defer();
-        File.destroyWhere({path: path}, function (err, result) {
+
+        File.destroyWhere({url: path}, function (err, result) {
           if (err) { return destroyDeferred.reject(err);}
           destroyDeferred.resolve(result);
         });
@@ -141,14 +142,15 @@ var fileService = {
   save: function (userID, key, body, file, params) {
     var deferred = defer(),
       resolver = new Resolver(deferred),
+      key = userID.toString() + key,
       file = _.extend(file, {
         url: 'http://' + conf.get('amazon_assets_bucket') + '/' + key,
         userID: userID,
-        path: userID + '/' + key,
+        path: key,
         mimetype: params.ContentType || file.mimetype
       }),
       params = params || {};
-    awsService.s3Save(userID.toString() + '/' + key, body, params).then(function () {
+    awsService.s3Save(key, body, params).then(function () {
       File.create(file, function (err, newFile) {
         if (err) {
           resolver.reject(err);
@@ -286,7 +288,7 @@ var fileService = {
           res.text += data;
         });
         res.on('end', function () { // Save this sucker... yes, we're in callback hell. Sorry y'all
-          var key = userID + original.replace(ROOT_REGEX, ''),
+          var key = original.replace(ROOT_REGEX, ''),
             params = {ACL: 'public-read', ContentType: file.source.mimetype},
             body = new Buffer(res.text, 'binary');
 

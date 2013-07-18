@@ -38,9 +38,9 @@ var FileController = {
     var progress = function (message) { // Broadcast progress events via websockets
       req.socket.emit('wxr', message);
     };
-    generic(req, res, fileService.wxr, ['userID', 'id'], [], progress).then(function (result) {
-      console.log('fileController result: \n', result);
+    generic(req, res, fileService.wxr, ['userID', 'id'], [], progress).then(function () {
       req.socket.emit('wxr', {complete: true});
+      req.socket.disconnect();
     });
 
   }

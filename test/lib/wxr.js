@@ -115,7 +115,7 @@ module.exports = function () {
     //TODO Delete posts, meta and file object. Make sure files are off of s3.
     test('Should be able to remove all existing files by userID', function (done) {
       verbs.del('/file/destroy', userToken).end(function (err, res) {
-        assert.equal(res.text, 31, 'Should remove files.');
+        assert.equal(res.text, 30, 'Should remove files.');
         done();
       });
 
