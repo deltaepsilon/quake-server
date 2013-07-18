@@ -27,6 +27,7 @@ var util = {
 
       },
       error = function (err) {
+        var err = err || 'error';
         res.error(err.message || err);
 
       };

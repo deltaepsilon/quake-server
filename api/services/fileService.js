@@ -190,7 +190,7 @@ var fileService = {
       userID = quakeUtil.getMongoID(userID);
 
     File.findById(id, function (err, file) {
-      if (err) { return resolver.reject(err);}
+      if (err || !file || !file.path) { return resolver.reject(err || file);}
 
       awsService.s3Get(file.path).then(function (result) {
         var buffer = awsService.streamEncode(result.Body, 'utf8'),
@@ -260,7 +260,7 @@ var fileService = {
         // Clean up
         all([metaDeferred.promise, postsDeferred.promise, wxrDeferred.promise]).then(function (res) {
           workerProcess.removeAllListeners();
-          deferred.resolve(res);
+          File.findAll({classification: 'wxr'}, resolver.done);
         });
 
       });
