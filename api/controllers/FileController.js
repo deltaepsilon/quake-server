@@ -39,7 +39,7 @@ var FileController = {
       req.socket.emit('wxr', message);
     };
     generic(req, res, fileService.wxr, ['userID', 'id'], [], progress).then(function (wxrFiles) {
-      req.socket.emit('wxr', {complete: true, wxr: wxrFiles});
+      req.socket.emit('wxr', {complete: true, wxr: wxrFiles, message: "Import Complete"});
     });
 
   }

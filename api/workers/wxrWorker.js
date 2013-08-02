@@ -21,8 +21,8 @@ var _ = require('underscore'),
     process.send({err: err});
 
   },
-  broadcastStatus = function (percent, status) {
-    process.send({res: {percent: percent, status: status}});
+  broadcastStatus = function (percent, status, message) {
+    process.send({res: {percent: percent, status: status, message: message}});
 
   },
   getValue = function (source, key, canonical) { // Pluck the value from keys. Be resourceful in finding a value that can be returned.
@@ -245,7 +245,8 @@ var wxrWorker = {
           deferred.resolve({
             status: 'parse',
             meta: meta[0],
-            posts: posts
+            posts: posts,
+            message: "Parsing"
           });
         }
       });
@@ -285,7 +286,8 @@ var wxrWorker = {
     broadcastStatus(getPercent(), 'meta');
     deferred.resolve({
       status: 'meta',
-      meta: result
+      meta: result,
+      message: 'Metadata'
     });
     return deferred.promise;
 
@@ -298,7 +300,7 @@ var wxrWorker = {
     var deferred = defer(),
       incrementPercent = function (title) {
         numerator += 1;
-        broadcastStatus(getPercent(), 'post: ' + title);
+        broadcastStatus(getPercent(), 'post: ' + title, title);
       },
       i = posts.length,
       post,

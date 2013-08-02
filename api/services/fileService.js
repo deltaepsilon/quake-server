@@ -249,7 +249,7 @@ var fileService = {
             });
 
           } else { // Emit progress events
-            deferred.progress({percent: message.res.percent, status: message.res.status});
+            deferred.progress({percent: message.res.percent, status: message.res.status, message: message.res.message});
 
           }
         });
